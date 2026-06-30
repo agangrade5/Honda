@@ -1,0 +1,157 @@
+<div class="sidebar-menu-inner">
+    <header class="logo-env">
+        <!-- logo -->
+        <div class="logo">
+            <a href="/" class="logo-expanded">
+                <img src={{ asset("assets/images/logo@2x.png")}} width="200" alt="" />
+            </a>
+            <a href="/" class="logo-collapsed">
+                <img src={{ asset("assets/images/logo-collapsed@2x.png")}} width="40" alt="" />
+            </a>
+        </div>
+        <!-- This will toggle the mobile menu and will be visible only on mobile devices -->
+        <div class="mobile-menu-toggle visible-xs">
+            <a href="#" data-toggle="user-info-menu">
+                <i class="fa-bell-o"></i>
+                <span class="badge badge-success">7</span>
+            </a>
+            <a href="#" data-toggle="mobile-menu">
+                <i class="fa-bars"></i>
+            </a>
+        </div>
+    </header>
+    <ul id="main-menu" class="main-menu">
+        <li>
+            <a href="ManageEvents.php">
+            <i class="linecons-location"></i>
+            <span class="title">Events</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageTrucks.php">
+            <i class="linecons-truck"></i>
+            <span class="title">Trucks</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageInventory.php">
+            <i class="linecons-tag"></i>
+            <span class="title">Inventory</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageRegions.php">
+            <i class="linecons-globe"></i>
+            <span class="title">Regions</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageSocialMedia.php">
+            <i class="glyphicon glyphicon-bullhorn"></i>
+            <span class="title">Manage Social Media</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageCountries.php">
+            <i class="glyphicon glyphicon-flag"></i>
+            <span class="title">Manage Countries</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageDealers.php">
+            <i class="glyphicon glyphicon-star-empty"></i>
+            <span class="title">Manage Dealers</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageRestrictedRiders.php">
+            <i class="glyphicon glyphicon-remove"></i>
+            <span class="title">Manage Restricted Riders</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageGroups.php">
+            <i class="glyphicon glyphicon-th"></i>
+            <span class="title">Vehicle Groups</span>
+            </a>
+        </li>
+        <li>
+            <a href="ViewSignedWaivers.php">
+            <i class="glyphicon glyphicon-paperclip"></i>
+            <span class="title">Manage Signed Waiver</span>
+            </a>
+        </li>
+        <li>
+            <a href="ImportVehicles.php">
+            <i class="glyphicon glyphicon-paperclip"></i>
+            <span class="title">Manage Import Vehicle</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageModels.php">
+            <i class="glyphicon glyphicon-wrench"></i>
+            <span class="title">Manage Models</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageUsers.php">
+            <i class="linecons-user"></i>
+            <span class="title">Users</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageWaivers.php">
+            <i class="linecons-doc"></i>
+            <span class="title">Waivers</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageEmailTemplates.php">
+            <i class="linecons-mail"></i>
+            <span class="title">Email Templates</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageSMSTemplates.php">
+            <i class="linecons-mail"></i>
+            <span class="title">SMS Templates</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageSurveys.php">
+            <i class="linecons-globe"></i>
+            <span class="title">Manage Surveys</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageData.php">
+            <i class="linecons-globe"></i>
+            <span class="title">Data Management</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManageBikesAndTimes.php">
+            <i class="linecons-globe"></i>
+            <span class="title">Manage Bikes and Times</span>
+            </a>
+        </li>
+        <li>
+            <a href="PreRegEmails.php">
+            <i class="linecons-mail"></i>
+            <span class="title">Pre Reg-Emails</span>
+            </a>
+        </li>
+        <li>
+            <a href="ManagePreRegistrationHTML.php">
+            <i class="linecons-mail"></i>
+            <span class="title">Manage Pre Registration</span>
+            </a>
+        </li>
+        <li>
+            <a href="GenerateCards.php">
+            <i class="linecons-globe"></i>
+            <span class="title">Generate Cards</span>
+            </a>
+        </li>
+    </ul>
+</div>
