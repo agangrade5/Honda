@@ -40,7 +40,7 @@
             </a>
         </li>
         <li>
-            <a href="ManageRegions.php">
+            <a href="{{ route('manage-regions.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Regions</span>
             </a>
