@@ -12,7 +12,7 @@ class SocialMediaController extends Controller
      */
     public function index()
     {
-        return view('backend.manage-social-media.index', [
+        return view('backend.social-media.index', [
             'title' => 'Manage Social Media',
         ]);
     }

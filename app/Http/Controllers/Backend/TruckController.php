@@ -12,7 +12,7 @@ class TruckController extends Controller
      */
     public function index()
     {
-        return view('backend.manage-trucks.index', [
+        return view('backend.trucks.index', [
             'title' => 'Manage Trucks',
         ]);
     }

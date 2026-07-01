@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class InventoryController extends Controller
+class CountryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('backend.inventory.index', [
-            'title' => 'Manage Inventory',
+        return view('backend.country.index', [
+            'title' => 'Manage Countries',
         ]);
     }
 

@@ -12,7 +12,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('backend.manage-events.index', [
+        return view('backend.events.index', [
             'title' => 'Manage Events',
         ]);
     }
