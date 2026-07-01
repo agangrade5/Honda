@@ -2,13 +2,16 @@
 
 use App\Http\Controllers\Backend\{
     RegionsController,
-    InventoryController
+    InventoryController,
+    TruckController
 };
 use Illuminate\Support\Facades\Route;
 
-Route::get('/manage-regions', [RegionsController::class, 'index'])
-    ->name('manage-regions.index');
-
-Route::get('/manage-inventory', [InventoryController::class, 'index'])
-    ->name('manage-inventory.index');
-
+//Resource Route
+Route::resources(
+    [
+        'manage-regions' => RegionsController::class,
+        'manage-inventory' => InventoryController::class,
+        'manage-trucks' => TruckController::class,
+    ]
+);
