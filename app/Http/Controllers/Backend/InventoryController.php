@@ -12,7 +12,9 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('backend.manage-inventory.index', [
+            'title' => 'Manage Inventory',
+        ]);
     }
 
     /**
