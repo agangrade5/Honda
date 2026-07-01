@@ -5,15 +5,13 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-    ?>
+    @endif
     <ul class="nav nav-tabs right-aligned">
         <li>
             <a href="javascript:;" onclick="jQuery('#region-modal').modal('show');">
@@ -41,42 +39,22 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
+                    @foreach ($regions as $region)
                     <tr>
-                        <td>1</td>
-                        <td>India</td>
+                        <td>{{ $region->regionid }}</td>
+                        <td>{{ $region->regionname }}</td>
                         <td>
                             <a href="javascript:;" onclick="jQuery('#region-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
                             Edit
                             </a>
-                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;" onclick="jQuery('#region-modal-delete').modal('show');" class="btn btn-danger btn-sm btn-icon icon-left">
                             Delete
                             </a>
+                            @endif
                         </td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Latin America</td>
-                        <td>
-                            <a href="javascript:;" onclick="jQuery('#region-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
-                            Delete
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Asia Pacific</td>
-                        <td>
-                            <a href="javascript:;" onclick="jQuery('#region-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
-                            Delete
-                            </a>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -93,10 +71,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="RegionDelete">
+            <form method="post" action="{{ route('manage-regions.destroy') }}" id="RegionDelete">
+                @csrf
                 <input type="hidden" name="DeleteRegionID" id="DeleteRegionID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="region">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
@@ -114,14 +91,13 @@
                 <h4 class="modal-title">Add Region</h4>
             </div>
             <div class="modal-body">
-                <form id="Region" method="post" action="Action.php">
+                <form id="Region" method="post" action="{{ route('manage-regions.store') }}">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="field-1" class="control-label">Region Name</label>
                                 <input type="text" class="form-control" id="field-1" name="RegionName" placeholder="">
-                                <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="controller" value="region">
                             </div>
                         </div>
                     </div>
@@ -145,11 +121,10 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form id="RegionEdit" method="post" action="Action.php">
+                        <form id="RegionEdit" method="post" action="{{ route('manage-regions.update') }}">
+                            @csrf
                             <div class="form-group">
                                 <label for="field-1" class="control-label">Region Name</label>
-                                <input type="hidden" name="action" value="edit">
-                                <input type="hidden" name="controller" value="region">
                                 <input type="hidden" id="RegionID" name="RegionID" value="">
                                 <input type="text" class="form-control" id="RegionNameEdit" name="RegionName" placeholder="">
                             </div>

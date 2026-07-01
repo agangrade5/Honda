@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\ReportRegion;
+
 class RegionsController extends Controller
 {
     /**
@@ -12,17 +14,12 @@ class RegionsController extends Controller
      */
     public function index()
     {
+        $regions = ReportRegion::all();
+
         return view('backend.manage-regions.index', [
             'title' => 'Manage Regions',
+            'regions' => $regions,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -30,38 +27,48 @@ class RegionsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'RegionName' => 'required|string|max:100',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        ReportRegion::create([
+            'regionname' => $request->input('RegionName'),
+            'clientid' => auth()->user()?->clientid ?? 1,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return redirect()->back()->with('msg', 'The Region has been created successfully');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'RegionID' => 'required|exists:reportregions,regionid',
+            'RegionName' => 'required|string|max:100',
+        ]);
+
+        $region = ReportRegion::findOrFail($request->input('RegionID'));
+        $region->update([
+            'regionname' => $request->input('RegionName'),
+        ]);
+
+        return redirect()->back()->with('msg', 'The Region has been updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'DeleteRegionID' => 'required|exists:reportregions,regionid',
+        ]);
+
+        $region = ReportRegion::findOrFail($request->input('DeleteRegionID'));
+        $region->delete();
+
+        return redirect()->back()->with('msg', 'The Region has been deleted successfully');
     }
 }
