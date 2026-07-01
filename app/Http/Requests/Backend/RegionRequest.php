@@ -15,16 +15,38 @@ class RegionRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            'region_name' => 'required|string|max:255'
-        ];
+        $routeName = $this->route() ? $this->route()->getName() : '';
+
+        if ($this->isMethod('get') || $routeName === 'manage-regions.index') {
+            return [
+                'region_name' => 'required|string|max:100|unique:reportregions,regionname',
+                'region_id' => 'required|exists:reportregions,regionid',
+                'delete_region_id' => 'required|exists:reportregions,regionid',
+            ];
+        }
+
+        if ($routeName === 'manage-regions.store') {
+            return [
+                'region_name' => 'required|string|max:100|unique:reportregions,regionname',
+            ];
+        }
+
+        if ($routeName === 'manage-regions.update') {
+            return [
+                'region_id' => 'required|exists:reportregions,regionid',
+                'region_name' => 'required|string|max:100|unique:reportregions,regionname,' . $this->input('region_id') . ',regionid',
+            ];
+        }
+
+        if ($routeName === 'manage-regions.destroy') {
+            return [
+                'delete_region_id' => 'required|exists:reportregions,regionid',
+            ];
+        }
+
+        return [];
     }
 
     /**
@@ -37,7 +59,12 @@ class RegionRequest extends FormRequest
         return [
             'region_name.required' => 'The region name is required.',
             'region_name.string' => 'The region name must be a string.',
-            'region_name.max' => 'The region name must not be greater than 255 characters.',
+            'region_name.max' => 'The region name must not be greater than 100 characters.',
+            'region_name.unique' => 'This region name already exists.',
+            'region_id.required' => 'The region ID is required.',
+            'region_id.exists' => 'The selected region ID is invalid.',
+            'delete_region_id.required' => 'The delete region ID is required.',
+            'delete_region_id.exists' => 'The selected region to delete is invalid.',
         ];
     }
 }

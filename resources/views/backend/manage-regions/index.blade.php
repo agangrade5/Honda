@@ -65,7 +65,7 @@
 </div>
 <!-- content @e -->
 <!-- Region Delete -->
-<div class="modal fade custom-width" id="region-modal-delete">
+<div class="modal fade custom-width" id="region-modal-delete" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -74,17 +74,17 @@
             </div>
             <form method="post" action="{{ route('manage-regions.destroy') }}" id="RegionDelete">
                 @csrf
-                <input type="hidden" name="DeleteRegionID" id="DeleteRegionID" value="">
+                <input type="hidden" name="delete_region_id" id="delete_region_id" value="">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 <!-- Region Create Modal -->
-<div class="modal fade custom-width" id="region-modal">
+<div class="modal fade custom-width" id="region-modal" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -98,7 +98,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="field-1" class="control-label">Region Name</label>
-                                <input type="text" class="form-control" id="field-1" name="RegionName" placeholder="">
+                                <input type="text" class="form-control" id="field-1" name="region_name" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -106,13 +106,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
+                <button type="button" class="btn btn-info">Create</button>
             </div>
         </div>
     </div>
 </div>
 <!-- Region Edit Modal -->
-<div class="modal fade custom-width" id="region-modal-edit">
+<div class="modal fade custom-width" id="region-modal-edit" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -126,8 +126,8 @@
                             @csrf
                             <div class="form-group">
                                 <label for="field-1" class="control-label">Region Name</label>
-                                <input type="hidden" id="RegionID" name="RegionID" value="">
-                                <input type="text" class="form-control" id="RegionNameEdit" name="RegionName" placeholder="">
+                                <input type="hidden" id="region_id" name="region_id" value="">
+                                <input type="text" class="form-control" id="region_name_edit" name="region_name" placeholder="">
                             </div>
                         </form>
                     </div>
@@ -135,7 +135,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
+                <button type="button" class="btn btn-info">Save Changes</button>
             </div>
         </div>
     </div>
@@ -157,14 +157,18 @@
         });
 
         $("a.btn-danger").click(function(){
-            $("#DeleteRegionID").val($(this).parent().prev().prev().text());
+            $("#delete_region_id").val($(this).parent().prev().prev().text());
         });
 
         $("a.btn-secondary").click(function(){
             //console.log();
-            $("#RegionNameEdit").val($(this).parent().prev().text());
-            $("#RegionID").val($(this).parent().prev().prev().text());
+            $("#region_name_edit").val($(this).parent().prev().text());
+            $("#region_id").val($(this).parent().prev().prev().text());
         });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#Region') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#RegionEdit') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#RegionDelete') !!}
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\ReportRegion;
+use App\Http\Requests\Backend\RegionRequest;
 
 class RegionsController extends Controller
 {
@@ -25,14 +26,10 @@ class RegionsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RegionRequest $request)
     {
-        $request->validate([
-            'RegionName' => 'required|string|max:100',
-        ]);
-
         ReportRegion::create([
-            'regionname' => $request->input('RegionName'),
+            'regionname' => $request->input('region_name'),
             'clientid' => auth()->user()?->clientid ?? 1,
         ]);
 
@@ -42,16 +39,11 @@ class RegionsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(RegionRequest $request)
     {
-        $request->validate([
-            'RegionID' => 'required|exists:reportregions,regionid',
-            'RegionName' => 'required|string|max:100',
-        ]);
-
-        $region = ReportRegion::findOrFail($request->input('RegionID'));
+        $region = ReportRegion::findOrFail($request->input('region_id'));
         $region->update([
-            'regionname' => $request->input('RegionName'),
+            'regionname' => $request->input('region_name'),
         ]);
 
         return redirect()->back()->with('msg', 'The Region has been updated successfully');
@@ -60,13 +52,9 @@ class RegionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(RegionRequest $request)
     {
-        $request->validate([
-            'DeleteRegionID' => 'required|exists:reportregions,regionid',
-        ]);
-
-        $region = ReportRegion::findOrFail($request->input('DeleteRegionID'));
+        $region = ReportRegion::findOrFail($request->input('delete_region_id'));
         $region->delete();
 
         return redirect()->back()->with('msg', 'The Region has been deleted successfully');
