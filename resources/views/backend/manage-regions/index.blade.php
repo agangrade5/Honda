@@ -142,20 +142,29 @@
         </div>
     </div>
 </div>
+@push('scripts')
 <script>
     $( document ).ready(function() {
         $("button.btn-info").click(function(){
             console.log($(this).text());
             if($(this).text()=="Create"){
-                $( "#Region" ).submit();
+                var form = $( "#Region" );
+                if (form.valid()) {
+                    form.submit();
+                }
             }
             else if($(this).text()=="Save Changes"){
-                $( "#RegionEdit" ).submit();
+                var form = $( "#RegionEdit" );
+                if (form.valid()) {
+                    form.submit();
+                }
             }
             else if($(this).text()=="Delete"){
-                $("#RegionDelete").submit();
+                var form = $("#RegionDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
             }
-            //$( "#Region" ).submit();
         });
 
         $("a.btn-danger").click(function(){
@@ -203,4 +212,5 @@
 {!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#Region') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#RegionEdit') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#RegionDelete') !!}
+@endpush
 @endsection
