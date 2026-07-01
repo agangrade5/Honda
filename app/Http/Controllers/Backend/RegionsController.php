@@ -17,7 +17,7 @@ class RegionsController extends Controller
     {
         $regions = ReportRegion::all();
 
-        return view('backend.manage-regions.index', [
+        return view('backend.regions.index', [
             'title' => 'Manage Regions',
             'regions' => $regions,
         ]);
