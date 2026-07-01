@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\{
     TruckController,
     InventoryController,
     RegionsController,
+    SocialMediaController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,7 @@ Route::middleware('auth')->group(function () {
             'manage-trucks' => TruckController::class,
             'manage-inventory' => InventoryController::class,
             'manage-regions' => RegionsController::class,
+            'manage-social-media' => SocialMediaController::class,
         ]
     );
 });
