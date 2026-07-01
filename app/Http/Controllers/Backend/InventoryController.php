@@ -44,7 +44,7 @@ class InventoryController extends Controller
         $trucks = Truck::all();
         $models = HondaModel::all();
 
-        return view('backend.manage-inventory.index', [
+        return view('backend.inventory.index', [
             'title' => 'Manage Inventory',
             'vehicles' => $vehicles,
             'groups' => $groups,

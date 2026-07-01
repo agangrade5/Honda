@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class EventController extends Controller
+class SocialMediaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('backend.events.index', [
-            'title' => 'Manage Events',
+        return view('backend.social-media.index', [
+            'title' => 'Manage Social Media',
         ]);
     }
 

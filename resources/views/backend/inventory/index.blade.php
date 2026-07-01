@@ -363,6 +363,8 @@
     </div>
 </div>
 
+@endsection
+
 @push('scripts')
 <script>
     $( document ).ready(function() {
@@ -445,9 +447,10 @@
         });
     });
 </script>
+
 <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
 {!! JsValidator::formRequest('App\Http\Requests\Backend\InventoryRequest', '#Inventory') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\InventoryRequest', '#InventoryEdit') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\InventoryRequest', '#InventoryDelete') !!}
+
 @endpush
-@endsection

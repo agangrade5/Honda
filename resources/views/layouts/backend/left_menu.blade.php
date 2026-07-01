@@ -45,14 +45,14 @@
             <span class="title">Regions</span>
             </a>
         </li>
-        <li>
-            <a href="ManageSocialMedia.php">
+        <li class="{{ request()->routeIs('manage-social-media.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-social-media.index') }}">
             <i class="glyphicon glyphicon-bullhorn"></i>
             <span class="title">Manage Social Media</span>
             </a>
         </li>
-        <li>
-            <a href="ManageCountries.php">
+        <li class="{{ request()->routeIs('manage-countries.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-countries.index') }}">
             <i class="glyphicon glyphicon-flag"></i>
             <span class="title">Manage Countries</span>
             </a>

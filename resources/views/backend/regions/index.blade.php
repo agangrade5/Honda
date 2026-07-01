@@ -142,6 +142,8 @@
         </div>
     </div>
 </div>
+@endsection
+
 @push('scripts')
 <script>
     $( document ).ready(function() {
@@ -213,4 +215,3 @@
 {!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#RegionEdit') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\RegionRequest', '#RegionDelete') !!}
 @endpush
-@endsection
