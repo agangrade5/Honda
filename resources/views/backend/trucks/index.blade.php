@@ -358,6 +358,9 @@
     </div>
 </div>
 <!-- Modal 2 end-->
+@endsection
+
+@push('scripts')
 <script>
     var count = 0;
     var uploadedData = []
@@ -478,4 +481,4 @@
     	});
     });
 </script>
-@endsection
+@endpush

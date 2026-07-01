@@ -23,6 +23,7 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
+<<<<<<< HEAD
         // Get Year list from Event
         $years = Event::selectRaw('YEAR(eventend) as Year')
             ->groupByRaw('YEAR(eventend)')
@@ -260,6 +261,9 @@ class EventController extends Controller
         });
 
         return view('backend.manage-events.index', [
+=======
+        return view('backend.events.index', [
+>>>>>>> 48119b00046f0ba03e974c53c614ca55f7c3fbb5
             'title' => 'Manage Events',
             'years' => $years,
             'selectedYear' => $selectedYear,

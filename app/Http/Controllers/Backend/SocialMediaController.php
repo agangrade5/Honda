@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class TruckController extends Controller
+class SocialMediaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('backend.trucks.index', [
-            'title' => 'Manage Trucks',
+        return view('backend.social-media.index', [
+            'title' => 'Manage Social Media',
         ]);
     }
 
