@@ -20,14 +20,6 @@ class RegionRequest extends FormRequest
     {
         $routeName = $this->route() ? $this->route()->getName() : '';
 
-        if ($this->isMethod('get') || $routeName === 'manage-regions.index') {
-            return [
-                'region_name' => ['required', 'string', 'max:100', 'unique:reportregions,regionname', 'regex:/^[a-zA-Z\s\-]+$/', new NoScripts()],
-                'region_id' => ['required', 'exists:reportregions,regionid', new NoScripts()],
-                'delete_region_id' => ['required', 'exists:reportregions,regionid', new NoScripts()],
-            ];
-        }
-
         if ($routeName === 'manage-regions.store') {
             return [
                 'region_name' => ['required', 'string', 'max:100', 'unique:reportregions,regionname', 'regex:/^[a-zA-Z\s\-]+$/', new NoScripts()],
