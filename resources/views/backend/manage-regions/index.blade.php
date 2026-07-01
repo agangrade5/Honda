@@ -42,14 +42,14 @@
                 <tbody class="middle-align">
                     @foreach ($regions as $region)
                     <tr>
-                        <td>{{ $region->regionid }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $region->regionname }}</td>
                         <td>
-                            <a href="javascript:;" onclick="jQuery('#region-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
+                            <a href="javascript:;" data-id="{{ $region->regionid }}" onclick="jQuery('#region-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
                             Edit
                             </a>
                             @if(!auth()->check() || auth()->user()?->userlevel == 1)
-                            <a href="javascript:;" onclick="jQuery('#region-modal-delete').modal('show');" class="btn btn-danger btn-sm btn-icon icon-left">
+                            <a href="javascript:;" data-id="{{ $region->regionid }}" onclick="jQuery('#region-modal-delete').modal('show');" class="btn btn-danger btn-sm btn-icon icon-left">
                             Delete
                             </a>
                             @endif
@@ -65,12 +65,12 @@
 </div>
 <!-- content @e -->
 <!-- Region Delete -->
-<div class="modal fade custom-width" id="region-modal-delete" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade custom-width" id="region-modal-delete" tabindex="-1" role="dialog" aria-labelledby="region-modal-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="region-modal-delete-label">Are you sure? </h4>
             </div>
             <form method="post" action="#" id="RegionDelete">
                 @csrf
@@ -85,12 +85,12 @@
     </div>
 </div>
 <!-- Region Create Modal -->
-<div class="modal fade custom-width" id="region-modal" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+<div class="modal fade custom-width" id="region-modal" tabindex="-1" role="dialog" aria-labelledby="region-modal-label" data-backdrop="static" data-keyboard="false" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Region</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="region-modal-label">Add Region</h4>
             </div>
             <div class="modal-body">
                 <form id="Region" method="post" action="{{ route('manage-regions.store') }}">
@@ -113,12 +113,12 @@
     </div>
 </div>
 <!-- Region Edit Modal -->
-<div class="modal fade custom-width" id="region-modal-edit" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade custom-width" id="region-modal-edit" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Region</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="region-modal-edit-label">Edit Region</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -159,7 +159,7 @@
         });
 
         $("a.btn-danger").click(function(){
-            var id = $(this).parent().prev().prev().text();
+            var id = $(this).data('id');
             $("#delete_region_id").val(id);
             $("#RegionDelete").attr('action', '/manage-regions/' + id);
         });
@@ -167,9 +167,35 @@
         $("a.btn-secondary").click(function(){
             //console.log();
             $("#region_name_edit").val($(this).parent().prev().text());
-            var id = $(this).parent().prev().prev().text();
+            var id = $(this).data('id');
             $("#region_id").val(id);
             $("#RegionEdit").attr('action', '/manage-regions/' + id);
+        });
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
         });
     });
 </script>
