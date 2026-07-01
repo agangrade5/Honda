@@ -3,10 +3,15 @@
 use App\Http\Controllers\Backend\{
     RegionsController,
     InventoryController,
+    TruckController
 };
 use Illuminate\Support\Facades\Route;
- 
+
 //Resource Route
-Route::resource('manage-regions', RegionsController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::resource('manage-inventory', InventoryController::class);
- 
+Route::resources(
+    [
+        'manage-regions' => RegionsController::class,
+        'manage-inventory' => InventoryController::class,
+        'manage-trucks' => TruckController::class,
+    ]
+);

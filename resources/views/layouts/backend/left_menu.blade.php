@@ -27,8 +27,8 @@
             <span class="title">Events</span>
             </a>
         </li>
-        <li>
-            <a href="ManageTrucks.php">
+        <li class="{{ request()->routeIs('manage-trucks.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-trucks.index') }}">
             <i class="linecons-truck"></i>
             <span class="title">Trucks</span>
             </a>

@@ -11,7 +11,7 @@
     <!-- Right links for user info navbar -->
     <ul class="user-info-menu right-links list-inline list-unstyled">
         <li>
-            <a href="logout.php"><i class="fa-lock"></i>Logout</a>
+            <a href="logout.php"><i class="fa-lock"></i> Logout</a>
         </li>
     </ul>
 </nav>
