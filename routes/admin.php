@@ -8,10 +8,12 @@ use App\Http\Controllers\Backend\{
 use Illuminate\Support\Facades\Route;
 
 //Resource Route
-Route::resources(
-    [
-        'manage-regions' => RegionsController::class,
-        'manage-inventory' => InventoryController::class,
-        'manage-trucks' => TruckController::class,
-    ]
-);
+Route::middleware('auth')->group(function () {
+    Route::resources(
+        [
+            'manage-regions' => RegionsController::class,
+            'manage-inventory' => InventoryController::class,
+            'manage-trucks' => TruckController::class,
+        ]
+    );
+});
