@@ -1,6 +1,7 @@
 <!-- Imported styles on this page -->
 <link rel="stylesheet" href={{ asset("assets/js/datatables/dataTables.bootstrap.css")}}>
 <link rel="stylesheet" href={{ asset("assets/js/daterangepicker/daterangepicker-bs3.css")}}>
+<link rel="stylesheet" href={{ asset("assets/css/bootstrap-datetimepicker.css")}}>
 <link rel="stylesheet" href={{ asset("assets/js/select2/select2.css")}}>
 <link rel="stylesheet" href={{ asset("assets/js/select2/select2-bootstrap.css")}}>
 <link rel="stylesheet" href={{ asset("assets/js/multiselect/css/multi-select.css")}}>
@@ -32,6 +33,7 @@
 <script src={{ asset("assets/js/multiselect/js/jquery.multi-select.js")}}></script>
 <script src={{ asset("assets/js/daterangepicker/daterangepicker.js")}}></script>
 <script src={{ asset("assets/js/datepicker/bootstrap-datepicker.js")}}></script>
+<script src={{ asset("assets/js/datepicker/bootstrap-datetimepicker.js")}}></script>
 <script src={{ asset("assets/js/inputmask/jquery.inputmask.bundle.js")}}></script>
 <script src={{ asset("assets/js/formwizard/jquery.bootstrap.wizard.min.js")}}></script>
 <script src={{ asset("assets/js/jquery-validate/jquery.validate.min.js")}}></script>

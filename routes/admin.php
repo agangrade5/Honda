@@ -1,17 +1,19 @@
 <?php
- 
+
 use App\Http\Controllers\Backend\{
-    RegionsController,
+    EventController,
+    TruckController,
     InventoryController,
-    TruckController
+    RegionsController,
 };
 use Illuminate\Support\Facades\Route;
 
 //Resource Route
 Route::resources(
     [
-        'manage-regions' => RegionsController::class,
-        'manage-inventory' => InventoryController::class,
+        'manage-events' => EventController::class,
         'manage-trucks' => TruckController::class,
+        'manage-inventory' => InventoryController::class,
+        'manage-regions' => RegionsController::class,
     ]
 );

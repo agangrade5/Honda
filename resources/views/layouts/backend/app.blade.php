@@ -22,5 +22,7 @@
         </div>
 		<!-- Footer Scripts -->
         @include('layouts.backend.footer_scripts')
+        <!-- Custom Scripts -->
+        @stack('scripts')
     </body>
 </html>
