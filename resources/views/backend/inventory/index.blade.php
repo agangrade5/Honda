@@ -5,31 +5,26 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <div class="row">
         <div class="col-md-2">
             <div class="form-group">
-                <form method="post" id="ArchivedFilterForm">
-                    <script type="text/javascript">
-                        function ArchiveChange(){
-                        	//$("#ArchivedFilterForm").submit();
-                        }
-                    </script>
-                    <input type="hidden" name="action" value="filter">
-                    <input type="hidden" name="controller" value="archived">
-                    <button type="button" onclick="ArchiveChange();" class="btn btn-info" data-dismiss="modal">Show Archived vehicles</button>
+                <form method="GET" action="{{ route('manage-inventory.index') }}" id="ArchivedFilterForm">
+                    <input type="hidden" name="archive" value="{{ $selectedArchive ? 0 : 1 }}">
+                    <button type="submit" class="btn btn-info">{{ $selectedArchive ? 'Show Active vehicles' : 'Show Archived vehicles' }}</button>
                 </form>
             </div>
         </div>
     </div>
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#vehicle-modal').modal('show');">
@@ -37,6 +32,7 @@
             </a>
         </li>
     </ul>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Vehicles</h3>
@@ -62,39 +58,43 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        //if(isset($inventories->Vehicles) && $inventories->Success==1){
-                        //foreach ($inventories->Vehicles as $key => $inventorie) { ?>
+                    @foreach ($vehicles as $inventorie)
                     <tr>
-                        <td>1</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
+                        <td>{{ $inventorie->VehicleCOV }}</td>
+                        <td>{{ $inventorie->VehicleNickName }}</td>
+                        <td>{{ $inventorie->VehicleGroup }}</td>
+                        <td>{{ $inventorie->VehicleColor }}</td>
+                        <td>{{ $inventorie->TruckName }}</td>
+                        <td>{{ $inventorie->VehicleLicPlate }}</td>
+                        <td>{{ ucfirst($inventorie->VehicleType) }}</td>
                         <td>
-                            <input type="hidden" name="" id="VehicleVIN<?php //echo $inventorie->VehicleID;?>" value="<?php //echo $inventorie->VehicleVIN;?>">
-                            <input type="hidden" name="" id="EventArchive<?php //echo $inventorie->VehicleID;?>" value="<?php //echo $inventorie->VehicleArchive;?>">
-                            <input type="hidden" name="" id="VehicleCOV<?php //echo $inventorie->VehicleID;?>" value="<?php //echo $inventorie->VehicleCOV;?>">
-                            <input type="hidden" name="" id="VehicleTruckID<?php //echo $inventorie->VehicleID;?>" value="<?php //echo $inventorie->VehicleTruckID;?>">
-                            <input type="hidden" name="" id="group<?php //echo $inventorie->VehicleID;?>" value="<?php //echo $inventorie->VehicleGroupID;?>">
-                            <input type="hidden" name="" id="ModelID<?php //echo $inventorie->VehicleID;?>" value="<?php //echo $inventorie->ModelID;?>">
-                            <input type="hidden" name=""  value="<?php //echo $inventorie->VehicleID;?>">
-                            <a href="javascript:;" onclick="jQuery('#vehicle-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
+                            <a href="javascript:;"
+                               data-id="{{ $inventorie->VehicleID }}"
+                               data-nickname="{{ $inventorie->VehicleNickName }}"
+                               data-group="{{ $inventorie->VehicleGroupID }}"
+                               data-color="{{ $inventorie->VehicleColor }}"
+                               data-truck="{{ $inventorie->VehicleTruckID }}"
+                               data-model="{{ $inventorie->ModelID }}"
+                               data-plate="{{ $inventorie->VehicleLicPlate }}"
+                               data-vin="{{ $inventorie->VehicleVIN }}"
+                               data-cov="{{ $inventorie->VehicleCOV }}"
+                               data-type="{{ strtolower($inventorie->VehicleType) }}"
+                               data-archive="{{ $inventorie->VehicleArchive }}"
+                               onclick="jQuery('#vehicle-modal-edit').modal('show');"
+                               class="btn btn-secondary btn-sm btn-icon icon-left">
+                               Edit
                             </a>
-                            <?php //if((Auth::getUsers()->userlevel==1)){ ?>
-                            <a href="javascript:;" id="<?php //echo $inventorie->VehicleID;?>" onclick="jQuery('#inventory-modal-delete').modal('show');" class="btn btn-danger btn-icon">
-                            <i class="icon-white icon-heart"></i> Delete
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;"
+                               data-id="{{ $inventorie->VehicleID }}"
+                               onclick="jQuery('#inventory-modal-delete').modal('show');"
+                               class="btn btn-danger btn-icon">
+                               <i class="icon-white icon-heart"></i> Delete
                             </a>
-                            <?php //} ?>
-                            <!--  <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
-                                Delete
-                                </a> -->
+                            @endif
                         </td>
                     </tr>
-                    <?php //}} ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -103,35 +103,38 @@
     @include('layouts.backend.footer')
 </div>
 <!-- content @e -->
+
 <!-- Delete Modal -->
-<div class="modal fade custom-width" id="inventory-modal-delete">
+<div class="modal fade custom-width" id="inventory-modal-delete" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="delete-modal-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="InventoryDelete">
+            <form method="post" action="#" id="InventoryDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteInventoryID" id="DeleteInventoryID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="inventory">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <!-- Create Modal -->
-<div class="modal fade custom-width" id="vehicle-modal">
+<div class="modal fade custom-width" id="vehicle-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Vehicle</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="create-modal-label">Add Vehicle</h4>
             </div>
-            <form method="post" action="Action.php" id="Inventory">
+            <form method="post" action="{{ route('manage-inventory.store') }}" id="Inventory">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -142,19 +145,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="group" class="control-label">Group</label>
+                                <label for="VehicleModel" class="control-label">Group</label>
                                 <select class="form-control" id="VehicleModel" name="VehicleModel">
                                     <option value="0">None</option>
-                                    <?php
-                                        /* if(isset($groups->Success) && $groups->Success==1){
-                                        	foreach ($groups->Groups as $key => $groups) {
-                                        		echo '<option value="'.$groups->GroupID.'">'.$groups->GroupName.'</option>';
-                                        	}
-                                        } */
-                                        ?>
-                                        <option value="1">Rebel 1</option>
-                                        <option value="2">Rebel 2</option>
-                                        <option value="3">Rebel 3</option>
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->groupid }}">{{ $group->groupname }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -168,35 +164,18 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Truck</label>
-                                <script type="text/javascript">
-                                    jQuery(document).ready(function($)
-                                    {
-                                        $("#sboxit-1").selectBoxIt().on('open', function()
-                                        {
-                                            // Adding Custom Scrollbar
-                                            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                        });
-                                    });
-                                </script>
+                                <label for="VehicleTruckID" class="control-label">Truck</label>
                                 <select class="form-control" id="VehicleTruckID" name="VehicleTruckID">
                                     <option value="0">None</option>
-                                    <?php
-                                        /* if(isset($trucks->Trucks) && $trucks->Success==1){
-                                        	foreach ($trucks->Trucks as $key => $truck) {
-                                        		echo '<option value="'.$truck->TruckID.'">'.$truck->TruckName.'</option>';
-                                        	}
-                                        } */
-                                        ?>
-                                        <option value="1">Rebel 1</option>
-                                        <option value="2">Rebel 2</option>
-                                        <option value="3">Rebel 3</option>
+                                    @foreach ($trucks as $truck)
+                                        <option value="{{ $truck->truckid }}">{{ $truck->truckname }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="plate" class="control-label">Plate #</label>
+                                <label for="VehicleLicPlate" class="control-label">Plate #</label>
                                 <input type="text" class="form-control" id="VehicleLicPlate" name="VehicleLicPlate" placeholder="">
                             </div>
                         </div>
@@ -204,13 +183,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="color" class="control-label">Vehicle VIN</label>
+                                <label for="VehicleVIN" class="control-label">Vehicle VIN</label>
                                 <input type="text" class="form-control" id="VehicleVIN" name="VehicleVIN" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="color" class="control-label">Vehicle COV</label>
+                                <label for="VehicleCOV" class="control-label">Vehicle COV</label>
                                 <input type="text" class="form-control" id="VehicleCOV" name="VehicleCOV" placeholder="">
                             </div>
                         </div>
@@ -218,26 +197,19 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="group" class="control-label">Model</label>
+                                <label for="ModelID" class="control-label">Model</label>
                                 <select class="form-control" id="ModelID" name="ModelID">
                                     <option value="0">None</option>
-                                    <?php
-                                        /* if(isset($models->Models) && $models->Success==1){
-                                        	foreach ($models->Models as $key => $model) {
-                                        		echo '<option value="'.$model->ModelID.'">'.$model->ModelName.'</option>';
-                                        	}
-                                        } */
-                                        ?>
-                                        <option value="1">Rebel 1</option>
-                                        <option value="2">Rebel 2</option>
-                                        <option value="3">Rebel 3</option>
+                                    @foreach ($models as $model)
+                                        <option value="{{ $model->modelid }}">{{ $model->modelname }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="group" class="control-label">Type</label>
-                                <select class="form-control" name="VehicleType">
+                                <label for="VehicleType" class="control-label">Type</label>
+                                <select class="form-control" id="VehicleType" name="VehicleType">
                                     <option value="display">Display</option>
                                     <option value="demo">Demo</option>
                                 </select>
@@ -247,59 +219,57 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="color" class="control-label">Archive</label>
+                                <label class="control-label">Archive</label>
                             </div>
                         </div>
                         <div class="col-md-10">
                             <div class="form-group">
-                                <input type="radio" value="1" placeholder="" name="EventArchive" id="EventArchive"> Yes
-                                <input type="radio" value="0" placeholder="" name="EventArchive" id="EventArchive1"> No
+                                <label class="radio-inline">
+                                    <input type="radio" value="1" name="EventArchive" id="EventArchive"> Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="0" name="EventArchive" id="EventArchive1" checked> No
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="action" value="add">
-                <input type="hidden" name="controller" value="inventory">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-info">Create</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <!-- Edit Modal -->
-<div class="modal fade custom-width" id="vehicle-modal-edit">
+<div class="modal fade custom-width" id="vehicle-modal-edit" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Vehicle</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="edit-modal-label">Edit Vehicle</h4>
             </div>
-            <form method="post" action="Action.php" id="InventoryEdit">
+            <form method="post" action="#" id="InventoryEdit">
+                @csrf
+                @method('PUT')
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="nickname2" class="control-label">Nickname</label>
+                                <label for="VehicleNickNameEdit" class="control-label">Nickname</label>
                                 <input type="text" class="form-control" id="VehicleNickNameEdit" name="VehicleNickName" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="group2" class="control-label">Group</label>
+                                <label for="VehicleModelEdit" class="control-label">Group</label>
                                 <select class="form-control" id="VehicleModelEdit" name="VehicleModel">
                                     <option value="0">None</option>
-                                    <?php
-                                       /*  if(isset($groups1->Success) && $groups1->Success==1){
-                                        	foreach ($groups1->Groups as $key => $groups1) {
-                                        		echo '<option value="'.$groups1->GroupID.'">'.$groups1->GroupName.'</option>';
-                                        	}
-                                        } */
-                                        ?>
-                                        <option value="1">Rebel 1</option>
-                                        <option value="2">Rebel 2</option>
-                                        <option value="3">Rebel 3</option>
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->groupid }}">{{ $group->groupname }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -307,41 +277,24 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="color2" class="control-label">Color</label>
+                                <label for="VehicleColorEdit" class="control-label">Color</label>
                                 <input type="text" class="form-control" id="VehicleColorEdit" name="VehicleColor" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Truck</label>
-                                <script type="text/javascript">
-                                    jQuery(document).ready(function($)
-                                    {
-                                        $("#sboxit-2").selectBoxIt().on('open', function()
-                                        {
-                                            // Adding Custom Scrollbar
-                                            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                        });
-                                    });
-                                </script>
+                                <label for="VehicleTruckIDEdit" class="control-label">Truck</label>
                                 <select class="form-control" id="VehicleTruckIDEdit" name="VehicleTruckID">
                                     <option value="0">None</option>
-                                    <?php
-                                        /* if(isset($trucks->Success) && $trucks->Success==1){
-                                        	foreach ($trucks->Trucks as $key => $truck) {
-                                        		echo '<option value="'.$truck->TruckID.'">'.$truck->TruckName.'</option>';
-                                        	}
-                                        } */
-                                        ?>
-                                        <option value="1">Rebel 1</option>
-                                        <option value="2">Rebel 2</option>
-                                        <option value="3">Rebel 3</option>
+                                    @foreach ($trucks as $truck)
+                                        <option value="{{ $truck->truckid }}">{{ $truck->truckname }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="plate2" class="control-label">Plate #</label>
+                                <label for="VehicleLicPlateEdit" class="control-label">Plate #</label>
                                 <input type="text" class="form-control" id="VehicleLicPlateEdit" name="VehicleLicPlate" placeholder="">
                             </div>
                         </div>
@@ -349,13 +302,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="color" class="control-label">Vehicle VIN</label>
+                                <label for="VehicleVINEdit" class="control-label">Vehicle VIN</label>
                                 <input type="text" class="form-control" id="VehicleVINEdit" name="VehicleVIN" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="color" class="control-label">Vehicle COV</label>
+                                <label for="VehicleCOVEdit" class="control-label">Vehicle COV</label>
                                 <input type="text" class="form-control" id="VehicleCOVEdit" name="VehicleCOV" placeholder="">
                             </div>
                         </div>
@@ -363,25 +316,18 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="group" class="control-label">Model</label>
+                                <label for="ModelIDEdit" class="control-label">Model</label>
                                 <select class="form-control" id="ModelIDEdit" name="ModelID">
                                     <option value="0">None</option>
-                                    <?php
-                                        /* if(isset($models->Success) && $models->Success==1){
-                                        	foreach ($models->Models as $key => $model) {
-                                        		echo '<option value="'.$model->ModelID.'">'.$model->ModelName.'</option>';
-                                        	}
-                                        } */
-                                        ?>
-                                        <option value="1">Rebel 1</option>
-                                        <option value="2">Rebel 2</option>
-                                        <option value="3">Rebel 3</option>
+                                    @foreach ($models as $model)
+                                        <option value="{{ $model->modelid }}">{{ $model->modelname }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="group" class="control-label">Type</label>
+                                <label for="VehicleTypeEdit" class="control-label">Type</label>
                                 <select class="form-control" id="VehicleTypeEdit" name="VehicleType">
                                     <option value="display">Display</option>
                                     <option value="demo">Demo</option>
@@ -392,23 +338,25 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="color" class="control-label">Archive</label>
+                                <label class="control-label">Archive</label>
                             </div>
                         </div>
                         <div class="col-md-10">
                             <div class="form-group">
-                                <input type="radio" value="1" placeholder="" name="EventArchive" id="EventArchiveEdit"> Yes
-                                <input type="radio" value="0" placeholder="" name="EventArchive" id="EventArchiveEdit1"> No
+                                <label class="radio-inline">
+                                    <input type="radio" value="1" name="EventArchive" id="EventArchiveEdit"> Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="0" name="EventArchive" id="EventArchiveEdit1"> No
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
+                    <button type="button" class="btn btn-info">Save Changes</button>
                 </div>
-                <input type="hidden" name="action" value="edit">
-                <input type="hidden" name="controller" value="inventory">
                 <input type="hidden" id="VehicleID" name="VehicleID" value="">
             </form>
         </div>
@@ -421,44 +369,88 @@
 <script>
     $( document ).ready(function() {
     	$("button.btn-info").click(function(){
-    		if($(this).text()=="Create"){ console.log("create");
-    			$( "#Inventory" ).submit();
+    		if($(this).text()=="Create"){
+    			var form = $( "#Inventory" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
-    		else if($(this).text()=="Save Changes"){ console.log("edit");
-    			$( "#InventoryEdit" ).submit();
+    		else if($(this).text()=="Save Changes"){
+    			var form = $( "#InventoryEdit" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Delete"){
-    			$("#InventoryDelete").submit();
+    			var form = $("#InventoryDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     	});
 
     	$("a.btn-danger").click(function(){
-    		$("#DeleteInventoryID").val($(this).prev().prev().val());//$(this).parent().prev().prev().prev().prev().prev().prev().text()
+            var id = $(this).data('id');
+    		$("#DeleteInventoryID").val(id);
+            $("#InventoryDelete").attr('action', '/manage-inventory/' + id);
     	});
 
     	$("a.btn-secondary").click(function(){
-
-    		var VId = $(this).prev().val();//$(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
-    		$("#VehicleNickNameEdit").val($(this).parent().prev().prev().prev().prev().prev().prev().text());
-    		$("#VehicleModelEdit").val($("#group"+VId).val());
-    		$("#VehicleColorEdit").val($(this).parent().prev().prev().prev().prev().text());
-    		$("#VehicleTruckIDEdit").val($("#VehicleTruckID"+VId).val());
+    		var btn = $(this);
+    		var VId = btn.data('id');
+    		$("#VehicleNickNameEdit").val(btn.data('nickname'));
+    		$("#VehicleModelEdit").val(btn.data('group'));
+    		$("#VehicleColorEdit").val(btn.data('color'));
+    		$("#VehicleTruckIDEdit").val(btn.data('truck'));
     		$("#VehicleID").val(VId);
-    		$("#ModelIDEdit").val($("#ModelID"+VId).val());
-    		$("#VehicleLicPlateEdit").val($(this).parent().prev().prev().text());
-    		$("#VehicleVINEdit").val($("#VehicleVIN"+VId).val());
-    		$("#VehicleCOVEdit").val($("#VehicleCOV"+VId).val());
-    		$("#VehicleTypeEdit").val($(this).parent().prev().text().toLowerCase());
-    		if(parseInt($("#EventArchive"+VId).val())==1){ console.log(VId);
-    			$("#EventArchiveEdit").attr('checked', true);
-    			$("#EventArchiveEdit1").removeAttr('checked');
-    		}
-    		else { console.log("else");
-    			$("#EventArchiveEdit").removeAttr('checked');
-    			$("#EventArchiveEdit1").attr('checked', true);
-    		}
+    		$("#ModelIDEdit").val(btn.data('model'));
+    		$("#VehicleLicPlateEdit").val(btn.data('plate'));
+    		$("#VehicleVINEdit").val(btn.data('vin'));
+    		$("#VehicleCOVEdit").val(btn.data('cov'));
+    		$("#VehicleTypeEdit").val(btn.data('type'));
 
+    		if(parseInt(btn.data('archive')) == 1){
+    			$("#EventArchiveEdit").prop('checked', true);
+    			$("#EventArchiveEdit1").prop('checked', false);
+    		}
+    		else {
+    			$("#EventArchiveEdit").prop('checked', false);
+    			$("#EventArchiveEdit1").prop('checked', true);
+    		}
+            $("#InventoryEdit").attr('action', '/manage-inventory/' + VId);
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
     });
 </script>
+
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\InventoryRequest', '#Inventory') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\InventoryRequest', '#InventoryEdit') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\InventoryRequest', '#InventoryDelete') !!}
+
 @endpush
