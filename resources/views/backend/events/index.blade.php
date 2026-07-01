@@ -181,7 +181,7 @@
                                         value="{{ $event->TrikeWaiver }}">
                                     <input type="hidden" id="TrikePassengerWaiver{{ $event->EventID }}"
                                         value="{{ $event->TrikePassengerWaiver }}">
-                                    
+
                                     <input type="hidden" id="Eventalloweventpreregistrations{{ $event->EventID }}"
                                         value="{{ $event->alloweventpreregistrations }}">
                                     <input type="hidden" id="Eventregistrationsurveyid{{ $event->EventID }}"

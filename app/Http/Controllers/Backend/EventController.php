@@ -89,7 +89,7 @@ class EventController extends Controller
         $mappedEvents = [];
         foreach ($dbEvents as $event) {
             $regionName = $event->regionname ?? 'Uncategorized';
-            
+
             // Truck name logic
             $truckName = '';
             $truckIds = !empty($event->eventstrucksblob) ? @unserialize($event->eventstrucksblob) : [];
@@ -259,7 +259,11 @@ class EventController extends Controller
             ];
         });
 
+<<<<<<< HEAD
         return view('backend.events.index', [
+=======
+        return view('backend.manage-events.index', [
+>>>>>>> da2ea9bd5322535db1c76e519a8d1aedcd14df99
             'title' => 'Manage Events',
             'years' => $years,
             'selectedYear' => $selectedYear,

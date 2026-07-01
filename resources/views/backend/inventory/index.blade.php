@@ -68,7 +68,7 @@
                         <td>{{ $inventorie->VehicleLicPlate }}</td>
                         <td>{{ ucfirst($inventorie->VehicleType) }}</td>
                         <td>
-                            <a href="javascript:;" 
+                            <a href="javascript:;"
                                data-id="{{ $inventorie->VehicleID }}"
                                data-nickname="{{ $inventorie->VehicleNickName }}"
                                data-group="{{ $inventorie->VehicleGroupID }}"
@@ -80,14 +80,14 @@
                                data-cov="{{ $inventorie->VehicleCOV }}"
                                data-type="{{ strtolower($inventorie->VehicleType) }}"
                                data-archive="{{ $inventorie->VehicleArchive }}"
-                               onclick="jQuery('#vehicle-modal-edit').modal('show');" 
+                               onclick="jQuery('#vehicle-modal-edit').modal('show');"
                                class="btn btn-secondary btn-sm btn-icon icon-left">
                                Edit
                             </a>
                             @if(!auth()->check() || auth()->user()?->userlevel == 1)
-                            <a href="javascript:;" 
-                               data-id="{{ $inventorie->VehicleID }}" 
-                               onclick="jQuery('#inventory-modal-delete').modal('show');" 
+                            <a href="javascript:;"
+                               data-id="{{ $inventorie->VehicleID }}"
+                               onclick="jQuery('#inventory-modal-delete').modal('show');"
                                class="btn btn-danger btn-icon">
                                <i class="icon-white icon-heart"></i> Delete
                             </a>
@@ -408,7 +408,7 @@
     		$("#VehicleVINEdit").val(btn.data('vin'));
     		$("#VehicleCOVEdit").val(btn.data('cov'));
     		$("#VehicleTypeEdit").val(btn.data('type'));
-    		
+
     		if(parseInt(btn.data('archive')) == 1){
     			$("#EventArchiveEdit").prop('checked', true);
     			$("#EventArchiveEdit1").prop('checked', false);
