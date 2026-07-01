@@ -33,13 +33,13 @@
             <span class="title">Trucks</span>
             </a>
         </li>
-        <li>
-            <a href="ManageInventory.php">
+        <li class="{{ request()->routeIs('manage-inventory.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-inventory.index') }}">
             <i class="linecons-tag"></i>
             <span class="title">Inventory</span>
             </a>
         </li>
-        <li>
+        <li class="{{ request()->routeIs('manage-regions.*') ? 'active' : '' }}">
             <a href="{{ route('manage-regions.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Regions</span>

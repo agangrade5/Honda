@@ -39,9 +39,9 @@ class RegionsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RegionRequest $request)
+    public function update(RegionRequest $request, $id)
     {
-        $region = ReportRegion::findOrFail($request->input('region_id'));
+        $region = ReportRegion::findOrFail($id);
         $region->update([
             'regionname' => $request->input('region_name'),
         ]);
@@ -52,9 +52,9 @@ class RegionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RegionRequest $request)
+    public function destroy(RegionRequest $request, $id)
     {
-        $region = ReportRegion::findOrFail($request->input('delete_region_id'));
+        $region = ReportRegion::findOrFail($id);
         $region->delete();
 
         return redirect()->back()->with('msg', 'The Region has been deleted successfully');

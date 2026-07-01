@@ -72,8 +72,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Are you sure? </h4>
             </div>
-            <form method="post" action="{{ route('manage-regions.destroy') }}" id="RegionDelete">
+            <form method="post" action="#" id="RegionDelete">
                 @csrf
+                @method('DELETE')
                 <input type="hidden" name="delete_region_id" id="delete_region_id" value="">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
@@ -122,8 +123,9 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form id="RegionEdit" method="post" action="{{ route('manage-regions.update') }}">
+                        <form id="RegionEdit" method="post" action="#">
                             @csrf
+                            @method('PUT')
                             <div class="form-group">
                                 <label for="field-1" class="control-label">Region Name</label>
                                 <input type="hidden" id="region_id" name="region_id" value="">
@@ -157,13 +159,17 @@
         });
 
         $("a.btn-danger").click(function(){
-            $("#delete_region_id").val($(this).parent().prev().prev().text());
+            var id = $(this).parent().prev().prev().text();
+            $("#delete_region_id").val(id);
+            $("#RegionDelete").attr('action', '/manage-regions/' + id);
         });
 
         $("a.btn-secondary").click(function(){
             //console.log();
             $("#region_name_edit").val($(this).parent().prev().text());
-            $("#region_id").val($(this).parent().prev().prev().text());
+            var id = $(this).parent().prev().prev().text();
+            $("#region_id").val(id);
+            $("#RegionEdit").attr('action', '/manage-regions/' + id);
         });
     });
 </script>
