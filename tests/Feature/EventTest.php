@@ -37,7 +37,7 @@ class EventTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('manage-events.index'));
         $response->assertStatus(200);
-        $response->assertViewIs('backend.manage-events.index');
+        $response->assertViewIs('backend.events.index');
         $response->assertViewHas('events');
     }
 
@@ -115,7 +115,7 @@ class EventTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('manage-events.create'));
         $response->assertStatus(200);
-        $response->assertViewIs('backend.manage-events.create');
+        $response->assertViewIs('backend.events.create');
         $response->assertViewHasAll(['users', 'countries', 'dealers', 'waivers', 'trucks', 'surveys', 'emailTemplates']);
     }
 
