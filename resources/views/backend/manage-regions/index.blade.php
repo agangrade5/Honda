@@ -1,4 +1,5 @@
 @extends('layouts.backend.app')
+@section('title', $title)
 @section('content')
 <!-- content @s -->
 <div class="main-content">
