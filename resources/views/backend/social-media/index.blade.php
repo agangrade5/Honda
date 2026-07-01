@@ -218,6 +218,9 @@
         </div>
     </div>
 </div>
+@endsection
+
+@push('scripts')
 <script>
     $( document ).ready(function() {
     	$("button.btn-info").click(function(){
@@ -247,4 +250,4 @@
     	});
     });
 </script>
-@endsection
+@endpush
