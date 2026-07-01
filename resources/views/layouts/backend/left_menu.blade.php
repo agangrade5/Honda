@@ -21,8 +21,8 @@
         </div>
     </header>
     <ul id="main-menu" class="main-menu">
-        <li>
-            <a href="ManageEvents.php">
+        <li class="{{ request()->routeIs('manage-events.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-events.index') }}">
             <i class="linecons-location"></i>
             <span class="title">Events</span>
             </a>
