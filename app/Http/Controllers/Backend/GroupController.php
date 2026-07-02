@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\GroupRequest;
+use App\Models\VehicleGroup;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -12,56 +14,52 @@ class GroupController extends Controller
      */
     public function index()
     {
+        $vehiclegroups = VehicleGroup::all();
+
+        $groups = (object)[
+            'Success' => 1,
+            'Groups' => $vehiclegroups,
+        ];
+
         return view('backend.groups.index', [
             'title' => 'Manage Groups',
+            'groups' => $groups,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(GroupRequest $request)
     {
-        //
-    }
+        VehicleGroup::create([
+            'groupname' => $request->input('GroupName'),
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return redirect()->back()->with('msg', 'The Group has been created successfully');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(GroupRequest $request, string $id)
     {
-        //
+        $group = VehicleGroup::findOrFail($id);
+        $group->update([
+            'groupname' => $request->input('GroupName'),
+        ]);
+
+        return redirect()->back()->with('msg', 'The Group has been updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(GroupRequest $request, string $id)
     {
-        //
+        $group = VehicleGroup::findOrFail($id);
+        $group->delete();
+
+        return redirect()->back()->with('msg', 'The Group has been deleted successfully');
     }
 }

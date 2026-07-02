@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#region-modal').modal('show');">
@@ -41,24 +41,29 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if(isset($groups->Groups) && $groups->Success==1){
-                            foreach ($groups->Groups as $key => $group) { ?>
+                    @foreach ($groups->Groups as $group)
                     <tr>
-                        <td><?php echo $group->GroupID;?></td>
-                        <td><?php echo $group->GroupName?></td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $group->groupname }}</td>
                         <td>
-                            <a href="javascript:;" onclick="jQuery('#region-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
+                            <a href="javascript:;" 
+                               data-id="{{ $group->groupid }}"
+                               data-name="{{ $group->groupname }}"
+                               onclick="jQuery('#region-modal-edit').modal('show');" 
+                               class="btn btn-secondary btn-sm btn-icon icon-left">
+                               Edit
                             </a>
-                            <?php if(Auth::getUsers()->userlevel==1){ ?>
-                            <a href="javascript:;" id="<?php echo $group->GroupID;?>" onclick="jQuery('#group-modal-delete').modal('show');" class="btn btn-danger btn-icon">
-                            <i class="icon-white icon-heart"></i> Delete
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;" 
+                               data-id="{{ $group->groupid }}" 
+                               onclick="jQuery('#group-modal-delete').modal('show');" 
+                               class="btn btn-danger btn-icon">
+                               <i class="icon-white icon-heart"></i> Delete
                             </a>
-                            <?php } ?>
+                            @endif
                         </td>
                     </tr>
-                    <?php } } ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -73,16 +78,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="group-modal-delete-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="GroupDelete">
-                <input type="hidden" name="DeleteGroupID" id="DeleteGroupID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="group">
+            <form method="post" action="#" id="GroupDelete">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="GroupID" id="DeleteGroupID" value="">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -94,18 +99,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Group</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="region-modal-label">Add Group</h4>
             </div>
             <div class="modal-body">
-                <form id="Group" method="post" action="Action.php">
+                <form id="Group" method="post" action="{{ route('manage-groups.store') }}">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="field-1" class="control-label">Group Name</label>
                                 <input type="text" class="form-control" id="field-1" name="GroupName" placeholder="">
-                                <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="controller" value="group">
                             </div>
                         </div>
                     </div>
@@ -113,7 +117,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
+                <button type="button" class="btn btn-info">Create</button>
             </div>
         </div>
     </div>
@@ -124,17 +128,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Group</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="region-modal-edit-label">Edit Group</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form id="GroupEdit" method="post" action="Action.php">
+                        <form id="GroupEdit" method="post" action="#">
+                            @csrf
+                            @method('PUT')
                             <div class="form-group">
-                                <label for="field-1" class="control-label">Group Name</label>
-                                <input type="hidden" name="action" value="edit">
-                                <input type="hidden" name="controller" value="group">
+                                <label for="GroupNameEdit" class="control-label">Group Name</label>
                                 <input type="hidden" id="GroupID" name="GroupID" value="">
                                 <input type="text" class="form-control" id="GroupNameEdit" name="GroupName" placeholder="">
                             </div>
@@ -144,7 +148,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
+                <button type="button" class="btn btn-info">Save Changes</button>
             </div>
         </div>
     </div>
@@ -154,27 +158,70 @@
 @push('scripts')
 <script>
     $( document ).ready(function() {
-    	$("a.btn-danger").click(function(){
-    		$("#DeleteGroupID").val($(this).parent().prev().prev().text());
-    	});
     	$("button.btn-info").click(function(){
     		if($(this).text()=="Create"){
-    			$( "#Group" ).submit();
+    			var form = $( "#Group" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Save Changes"){
-    			$( "#GroupEdit" ).submit();
+    			var form = $( "#GroupEdit" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Delete"){
-    			$("#GroupDelete").submit();
+    			var form = $("#GroupDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
-    		//$( "#Region" ).submit();
+    	});
+
+    	$("a.btn-danger").click(function(){
+            var id = $(this).data('id');
+    		$("#DeleteGroupID").val(id);
+            $("#GroupDelete").attr('action', '/manage-groups/' + id);
     	});
 
     	$("a.btn-secondary").click(function(){
-    		//console.log();
-    		$("#GroupNameEdit").val($(this).parent().prev().text());
-    		$("#GroupID").val($(this).parent().prev().prev().text());
+    		var btn = $(this);
+            var GroupID = btn.data('id');
+    		$("#GroupNameEdit").val(btn.data('name'));
+    		$("#GroupID").val(GroupID);
+            $("#GroupEdit").attr('action', '/manage-groups/' + GroupID);
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\GroupRequest', '#Group') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\GroupRequest', '#GroupEdit') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\GroupRequest', '#GroupDelete') !!}
 @endpush
