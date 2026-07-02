@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Backend\SocialMediaRequest;
+use App\Models\SocialMedia;
 
 class SocialMediaController extends Controller
 {
@@ -12,56 +13,62 @@ class SocialMediaController extends Controller
      */
     public function index()
     {
+        $socialmedias = SocialMedia::all();
+
         return view('backend.social-media.index', [
             'title' => 'Manage Social Media',
+            'socialmedias' => $socialmedias,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SocialMediaRequest $request)
     {
-        //
-    }
+        $blob = serialize([
+            'Facebook' => $request->input('Facebook') ?? '',
+            'Twitter' => $request->input('Twitter') ?? '',
+            'Instagram' => $request->input('Instagram') ?? '',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        SocialMedia::create([
+            'socialname' => $request->input('SocialName'),
+            'socialblob' => $blob,
+            'clientid' => auth()->user()?->clientid ?? 1,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return redirect()->back()->with('msg', 'The Social Media has been created successfully');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SocialMediaRequest $request, string $id)
     {
-        //
+        $socialmedia = SocialMedia::findOrFail($id);
+
+        $blob = serialize([
+            'Facebook' => $request->input('Facebook') ?? '',
+            'Twitter' => $request->input('Twitter') ?? '',
+            'Instagram' => $request->input('Instagram') ?? '',
+        ]);
+
+        $socialmedia->update([
+            'socialblob' => $blob,
+        ]);
+
+        return redirect()->back()->with('msg', 'The Social Media has been updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(SocialMediaRequest $request, string $id)
     {
-        //
+        $socialmedia = SocialMedia::findOrFail($id);
+        $socialmedia->delete();
+
+        return redirect()->back()->with('msg', 'The Social Media has been deleted successfully');
     }
 }

@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li>
@@ -43,29 +43,41 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if(!empty($socialmedias) && $socialmedias->Success==1){
-                            foreach ($socialmedias->SocialMedias as $key => $socialmedia) { ?>
+                    @foreach ($socialmedias as $socialmedia)
+                    @php
+                        $blob = @unserialize($socialmedia->socialblob) ?: [];
+                        $facebook = $blob['Facebook'] ?? '';
+                        $twitter = $blob['Twitter'] ?? '';
+                        $instagram = $blob['Instagram'] ?? '';
+                    @endphp
                     <tr>
-                        <td><?php echo $socialmedia->SocialID;?></td>
-                        <td><?php echo $socialmedia->SocialName;?></td>
-                        <?php $blobUrl = unserialize($socialmedia->SocialBlob);
-                            foreach ($blobUrl as $keyName => $URL) {
-                            		echo '<td>'.$URL.'</td>';
-                            }
-                            ?>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $socialmedia->socialname }}</td>
+                        <td>{{ $facebook }}</td>
+                        <td>{{ $twitter }}</td>
+                        <td>{{ $instagram }}</td>
                         <td>
-                            <a href="javascript:;" onclick="jQuery('#truck-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
+                            <a href="javascript:;" 
+                               data-id="{{ $socialmedia->socialid }}"
+                               data-name="{{ $socialmedia->socialname }}"
+                               data-facebook="{{ $facebook }}"
+                               data-twitter="{{ $twitter }}"
+                               data-instagram="{{ $instagram }}"
+                               onclick="jQuery('#truck-modal-edit').modal('show');" 
+                               class="btn btn-secondary btn-sm btn-icon icon-left">
+                               Edit
                             </a>
-                            <?php if(Auth::getUsers()->userlevel==1){ ?>
-                            <a href="javascript:;" id="<?php echo $group->GroupID;?>" onclick="jQuery('#socialmedia-modal-delete').modal('show');" class="btn btn-danger btn-icon">
-                            <i class="icon-white icon-heart"></i> Delete
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;" 
+                               data-id="{{ $socialmedia->socialid }}" 
+                               onclick="jQuery('#socialmedia-modal-delete').modal('show');" 
+                               class="btn btn-danger btn-icon">
+                               <i class="icon-white icon-heart"></i> Delete
                             </a>
-                            <?php } ?>
+                            @endif
                         </td>
                     </tr>
-                    <?php }} ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -76,20 +88,20 @@
 <!-- content @e -->
 
 <!-- Delete Modal -->
-<div class="modal fade custom-width" id="socialmedia-modal-delete" tabindex="-1" role="dialog" aria-labelledby="socialmedia-modal-delete-label" data-backdrop="static" data-keyboard="false">
+<div class="modal fade custom-width" id="socialmedia-modal-delete" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="delete-modal-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="SocialMediaDelete">
+            <form method="post" action="#" id="SocialMediaDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteSocialMediaID" id="DeleteSocialMediaID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="socialmedia">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -97,18 +109,19 @@
 </div>
 
 <!-- Create Modal -->
-<div class="modal fade custom-width" id="truck-modal" tabindex="-1" role="dialog" aria-labelledby="truck-modal-label" data-backdrop="static" data-keyboard="false">
+<div class="modal fade custom-width" id="truck-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Social Media</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="create-modal-label">Add Social Media</h4>
             </div>
-            <form method="post" action="Action.php" id="SocialMediaForm">
+            <form method="post" action="{{ route('manage-social-media.store') }}" id="SocialMediaForm">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-2">
-                            <label class="control-label" for="social_media">Saved SM Presets</label>
+                            <label class="control-label" for="SocialName">Saved SM Presets</label>
                         </div>
                         <div class="col-md-9">
                             <div class="form-group">
@@ -140,43 +153,39 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="controller" value="socialmedia">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info">Create</button>
+                </div>
             </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
-            </div>
         </div>
     </div>
 </div>
 
 <!-- Edit Modal -->
-<div class="modal fade custom-width" id="truck-modal-edit" tabindex="-1" role="dialog" aria-labelledby="truck-modal-edit-label" data-backdrop="static" data-keyboard="false">
+<div class="modal fade custom-width" id="truck-modal-edit" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Social Media</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="edit-modal-label">Edit Social Media</h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="Action.php" id="SocialMediaFormEdit">
+                <form method="post" action="#" id="SocialMediaFormEdit">
+                    @csrf
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-2">
-                            <label class="control-label" for="social_media">Saved SM Presets</label>
+                            <label class="control-label" for="SocialNameEdit">Saved SM Presets</label>
                         </div>
                         <div class="col-md-9">
                             <div class="form-group">
-                                <select name="SocialName" class="col-sm-8 selectboxit" id="SocialNameEdit">
+                                <select name="SocialName" class="form-control selectboxit" id="SocialNameEdit">
                                     <optgroup label="Saved Social Media Settings">
-                                        <?php
-                                            if(isset($socialmedias->Success) && $socialmedias->Success==1){
-                                                foreach ($socialmedias->SocialMedias as $skey => $socialmedia) {
-                                                	echo '<option value="'.$socialmedia->SocialID.'">'.$socialmedia->SocialName.'</option>';
-                                                }
-                                            }
-                                            ?>
+                                        @foreach ($socialmedias as $item)
+                                            <option value="{{ $item->socialid }}">{{ $item->socialname }}</option>
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
@@ -206,14 +215,12 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="socialmedia">
                     <input type="hidden" id="SocialIDID" name="SocialID" value="">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
+                <button type="button" class="btn btn-info">Save Changes</button>
             </div>
         </div>
     </div>
@@ -225,29 +232,76 @@
     $( document ).ready(function() {
     	$("button.btn-info").click(function(){
     		if($(this).text()=="Create"){
-    			$( "#SocialMediaForm" ).submit();
+    			var form = $( "#SocialMediaForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Save Changes"){
-    			$( "#SocialMediaFormEdit" ).submit();
+    			var form = $( "#SocialMediaFormEdit" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Delete"){
-    			$("#SocialMediaDelete").submit();
+    			var form = $("#SocialMediaDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     	});
 
     	$("a.btn-danger").click(function(){
-    		$("#DeleteSocialMediaID").val($(this).parent().prev().prev().prev().prev().prev().text());
+            var id = $(this).data('id');
+    		$("#DeleteSocialMediaID").val(id);
+            $("#SocialMediaDelete").attr('action', '/manage-social-media/' + id);
     	});
 
     	$("a.btn-secondary").click(function(){
-    		var SMID = $(this).parent().prev().prev().prev().prev().prev().text();
-    		//console.log($(this).parent().prev().text());
-    		$("#InstagramEdit").val($(this).parent().prev().text());
-    		$("#TwitterEdit").val($(this).parent().prev().prev().text());
-    		$("#FacebookEdit").val($(this).parent().prev().prev().prev().text());
-    		$("#SocialNameEdit").val($(this).parent().prev().prev().prev().prev().text());
+    		var btn = $(this);
+            var SMID = btn.data('id');
+    		$("#InstagramEdit").val(btn.data('instagram'));
+    		$("#TwitterEdit").val(btn.data('twitter'));
+    		$("#FacebookEdit").val(btn.data('facebook'));
+            
+            if ($("#SocialNameEdit").data("selectBox-selectBoxIt")) {
+    		    $("#SocialNameEdit").data("selectBox-selectBoxIt").selectOption(String(SMID));
+            } else {
+                $("#SocialNameEdit").val(SMID);
+            }
     		$("#SocialIDID").val(SMID);
+            $("#SocialMediaFormEdit").attr('action', '/manage-social-media/' + SMID);
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\SocialMediaRequest', '#SocialMediaForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\SocialMediaRequest', '#SocialMediaFormEdit') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\SocialMediaRequest', '#SocialMediaDelete') !!}
 @endpush
