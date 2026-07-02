@@ -220,8 +220,8 @@
                                         data-id="{{ $event->EventID }}">Edit</a>
                                     @endif
 
-                                    <a href="javascript:;" class="reportLink btn btn-info btn-sm btn-icon icon-left">
-                                    Reports
+                                    <a href="{{ route('event.report.show', base64_encode($event->EventID)) }}" class="btn btn-info btn-sm btn-icon icon-left">
+                                    <i class="fa-bar-chart"></i> Reports
                                     </a>
 
                                     @if(auth()->user()?->userlevel == 1)
@@ -349,8 +349,11 @@
                 $("#EventJumpStartWaiverDiv").show();
                 $("#EventJumpStartWaiverUnderAgeDiv").show();
 
-                $("#EventJumpStartWaiver").data("selectBox-selectBoxIt").selectOption($("#EventJumpStartWaiver" + TmpEventId).val());
-                $("#EventJumpStartWaiverUnderAge").data("selectBox-selectBoxIt").selectOption($("#EventJumpStartWaiverUnderAge" + TmpEventId).val());
+                var jsWaiver = $("#EventJumpStartWaiver" + TmpEventId).val();
+                $("#EventJumpStartWaiver").data("selectBox-selectBoxIt").selectOption(jsWaiver == 0 || !jsWaiver ? "" : jsWaiver);
+
+                var jsWaiverUnderAge = $("#EventJumpStartWaiverUnderAge" + TmpEventId).val();
+                $("#EventJumpStartWaiverUnderAge").data("selectBox-selectBoxIt").selectOption(jsWaiverUnderAge == 0 || !jsWaiverUnderAge ? "" : jsWaiverUnderAge);
             }
 
             if ($("#Eventalloweventpreregistrations" + TmpEventId).val() == 1) {
@@ -364,13 +367,20 @@
                 }
 
                 $("#EventPreRegistrationEmailQty").val($("#EventPreRegistrationEmailQty" + TmpEventId).val());
-                $("#registrationsurveyid").data("selectBox-selectBoxIt").selectOption($("#Eventregistrationsurveyid" + TmpEventId).val());
-                $("#registrationsuccessfulemailtemplate").data("selectBox-selectBoxIt").selectOption($("#Eventregistrationsuccessfulemailtemplate" + TmpEventId).val());
+                var regSurveyId = $("#Eventregistrationsurveyid" + TmpEventId).val();
+                $("#registrationsurveyid").data("selectBox-selectBoxIt").selectOption(regSurveyId == 0 || !regSurveyId ? "" : regSurveyId);
 
-                $("#waitlisttemplateemailtemplateEdit").data("selectBox-selectBoxIt").selectOption($("#Eventwaitlisttemplateemailtemplate" + TmpEventId).val());
+                var regSuccessEmail = $("#Eventregistrationsuccessfulemailtemplate" + TmpEventId).val();
+                $("#registrationsuccessfulemailtemplate").data("selectBox-selectBoxIt").selectOption(regSuccessEmail == 0 || !regSuccessEmail ? "" : regSuccessEmail);
 
-                $("#remindertemplateemailtemplate").data("selectBox-selectBoxIt").selectOption($("#Eventremindertemplateemailtemplate" + TmpEventId).val());
-                $("#remindertemplate2emailtemplate").data("selectBox-selectBoxIt").selectOption($("#Eventremindertemplate2emailtemplate" + TmpEventId).val());
+                var waitlistTemplate = $("#Eventwaitlisttemplateemailtemplate" + TmpEventId).val();
+                $("#waitlisttemplateemailtemplateEdit").data("selectBox-selectBoxIt").selectOption(waitlistTemplate == 0 || !waitlistTemplate ? "" : waitlistTemplate);
+
+                var reminderTemplate = $("#Eventremindertemplateemailtemplate" + TmpEventId).val();
+                $("#remindertemplateemailtemplate").data("selectBox-selectBoxIt").selectOption(reminderTemplate == 0 || !reminderTemplate ? "" : reminderTemplate);
+
+                var reminderTemplate2 = $("#Eventremindertemplate2emailtemplate" + TmpEventId).val();
+                $("#remindertemplate2emailtemplate").data("selectBox-selectBoxIt").selectOption(reminderTemplate2 == 0 || !reminderTemplate2 ? "" : reminderTemplate2);
 
                 $("#additionaldetails").text($("#Eventadditionaldetails" + TmpEventId).val());
 
@@ -404,7 +414,8 @@
             if ($("#EventLeadGen" + TmpEventId).val() == 1) {
                 $('#EventLeadGen').prop('checked', true);
                 $("#EventLeadGenWaiverDiv").show();
-                $("#EventLeadGenWaiver").data("selectBox-selectBoxIt").selectOption($("#EventLeadGenWaiver" + TmpEventId).val());
+                var lgWaiver = $("#EventLeadGenWaiver" + TmpEventId).val();
+                $("#EventLeadGenWaiver").data("selectBox-selectBoxIt").selectOption(lgWaiver == 0 || !lgWaiver ? "" : lgWaiver);
             }
 
             $('#EnableSms').prop('checked', false);
@@ -412,7 +423,8 @@
             if ($("#EnableSms" + TmpEventId).val() == 1) {
                 $('#EnableSms').prop('checked', true);
                 $("#eventSmsTemplateIdDiv").show();
-                $("#EventSmsTemplateId").data("selectBox-selectBoxIt").selectOption($("#EventSmsTemplateId" + TmpEventId).val());
+                var smsTemplateId = $("#EventSmsTemplateId" + TmpEventId).val();
+                $("#EventSmsTemplateId").data("selectBox-selectBoxIt").selectOption(smsTemplateId == 0 || !smsTemplateId ? "" : smsTemplateId);
             }
 
             $('#EventDemo').prop("checked", false);
@@ -425,19 +437,24 @@
                 $('#EventDemo').prop("checked", true);
 
                 $("#EventDemoWaiverDiv").show();
-                $("#EventDemoWaiver").data("selectBox-selectBoxIt").selectOption($("#EventDemoWaiver_" + TmpEventId).val());
+                var demoWaiver = $("#EventDemoWaiver_" + TmpEventId).val();
+                $("#EventDemoWaiver").data("selectBox-selectBoxIt").selectOption(demoWaiver == 0 || !demoWaiver ? "" : demoWaiver);
 
                 $("#EventDemoWaiverDiv2").show();
-                $("#EventDemoWaiver2").data("selectBox-selectBoxIt").selectOption($("#EventDemoWaiver2" + TmpEventId).val());
+                var demoWaiver2 = $("#EventDemoWaiver2" + TmpEventId).val();
+                $("#EventDemoWaiver2").data("selectBox-selectBoxIt").selectOption(demoWaiver2 == 0 || !demoWaiver2 ? "" : demoWaiver2);
 
                 $("#EventDemoPassengerWaiverDiv").show();
-                $("#EventDemoPassengerWaiver").data("selectBox-selectBoxIt").selectOption($("#EventDemoPassengerWaiver_" + TmpEventId).val());
+                var passengerWaiver = $("#EventDemoPassengerWaiver_" + TmpEventId).val();
+                $("#EventDemoPassengerWaiver").data("selectBox-selectBoxIt").selectOption(passengerWaiver == 0 || !passengerWaiver ? "" : passengerWaiver);
 
                 $("#EventDemoPassengerWaiverDiv2").show();
-                $("#EventDemoPassengerWaiver2").data("selectBox-selectBoxIt").selectOption($("#EventDemoPassengerWaiver2" + TmpEventId).val());
+                var passengerWaiver2 = $("#EventDemoPassengerWaiver2" + TmpEventId).val();
+                $("#EventDemoPassengerWaiver2").data("selectBox-selectBoxIt").selectOption(passengerWaiver2 == 0 || !passengerWaiver2 ? "" : passengerWaiver2);
 
                 $("#EventGuardianWaiverDiv").show();
-                $("#EventGuardianWaiver").data("selectBox-selectBoxIt").selectOption($("#EventGuardianWaiver" + TmpEventId).val());
+                var guardianWaiver = $("#EventGuardianWaiver" + TmpEventId).val();
+                $("#EventGuardianWaiver").data("selectBox-selectBoxIt").selectOption(guardianWaiver == 0 || !guardianWaiver ? "" : guardianWaiver);
             }
 
             $('#EventPRSurvey').prop("checked", false);
@@ -520,18 +537,35 @@
                 $("#eventbikesandtimes").prop('checked', false);
             }
 
-            $("#LeadGenSurveyEdit").data("selectBox-selectBoxIt").selectOption($("#EventLeadGenSurvey" + TmpEventId).val());
-            $("#DemoSurveyEdit").data("selectBox-selectBoxIt").selectOption($("#EventDemoSurvey" + TmpEventId).val());
-            $("#PostRideSurveyEdit").data("selectBox-selectBoxIt").selectOption($("#EventPostRideSurvey" + TmpEventId).val());
-            $("#JumpStartSurveyEdit").data("selectBox-selectBoxIt").selectOption($("#EventJumpStartSurvey" + TmpEventId).val());
+            var leadGenSurvey = $("#EventLeadGenSurvey" + TmpEventId).val();
+            $("#LeadGenSurveyEdit").data("selectBox-selectBoxIt").selectOption(leadGenSurvey == 0 || !leadGenSurvey ? "" : leadGenSurvey);
 
-            $("#EventPhotoAppEmailEdit").data("selectBox-selectBoxIt").selectOption($("#EventPhotoAppEmail" + TmpEventId).val());
+            var demoSurvey = $("#EventDemoSurvey" + TmpEventId).val();
+            $("#DemoSurveyEdit").data("selectBox-selectBoxIt").selectOption(demoSurvey == 0 || !demoSurvey ? "" : demoSurvey);
 
-            $("#EventWelcomeEmailEdit").data("selectBox-selectBoxIt").selectOption($("#EventWelcomeEmail" + TmpEventId).val());
-            $("#EventScheduledEmailEdit").data("selectBox-selectBoxIt").selectOption($("#EventScheduledEmail" + TmpEventId).val());
-            $("#EventTyEmailEdit").data("selectBox-selectBoxIt").selectOption($("#EventTyEmail" + TmpEventId).val());
-            $("#EventPrEmailEdit").data("selectBox-selectBoxIt").selectOption($("#EventPrEmail" + TmpEventId).val());
-            $("#EventSalesEmailEdit").data("selectBox-selectBoxIt").selectOption($("#EventSalesEmail" + TmpEventId).val());
+            var postRideSurvey = $("#EventPostRideSurvey" + TmpEventId).val();
+            $("#PostRideSurveyEdit").data("selectBox-selectBoxIt").selectOption(postRideSurvey == 0 || !postRideSurvey ? "" : postRideSurvey);
+
+            var jumpStartSurvey = $("#EventJumpStartSurvey" + TmpEventId).val();
+            $("#JumpStartSurveyEdit").data("selectBox-selectBoxIt").selectOption(jumpStartSurvey == 0 || !jumpStartSurvey ? "" : jumpStartSurvey);
+
+            var photoAppEmail = $("#EventPhotoAppEmail" + TmpEventId).val();
+            $("#EventPhotoAppEmailEdit").data("selectBox-selectBoxIt").selectOption(photoAppEmail == 0 || !photoAppEmail ? "" : photoAppEmail);
+
+            var welcomeEmail = $("#EventWelcomeEmail" + TmpEventId).val();
+            $("#EventWelcomeEmailEdit").data("selectBox-selectBoxIt").selectOption(welcomeEmail == 0 || !welcomeEmail ? "" : welcomeEmail);
+
+            var scheduledEmail = $("#EventScheduledEmail" + TmpEventId).val();
+            $("#EventScheduledEmailEdit").data("selectBox-selectBoxIt").selectOption(scheduledEmail == 0 || !scheduledEmail ? "" : scheduledEmail);
+
+            var tyEmail = $("#EventTyEmail" + TmpEventId).val();
+            $("#EventTyEmailEdit").data("selectBox-selectBoxIt").selectOption(tyEmail == 0 || !tyEmail ? "" : tyEmail);
+
+            var prEmail = $("#EventPrEmail" + TmpEventId).val();
+            $("#EventPrEmailEdit").data("selectBox-selectBoxIt").selectOption(prEmail == 0 || !prEmail ? "" : prEmail);
+
+            var salesEmail = $("#EventSalesEmail" + TmpEventId).val();
+            $("#EventSalesEmailEdit").data("selectBox-selectBoxIt").selectOption(salesEmail == 0 || !salesEmail ? "" : salesEmail);
 
             //Event start date
             var EventStartDate = $("#EventStartDate" + TmpEventId).val();
@@ -840,6 +874,7 @@
                                 <label class="control-label" for="waiver">Jump Start Waiver</label>
                                 <select name="EventJumpStartWaiver" class="selectboxit" id="EventJumpStartWaiver">
                                     <optgroup label="Waivers">
+                                        <option value="">None</option>
                                         @foreach($waivers as $waiver)
                                         <option value="{{ $waiver->WaiverID }}">{{ $waiver->WaiverName }}</option>
                                         @endforeach
@@ -852,6 +887,7 @@
                                 <label class="control-label" for="waiver">Jump Start Waiver Under Age</label>
                                 <select name="EventJumpStartWaiverUnderAge" class="selectboxit" id="EventJumpStartWaiverUnderAge">
                                     <optgroup label="Waivers">
+                                        <option value="">None</option>
                                         @foreach($waivers as $waiver)
                                         <option value="{{ $waiver->WaiverID }}">{{ $waiver->WaiverName }}</option>
                                         @endforeach
@@ -894,6 +930,7 @@
                                 <label class="control-label" for="waiver">Rider Waiver 1</label>
                                 <select name="EventDemoWaiver" class="selectboxit" id="EventDemoWaiver">
                                     <optgroup label="Waivers">
+                                        <option value="">None</option>
                                         @foreach($waivers as $waiver)
                                         <option value="{{ $waiver->WaiverID }}">{{ $waiver->WaiverName }}</option>
                                         @endforeach
@@ -906,6 +943,7 @@
                                 <label class="control-label" for="waiver">Passenger Waiver 1</label>
                                 <select name="EventDemoPassengerWaiver" class="selectboxit" id="EventDemoPassengerWaiver">
                                     <optgroup label="Waivers">
+                                        <option value="">None</option>
                                         @foreach($waivers as $waiver)
                                         <option value="{{ $waiver->WaiverID }}">{{ $waiver->WaiverName }}</option>
                                         @endforeach
@@ -923,6 +961,7 @@
                                 <label class="control-label" for="waiver">Rider Waiver 2</label>
                                 <select name="EventDemoWaiver2" class="selectboxit" id="EventDemoWaiver2">
                                     <optgroup label="Waivers">
+                                        <option value="">None</option>
                                         @foreach($waivers as $waiver)
                                         <option value="{{ $waiver->WaiverID }}">{{ $waiver->WaiverName }}</option>
                                         @endforeach
@@ -935,6 +974,7 @@
                                 <label class="control-label" for="waiver">Passenger Waiver 2</label>
                                 <select name="EventDemoPassengerWaiver2" class="selectboxit" id="EventDemoPassengerWaiver2">
                                     <optgroup label="Waivers">
+                                        <option value="">None</option>
                                         @foreach($waivers as $waiver)
                                         <option value="{{ $waiver->WaiverID }}">{{ $waiver->WaiverName }}</option>
                                         @endforeach
@@ -956,6 +996,7 @@
                                 <label class="control-label" for="EventSmsTemplateId">Event SMS Template</label>
                                 <select name="EventSmsTemplateId" class="selectboxit" id="EventSmsTemplateId">
                                     <optgroup label="SmsTemplate">
+                                        <option value="">None</option>
                                         @foreach($smstemplates as $smstemplate)
                                         <option value="{{ $smstemplate->TemplateID }}">{{ $smstemplate->TemplateName }}</option>
                                         @endforeach
@@ -973,6 +1014,7 @@
                                 <label class="control-label" for="waiver">Guardian Waiver</label>
                                 <select name="EventGuardianWaiver" class="selectboxit" id="EventGuardianWaiver">
                                     <optgroup label="Waivers">
+                                        <option value="">None</option>
                                         @foreach($waivers as $waiver)
                                         <option value="{{ $waiver->WaiverID }}">{{ $waiver->WaiverName }}</option>
                                         @endforeach
@@ -1082,6 +1124,7 @@
                                 <label class="control-label" for="registrationsurveyid">Registration Survey</label>
                                 <select name="registrationsurveyid" class="selectboxit" id="registrationsurveyid">
                                     <optgroup label="Saved Survey Data">
+                                        <option value="">None</option>
                                         @foreach($surveys as $survey)
                                         <option value="{{ $survey->SurveyID }}">{{ $survey->SurveyName }}</option>
                                         @endforeach
@@ -1096,6 +1139,7 @@
                                 <select name="registrationsuccessfulemailtemplate" class="selectboxit"
                                     id="registrationsuccessfulemailtemplate">
                                     <optgroup label="Email Templates">
+                                        <option value="">None</option>
                                         @foreach($emailTemplates as $emailtemplate)
                                         <option value="{{ $emailtemplate->TemplateID }}">{{ $emailtemplate->TemplateName }}</option>
                                         @endforeach
@@ -1109,6 +1153,7 @@
                                 <select name="waitlisttemplateemailtemplate" class="selectboxit"
                                     id="waitlisttemplateemailtemplateEdit">
                                     <optgroup label="Email Templates">
+                                        <option value="">None</option>
                                         @foreach($emailTemplates as $emailtemplate)
                                         <option value="{{ $emailtemplate->TemplateID }}">{{ $emailtemplate->TemplateName }}</option>
                                         @endforeach
@@ -1128,6 +1173,7 @@
                                 <label class="control-label" for="remindertemplateemailtemplate">Reminder Template 1</label>
                                 <select name="remindertemplateemailtemplate" class="selectboxit" id="remindertemplateemailtemplate">
                                     <optgroup label="Email Templates">
+                                        <option value="">None</option>
                                         @foreach($emailTemplates as $emailtemplate)
                                         <option value="{{ $emailtemplate->TemplateID }}">{{ $emailtemplate->TemplateName }}</option>
                                         @endforeach
@@ -1140,6 +1186,7 @@
                                 <label class="control-label" for="remindertemplate2emailtemplate">Reminder Template 2</label>
                                 <select name="remindertemplate2emailtemplate" class="selectboxit" id="remindertemplate2emailtemplate">
                                     <optgroup label="Email Templates">
+                                        <option value="">None</option>
                                         @foreach($emailTemplates as $emailtemplate)
                                         <option value="{{ $emailtemplate->TemplateID }}">{{ $emailtemplate->TemplateName }}</option>
                                         @endforeach

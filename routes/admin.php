@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\{
     WaiverController,
     EmailTemplateController,
     SmsTemplateController,
+    ReportController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +43,6 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::post('/data', 'getData')->name('data');
             Route::get('/pdf/{id}', 'downloadPdf')->name('pdf');
         });
-
     // Manage Import Vehicles Routes
     Route::prefix('manage-import-vehicles')
         ->name('manage-import-vehicles.')
@@ -52,6 +52,17 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::post('/upload', 'upload')->name('upload');
             Route::post('/delete', 'deleteFile')->name('delete');
             Route::post('/read', 'readExcel')->name('read');
+        });
+    // Event Report routes
+    Route::prefix('manage-events/{encodedId}/report')
+        ->name('event.report.')
+        ->controller(ReportController::class)
+        ->group(function () {
+            Route::get('/', 'show')->name('show');
+            Route::get('/demo-reports', 'demoReports')->name('demo');
+            Route::get('/demo-reports-2', 'demoReports2')->name('demo2');
+            Route::get('/stats-reports', 'statsReports')->name('stats');
+            Route::get('/demo-graph-reports', 'demoGraphReports')->name('graph');
         });
     // Resource Routes
     Route::resources(
