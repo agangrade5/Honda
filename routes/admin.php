@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\{
     ModelsController,
     UserController,
     WaiverController,
+    EmailTemplateController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -66,6 +67,7 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-models' => ModelsController::class,
             'manage-users' => UserController::class,
             'manage-waivers' => WaiverController::class,
+            'manage-email-templates' => EmailTemplateController::class,
         ]
     );
 });
