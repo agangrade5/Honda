@@ -40,7 +40,6 @@
                                     ?>
                             </optgroup>
                         </select>
-                        <?php echo $hidden_html; ?>
                     </div>
                 </div>
             </div>
@@ -48,6 +47,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <textarea class="form-control ckeditor" name="WaiverHTML1" rows="10">   </textarea>
+                        <?php echo $hidden_html; ?>
                         <input type="hidden" name="action" value="edit">
                         <input type="hidden" name="controller" value="waiver">
                     </div>

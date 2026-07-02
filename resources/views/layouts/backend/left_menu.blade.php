@@ -105,8 +105,8 @@
             <span class="title">Waivers</span>
             </a>
         </li>
-        <li>
-            <a href="ManageEmailTemplates.php">
+        <li class="{{ request()->routeIs('manage-email-templates.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-email-templates.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Email Templates</span>
             </a>
