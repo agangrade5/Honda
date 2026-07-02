@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\{
     DealerController,
     RestrictedRiderController,
     GroupController,
+    ReportController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -40,4 +41,11 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-groups' => GroupController::class
         ]
     );
+
+    // Event Report routes
+    Route::get('manage-events/{encodedId}/report', [ReportController::class, 'show'])->name('event.report.show');
+    Route::get('manage-events/{encodedId}/report/demo-reports', [ReportController::class, 'demoReports'])->name('event.report.demo');
+    Route::get('manage-events/{encodedId}/report/demo-reports-2', [ReportController::class, 'demoReports2'])->name('event.report.demo2');
+    Route::get('manage-events/{encodedId}/report/stats-reports', [ReportController::class, 'statsReports'])->name('event.report.stats');
+    Route::get('manage-events/{encodedId}/report/demo-graph-reports', [ReportController::class, 'demoGraphReports'])->name('event.report.graph');
 });
