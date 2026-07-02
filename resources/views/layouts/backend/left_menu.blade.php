@@ -87,8 +87,8 @@
             <span class="title">Manage Import Vehicle</span>
             </a>
         </li>
-        <li>
-            <a href="ManageModels.php">
+        <li class="{{ request()->routeIs('manage-models.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-models.index') }}">
             <i class="glyphicon glyphicon-wrench"></i>
             <span class="title">Manage Models</span>
             </a>
