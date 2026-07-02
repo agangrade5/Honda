@@ -99,8 +99,8 @@
             <span class="title">Users</span>
             </a>
         </li>
-        <li>
-            <a href="ManageWaivers.php">
+        <li class="{{ request()->routeIs('manage-waivers.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-waivers.index') }}">
             <i class="linecons-doc"></i>
             <span class="title">Waivers</span>
             </a>
