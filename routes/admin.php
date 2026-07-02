@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\{
     DealerController,
     RestrictedRiderController,
     GroupController,
+    SignedWaiverController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,8 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::post('/edit', 'editState')->name('edit');
             Route::post('/delete', 'deleteState')->name('delete');
         });
+    // Manage Signed Waiver
+    Route::get('manage-signed-waivers/index', [SignedWaiverController::class, 'index'])->name('manage-signed-waivers.index');
     // Resource Routes
     Route::resources(
         [

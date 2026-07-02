@@ -75,8 +75,8 @@
             <span class="title">Vehicle Groups</span>
             </a>
         </li>
-        <li>
-            <a href="ViewSignedWaivers.php">
+        <li class="{{ request()->routeIs('manage-signed-waivers.index') ? 'active' : '' }}">
+            <a href="{{ route('manage-signed-waivers.index') }}">
             <i class="glyphicon glyphicon-paperclip"></i>
             <span class="title">Manage Signed Waiver</span>
             </a>
