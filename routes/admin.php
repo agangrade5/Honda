@@ -7,13 +7,16 @@ use App\Http\Controllers\Backend\{
     RegionsController,
     SocialMediaController,
     CountryController,
-    DealerController
+    DealerController,
+    RestrictedRiderController
 };
 use Illuminate\Support\Facades\Route;
 
-//Resource Route
+//Admin Route
 Route::middleware(['admin.auth', 'no.cache'])->group(function () {
+    //Truck Import
     Route::post('manage-trucks/import', [TruckController::class, 'import'])->name('manage-trucks.import');
+    //Resource Route
     Route::resources(
         [
             'manage-events' => EventController::class,
@@ -22,7 +25,8 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-regions' => RegionsController::class,
             'manage-social-media' => SocialMediaController::class,
             'manage-countries' => CountryController::class,
-            'manage-dealers' => DealerController::class
+            'manage-dealers' => DealerController::class,
+            'manage-restricted-riders' => RestrictedRiderController::class
         ]
     );
 });

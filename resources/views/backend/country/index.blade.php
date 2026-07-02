@@ -78,7 +78,7 @@
 <!-- content @e -->
 
 <!-- Delete Modal -->
-<div class="modal fade custom-width" id="country-modal-delete">
+<div class="modal fade custom-width" id="country-modal-delete" tabindex="-1" role="dialog" aria-labelledby="country-modal-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -99,7 +99,7 @@
 </div>
 
 <!-- Edit State Modal -->
-<div class="modal fade custom-width" id="state-modal-edit-delete">
+<div class="modal fade custom-width" id="state-modal-edit-delete" tabindex="-1" role="dialog" aria-labelledby="state-modal-edit-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -139,7 +139,7 @@
 </div>
 
 <!-- Create Country Modal -->
-<div class="modal fade custom-width" id="truck-modal">
+<div class="modal fade custom-width" id="truck-modal" tabindex="-1" role="dialog" aria-labelledby="truck-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -185,7 +185,7 @@
 </div>
 
 <!-- Edit Country Modal -->
-<div class="modal fade custom-width" id="truck-modal-edit">
+<div class="modal fade custom-width" id="truck-modal-edit" tabindex="-1" role="dialog" aria-labelledby="truck-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
