@@ -17,7 +17,7 @@
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#template-modal').modal('show');">
-            <span class="hidden-xs">Add Email Template</span>
+            <span class="hidden-xs">Add SMS Template</span>
             </a>
         </li>
     </ul>
@@ -26,18 +26,18 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label class="control-label" for="email">Select an email template to edit</label>
+                        <label class="control-label" for="email">Select an sms template to edit</label>
                         <select class="selectboxit" id="EmailTemplateSubjEdit" name="EmailTemplateID">
-                            <optgroup label="Email Templates">
+                            <optgroup label="SMS Templates">
                                 <!--  <option>General Email Template</option>-->
-                                <option value="">Select an Email Template</option>
+                                <option value="">Select an SMS Template</option>
                                 <?php $hidden_html = '';
-                                    if(isset($emailtemplates->Success) && $emailtemplates->Success==1){
-                                    	foreach ($emailtemplates->EmailTemplates as $key => $emailtemplate) {
-                                    		$hidden_html .= "<input type='hidden' id='TemplateBlobTmp".$emailtemplate->TemplateID."' value='".$emailtemplate->TemplateBlob."'/>";
-                                    		$hidden_html .= "<input type='hidden' id='TemplateSub".$emailtemplate->TemplateID."' value='".$emailtemplate->EmailTemplateSubj."'/>";
-                                    		echo '<option value="'.$emailtemplate->TemplateID.'!$!'.$emailtemplate->EmailSubj.'">'.$emailtemplate->EmailSubj.'</option>';
-                                    	}
+                                    if(isset($smstemplates->Success) && $smstemplates->Success==1){
+                                        foreach ($smstemplates->SMSTemplates as $key => $emailtemplate) {
+                                            $hidden_html .= "<input type='hidden' id='TemplateBlobTmp".$emailtemplate->TemplateID."' value='".$emailtemplate->TemplateBlob."'/>";
+                                            $hidden_html .= "<input type='hidden' id='TemplateSub".$emailtemplate->TemplateID."' value='".$emailtemplate->SmsTemplateSubj."'/>";
+                                            echo '<option value="'.$emailtemplate->TemplateID.'!$!'.$emailtemplate->SmsSubj.'">'.$emailtemplate->SmsSubj.'</option>';
+                                        }
                                     }
                                     ?>
                             </optgroup>
@@ -47,22 +47,23 @@
                         <label class="control-label" for="nickname2">Subject</label>
                         <input id="EmailTemplateSub" class="form-control" type="text" placeholder="" name="EmailTemplateSub">
                     </div>
-                    <div class="form-group" style="text-align:right;">
-                        <button type="button" class="btn btn-info" data-dismiss="modal">Send Test Email</button>
-                    </div>
                     <div class="form-group">
-                        <textarea class="form-control ckeditor" name="TemplateBlob1" id="TemplateBlob1" rows="10"></textarea>
+                        <textarea maxlength="160" class="form-control smsTextarea" name="TemplateBlob1" id="TemplateBlob1" rows="10"></textarea>
+                        <spam style="font-weight: bold; color: red;">
+                            <spam class="EditSMSLIMITERRROR">160</spam>
+                            Character(s) Remaining
+                        </spam>
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
                         <?php /* if(Auth::getUsers()->userlevel==1){ ?>
                         <button type="button" class="btn btn-danger btn-info" onclick="openModel();" data-dismiss="modal">Delete</button>
-                        <?php } */ ?>
+                        <?php }  */?>
                     </div>
                     <?php echo $hidden_html; ?>
                     <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="emailtemplate">
+                    <input type="hidden" name="controller" value="smstemplate">
                 </div>
             </div>
         </form>
@@ -83,7 +84,7 @@
             <form method="post" action="Action.php" id="EmailTemplateDelete">
                 <input type="hidden" name="DeleteEmailTemplateID" id="DeleteEmailTemplateID" value="">
                 <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="emailtemplate">
+                <input type="hidden" name="controller" value="smstemplate">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
@@ -99,19 +100,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><b>Error - This email template is not setup properly. It is missing the dynamic link.<b> </h4>
+                <h4 class="modal-title"><b>Error - This sms template is not setup properly. It is missing the dynamic link.<b> </h4>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Test Email Template Modal -->
+<!-- Test SMS Template Modal -->
 <div class="modal fade custom-width" id="sendemail-template-modal" tabindex="-1" role="dialog" aria-labelledby="sendemail-template-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Test Email Template</h4>
+                <h4 class="modal-title">Test SMS Template</h4>
             </div>
             <div class="modal-body">
                 <form method="post" action="Action.php" id="EmailTemplateSendTestEmailForm">
@@ -126,7 +127,7 @@
                     <input type="hidden" name="EmailTemplateSubject" id="EmailTemplateSubject" value="">
                     <input type="hidden" name="template" value="" id="TestSendEmailTemplate">
                     <input type="hidden" name="action" value="send">
-                    <input type="hidden" name="controller" value="emailtemplate">
+                    <input type="hidden" name="controller" value="smstemplate">
                 </form>
             </div>
             <div class="modal-footer">
@@ -137,20 +138,20 @@
     </div>
 </div>
 
-<!-- Email Template Create Modal -->
+<!-- SMS Template Create Modal -->
 <div class="modal fade custom-width" id="template-modal" tabindex="-1" role="dialog" aria-labelledby="template-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Email Template</h4>
+                <h4 class="modal-title">Add SMS Template</h4>
             </div>
             <div class="modal-body">
                 <form method="post" action="Action.php" id="EmailTemplateForm">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="field-1" class="control-label">Email Template Name</label>
+                                <label for="field-1" class="control-label">SMS Template Name</label>
                                 <input type="text" name="EmailTemplateSubj" class="form-control" id="field-1" placeholder="">
                             </div>
                             <div class="form-group">
@@ -162,12 +163,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <textarea class="form-control ckeditor" rows="10" name="TemplateBlob"></textarea>
+                                <textarea maxlength="160" class="form-control addSmsTextarea" rows="10" name="TemplateBlob"></textarea>
+                                <spam style="font-weight: bold; color: red;">
+                                    <spam class="AddSMSLIMITERRROR">160</spam>
+                                    Character(s) Remaining
+                                </spam>
                             </div>
                         </div>
                     </div>
                     <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="controller" value="emailtemplate">
+                    <input type="hidden" name="controller" value="smstemplate">
                 </form>
             </div>
             <div class="modal-footer">
@@ -183,31 +188,14 @@
 <script>
     $( document ).ready(function() {
     	$("button.btn-info").click(function(){
-
     		if($(this).text()=="Create"){
     			$( "#EmailTemplateForm" ).submit();
-    		}
-    		else if($(this).text()=="Send Test Email"){
-    			var stringText = CKEDITOR.instances.TemplateBlob1.getData();
-    			$("#TestSendEmailTemplate").val(stringText);
-    			$("#EmailTemplateSubject").val($("#EmailTemplateSubjEdit").val());
-    			jQuery('#sendemail-template-modal').modal('show');
     		}
     		else if($(this).text()=="Send"){
     			$( "#EmailTemplateSendTestEmailForm" ).submit();
     		}
     		else if($(this).text()=="Save Changes"){
-    			var stringText = CKEDITOR.instances.TemplateBlob1.getData();
-    			var textArea = document.createElement('textarea');
-    		    textArea.innerHTML = stringText;
-    		    var searchStr = textArea.value;
-    		    if(searchStr.toLowerCase().indexOf('<a href="http://~prsurveyphoto~">')>=0){
-    		    	$( "#EmailTemplateEditForm" ).submit();
-    		    }
-    		    else {
-    		    	jQuery('#emailtemplate-modal-error').modal('show');
-    		    	return false;
-    		    }
+    		    $( "#EmailTemplateEditForm" ).submit();
     		}
     		else if($(this).text()=="Delete" && $(this).attr('class')=='btn btn-info'){
     			$("#EmailTemplateDelete").submit();
@@ -219,7 +207,11 @@
     		var strArray = curentVal.split("!$!");
     		$("#DeleteEmailTemplateID").val(strArray[0]);
     		$("#EmailTemplateSub").val($("#TemplateSub"+strArray[0]).val());
-    		$("#cke_TemplateBlob1 .cke_wysiwyg_frame").contents().find("body").html($("#TemplateBlobTmp"+strArray[0]).val());
+    		var maxLength = 160;
+    		var $smsTextarea = $("#TemplateBlobTmp"+strArray[0]).val();
+    		var textlen = maxLength - $smsTextarea.length;
+    	 	$('.EditSMSLIMITERRROR').text(textlen);
+    		$("#TemplateBlob1").val($("#TemplateBlobTmp"+strArray[0]).val());
     	});
     });
     function openModel(){
@@ -227,8 +219,17 @@
     		jQuery('#emailtemplate-modal-delete').modal('show');
     	}
     	else {
-    		alert("Please select Email Template that you want to delete!");
+    		alert("Please select SMS Template that you want to delete!");
     	}
     }
+    var maxLength = 160;
+    $('textarea.smsTextarea').keyup(function() {
+        var textlen = maxLength - $(this).val().length;
+        $('.EditSMSLIMITERRROR').text(textlen);
+    });
+    $('textarea.addSmsTextarea').keyup(function() {
+        var textlen = maxLength - $(this).val().length;
+        $('.AddSMSLIMITERRROR').text(textlen);
+    });
 </script>
 @endpush

@@ -41,26 +41,18 @@
                             </optgroup>
                         </select>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
                     <div class="form-group">
                         <textarea class="form-control ckeditor" name="WaiverHTML1" rows="10">   </textarea>
-                        <?php echo $hidden_html; ?>
-                        <input type="hidden" name="action" value="edit">
-                        <input type="hidden" name="controller" value="waiver">
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
                     <div class="form-group">
                         <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
                         <?php /* if(Auth::getUsers()->userlevel==1){ ?>
                         <button type="button" class="btn btn-danger btn-info" onclick="openModel();" data-dismiss="modal">Delete</button>
                         <?php } */ ?>
                     </div>
+                    <?php echo $hidden_html; ?>
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="controller" value="waiver">
                 </div>
             </div>
         </form>

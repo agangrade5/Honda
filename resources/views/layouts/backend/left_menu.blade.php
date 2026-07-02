@@ -111,8 +111,8 @@
             <span class="title">Email Templates</span>
             </a>
         </li>
-        <li>
-            <a href="ManageSMSTemplates.php">
+        <li class="{{ request()->routeIs('manage-sms-templates.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-sms-templates.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">SMS Templates</span>
             </a>
