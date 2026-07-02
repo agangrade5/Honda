@@ -32,6 +32,8 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
         });
     // Manage Signed Waiver
     Route::get('manage-signed-waivers', [SignedWaiverController::class, 'index'])->name('manage-signed-waivers.index');
+    Route::post('manage-signed-waivers/data', [SignedWaiverController::class, 'getData'])->name('manage-signed-waivers.data');
+    Route::get('manage-signed-waivers/pdf/{id}', [SignedWaiverController::class, 'downloadPdf'])->name('manage-signed-waivers.pdf');
     // Manage Signed Waiver
     Route::get('manage-import-vehicles', [ImportVehiclesController::class, 'index'])->name('manage-import-vehicles.index');
     // Resource Routes

@@ -5,20 +5,20 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <!-- Basic Setup -->
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Basic Setup</h3>
-            <h3 class="panel-title" style="margin-left:210px;"><b>Total Waivers : <?php echo isset($count) && !empty($count) ? $count->Count : 0;?></b></h3>
+            <h3 class="panel-title" style="margin-left:210px;"><b>Total Waivers : {{ isset($count) && !empty($count) ? $count->Count : 0 }}</b></h3>
             <div class="panel-options">
                 <a href="#" data-toggle="panel">
                 <span class="collapse-icon">&ndash;</span>
@@ -30,27 +30,6 @@
             </div>
         </div>
         <div class="panel-body">
-            <script type="text/javascript">
-                function update_editable(){
-
-                }
-                /* jQuery(document).ready(function($)
-                    {
-                        $("#example-1").dataTable({
-                        "processing": true,
-                        "serverSide": true,
-                        "ajax": {
-                            "url": "server1.php",
-                            "type": "POST"
-                        }
-                    }).yadcf([
-                        {column_number : 0, filter_type: 'text'},
-                        {column_number : 1, filter_type: 'text'},
-                        {column_number : 2, filter_type: 'text'},
-                        {column_number : 3, filter_type: 'text'}
-                    ]);
-                }); */
-            </script>
             <table id="example-1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -79,20 +58,21 @@
 <!-- content @e -->
 
 <!-- modal @s -->
-<div class="modal fade custom-width" id="user-modal-edit">
+<div class="modal fade custom-width" id="user-modal-edit" tabindex="-1" role="dialog" aria-labelledby="user-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 id="WaiverTitle" class="modal-title">Edit Truck</h4>
                 <span style="float:right;font-weight:bold;margin-top:-5%;">
-                <a class="btn btn-secondary btn-sm btn-icon icon-left"  href="javascript:;">
+                <a class="btn btn-secondary btn-sm btn-icon icon-left" href="javascript:;">
                 Download PDF
                 </a>
                 </span>
             </div>
             <div class="modal-body">
-                <form method="post" action="Action.php" id="TruckEdit">
+                <form method="post" action="#" id="TruckEdit">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -107,14 +87,11 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="truck">
                     <input type="hidden" id="WaiverDEditID" name="WaiverDID" value="">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <!-- <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>-->
             </div>
         </div>
     </div>
@@ -123,36 +100,56 @@
 
 @push('scripts')
 <script>
-    $( document ).ready(function() {
-    	$( "#user-modal-edit a.btn-secondary" ).on( "click", function() {
-    		var str = window.location.href;
-    		var filePath = window.location.pathname;
-    		var fileName = filePath.substr(filePath.lastIndexOf("/") + 1);
-    		var repStr = str.replace(fileName,"");
-    		window.open(repStr+"WaiverPDF.php?WaiverID="+$("#WaiverDEditID").val());
-    	});
-    });
+    $(document).ready(function() {
+        // Initialize Server-Side DataTable
+        $("#example-1").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "{{ route('manage-signed-waivers.data') }}",
+                "type": "POST",
+                "headers": {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }
+        }).yadcf([
+            {column_number : 0, filter_type: 'text'},
+            {column_number : 1, filter_type: 'text'},
+            {column_number : 2, filter_type: 'text'},
+            {column_number : 3, filter_type: 'text'}
+        ]);
 
-    $( "#example-1" ).on( "click", "tbody tr td a.btn-secondary", function() {
-    	//console.log("vvv");
-    	var WaiverDID = $(this).parent().prev().prev().prev().prev().text();
-    	//console.log(WaiverDID);
-    	$("#WaiverTitle").text($(this).parent().prev().text());
-    	//console.log(WaiverDID);
-    	var htmlData = $("#WaiverHTML"+WaiverDID).html();
-    	//console.log(htmlData);
+        // PDF Download Trigger
+        $( "#user-modal-edit a.btn-secondary" ).on( "click", function() {
+            var waiverId = $("#WaiverDEditID").val();
+            if (waiverId) {
+                window.open('/manage-signed-waivers/pdf/' + waiverId);
+            }
+        });
 
-    	$("#WaiverHTMLEditView").html(htmlData);
-    	var imgName = $("#WaiverDOCLocation"+WaiverDID).val();
+        // View Signature Trigger
+        $( "#example-1" ).on( "click", "tbody tr td a.btn-secondary", function() {
+            var WaiverDID = $(this).parent().prev().prev().prev().prev().text();
+            $("#WaiverTitle").text($(this).parent().prev().text());
+            
+            var htmlData = $("#WaiverHTML" + WaiverDID).html();
+            $("#WaiverHTMLEditView").html(htmlData);
 
-    	var imgURL = "http://"+window.location.hostname+"/API/assets/legal/sigs/";
-    	//imgName = imgName.replace("bin","legal");
-    	var iname = imgName.substr(imgName.lastIndexOf("/") + 1);
-    	//console.log(iname);
-    	$("#WaiverSignedImg").attr("src",imgURL+iname);
-    	//console.log($("#WaiverHTML"+WaiverDID).val());
-    	$("#WaiverDEditID").val(WaiverDID);
-    	//console.log($(this).parent().prev().text());
+            var imgName = $("#WaiverDOCLocation" + WaiverDID).val();
+            var imgURL = window.location.origin + "/API/assets/legal/sigs/";
+            var iname = imgName.substr(imgName.lastIndexOf("/") + 1);
+            
+            $("#WaiverSignedImg").attr("src", imgURL + iname);
+            $("#WaiverDEditID").val(WaiverDID);
+        });
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
 @endpush
