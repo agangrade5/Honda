@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\{
     RegionsController,
     SocialMediaController,
     CountryController,
+    DealerController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function () {
             'manage-regions' => RegionsController::class,
             'manage-social-media' => SocialMediaController::class,
             'manage-countries' => CountryController::class,
+            'manage-dealers' => DealerController::class
         ]
     );
 });
