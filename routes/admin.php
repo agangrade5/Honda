@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 //Resource Route
 Route::middleware('auth')->group(function () {
+    Route::post('manage-trucks/import', [TruckController::class, 'import'])->name('manage-trucks.import');
     Route::resources(
         [
             'manage-events' => EventController::class,
