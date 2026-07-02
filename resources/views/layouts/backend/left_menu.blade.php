@@ -75,14 +75,14 @@
             <span class="title">Vehicle Groups</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('manage-signed-waivers.index') ? 'active' : '' }}">
+        <li class="{{ request()->routeIs('manage-signed-waivers.*') ? 'active' : '' }}">
             <a href="{{ route('manage-signed-waivers.index') }}">
             <i class="glyphicon glyphicon-paperclip"></i>
             <span class="title">Manage Signed Waiver</span>
             </a>
         </li>
-        <li>
-            <a href="ImportVehicles.php">
+        <li class="{{ request()->routeIs('manage-import-vehicles.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-import-vehicles.index') }}">
             <i class="glyphicon glyphicon-paperclip"></i>
             <span class="title">Manage Import Vehicle</span>
             </a>
