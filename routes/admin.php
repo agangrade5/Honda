@@ -31,12 +31,26 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::post('/edit', 'editState')->name('edit');
             Route::post('/delete', 'deleteState')->name('delete');
         });
-    // Manage Signed Waiver
-    Route::get('manage-signed-waivers', [SignedWaiverController::class, 'index'])->name('manage-signed-waivers.index');
-    Route::post('manage-signed-waivers/data', [SignedWaiverController::class, 'getData'])->name('manage-signed-waivers.data');
-    Route::get('manage-signed-waivers/pdf/{id}', [SignedWaiverController::class, 'downloadPdf'])->name('manage-signed-waivers.pdf');
-    // Manage Signed Waiver
-    Route::get('manage-import-vehicles', [ImportVehiclesController::class, 'index'])->name('manage-import-vehicles.index');
+    // Manage Signed Waiver Routes
+    Route::prefix('manage-signed-waivers')
+        ->name('manage-signed-waivers.')
+        ->controller(SignedWaiverController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/data', 'getData')->name('data');
+            Route::get('/pdf/{id}', 'downloadPdf')->name('pdf');
+        });
+
+    // Manage Import Vehicles Routes
+    Route::prefix('manage-import-vehicles')
+        ->name('manage-import-vehicles.')
+        ->controller(ImportVehiclesController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/upload', 'upload')->name('upload');
+            Route::post('/delete', 'deleteFile')->name('delete');
+            Route::post('/read', 'readExcel')->name('read');
+        });
     // Resource Routes
     Route::resources(
         [
