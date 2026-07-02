@@ -57,8 +57,8 @@
             <span class="title">Manage Countries</span>
             </a>
         </li>
-        <li>
-            <a href="ManageDealers.php">
+        <li class="{{ request()->routeIs('manage-dealers.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-dealers.index') }}">
             <i class="glyphicon glyphicon-star-empty"></i>
             <span class="title">Manage Dealers</span>
             </a>
