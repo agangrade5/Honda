@@ -93,8 +93,8 @@
             <span class="title">Manage Models</span>
             </a>
         </li>
-        <li>
-            <a href="ManageUsers.php">
+        <li class="{{ request()->routeIs('manage-users.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-users.index') }}">
             <i class="linecons-user"></i>
             <span class="title">Users</span>
             </a>

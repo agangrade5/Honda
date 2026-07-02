@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\{
     ImportVehiclesController,
     SignedWaiverController,
     ModelsController,
+    UserController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,7 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-restricted-riders' => RestrictedRiderController::class,
             'manage-groups' => GroupController::class,
             'manage-models' => ModelsController::class,
+            'manage-users' => UserController::class,
         ]
     );
 });
