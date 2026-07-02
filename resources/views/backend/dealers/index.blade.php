@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#user-modal').modal('show');">
@@ -42,28 +42,34 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if(!empty($dealers) && $dealers->Success==1){
-                            foreach ($dealers->Dealers as $key => $dealer) { ?>
+                    @foreach ($dealers as $dealer)
                     <tr>
-                        <td><?php echo $dealer->DealerID;?></td>
-                        <td><?php echo $dealer->DealerNumber;?></td>
-                        <td><?php echo $dealer->DealerName;?></td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $dealer->dealernumber }}</td>
+                        <td>{{ $dealer->dealername }}</td>
                         <td>
-                            <input type="hidden" id="DealerLocation<?php echo $dealer->DealerID;?>" value="<?php echo $dealer->DealerLocation;?>">
-                            <input type="hidden" id="DealerRegion<?php echo $dealer->DealerID;?>" value="<?php echo $dealer->DealerRegion;?>">
-                            <input type="hidden" id="DealerDistrict<?php echo $dealer->DealerID;?>" value="<?php echo $dealer->DealerDistrict;?>">
-                            <a href="javascript:;" onclick="jQuery('#user-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
+                            <a href="javascript:;" 
+                               data-id="{{ $dealer->dealerid }}"
+                               data-number="{{ $dealer->dealernumber }}"
+                               data-name="{{ $dealer->dealername }}"
+                               data-location="{{ $dealer->dealerlocation }}"
+                               data-region="{{ $dealer->dealerregion }}"
+                               data-district="{{ $dealer->dealerdistrict }}"
+                               onclick="jQuery('#user-modal-edit').modal('show');" 
+                               class="btn btn-secondary btn-sm btn-icon icon-left">
+                               Edit
                             </a>
-                            <?php if(Auth::getUsers()->userlevel==1){ ?>
-                            <a href="javascript:;" id="<?php echo $dealer->DealerID;?>" onclick="jQuery('#dealer-modal-delete').modal('show');" class="btn btn-danger btn-icon">
-                            <i class="icon-white icon-heart"></i> Delete
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;" 
+                               data-id="{{ $dealer->dealerid }}" 
+                               onclick="jQuery('#dealer-modal-delete').modal('show');" 
+                               class="btn btn-danger btn-icon">
+                               <i class="icon-white icon-heart"></i> Delete
                             </a>
-                            <?php } ?>
+                            @endif
                         </td>
                     </tr>
-                    <?php } } ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -78,16 +84,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dealer-modal-delete-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="DealerDelete">
+            <form method="post" action="#" id="DealerDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteDealerID" id="DeleteDealerID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="dealer">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -99,21 +105,22 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Dealer</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="user-modal-label">Add Dealer</h4>
             </div>
-            <form method="post" action="Action.php" id="DealerForm">
+            <form method="post" action="{{ route('manage-dealers.store') }}" id="DealerForm">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="firstName" class="control-label">Dealer Number</label>
+                                <label for="DealerNumber" class="control-label">Dealer Number</label>
                                 <input type="text" class="form-control" id="DealerNumber" name="DealerNumber" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastName" class="control-label">Dealer Name</label>
+                                <label for="DealerName" class="control-label">Dealer Name</label>
                                 <input type="text" class="form-control" id="DealerName" name="DealerName" placeholder="">
                             </div>
                         </div>
@@ -121,13 +128,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="firstName" class="control-label">Dealer Location</label>
+                                <label for="DealerLocation" class="control-label">Dealer Location</label>
                                 <input type="text" class="form-control" id="DealerLocation" name="DealerLocation" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastName" class="control-label">Dealer Region</label>
+                                <label for="DealerRegion" class="control-label">Dealer Region</label>
                                 <input type="text" class="form-control" id="DealerRegion" name="DealerRegion" placeholder="">
                             </div>
                         </div>
@@ -135,7 +142,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="firstName" class="control-label">Dealer District</label>
+                                <label for="DealerDistrict" class="control-label">Dealer District</label>
                                 <input type="text" class="form-control" id="DealerDistrict" name="DealerDistrict" placeholder="">
                             </div>
                         </div>
@@ -143,10 +150,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-info">Create</button>
                 </div>
-                <input type="hidden" name="action" value="add">
-                <input type="hidden" name="controller" value="dealer">
             </form>
         </div>
     </div>
@@ -157,21 +162,23 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Dealer</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="user-modal-edit-label">Edit Dealer</h4>
             </div>
-            <form method="post" action="Action.php" id="DealerFormEdit">
+            <form method="post" action="#" id="DealerFormEdit">
+                @csrf
+                @method('PUT')
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="firstName" class="control-label">Dealer Number</label>
+                                <label for="DealerNumberEdit" class="control-label">Dealer Number</label>
                                 <input type="text" class="form-control" id="DealerNumberEdit" name="DealerNumber" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastName" class="control-label">Dealer Name</label>
+                                <label for="DealerNameEdit" class="control-label">Dealer Name</label>
                                 <input type="text" class="form-control" id="DealerNameEdit" name="DealerName" placeholder="">
                             </div>
                         </div>
@@ -179,13 +186,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="firstName" class="control-label">Dealer Location</label>
+                                <label for="DealerLocationEdit" class="control-label">Dealer Location</label>
                                 <input type="text" class="form-control" id="DealerLocationEdit" name="DealerLocation" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastName" class="control-label">Dealer Region</label>
+                                <label for="DealerRegionEdit" class="control-label">Dealer Region</label>
                                 <input type="text" class="form-control" id="DealerRegionEdit" name="DealerRegion" placeholder="">
                             </div>
                         </div>
@@ -193,18 +200,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="firstName" class="control-label">Dealer District</label>
+                                <label for="DealerDistrictEdit" class="control-label">Dealer District</label>
                                 <input type="text" class="form-control" id="DealerDistrictEdit" name="DealerDistrict" placeholder="">
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="dealer">
                     <input type="hidden" id="DealerID" name="DealerID" value="">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
+                    <button type="button" class="btn btn-info">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -216,33 +221,73 @@
 <script>
     $( document ).ready(function() {
     	$("button.btn-info").click(function(){
-    	    //console.log($(this).text());
-    		if($(this).text()=="Create"){ console.log("create");
-    			$( "#DealerForm" ).submit();
+    		if($(this).text()=="Create"){
+    			var form = $( "#DealerForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
-    		else if($(this).text()=="Save Changes"){ console.log("edit");
-    			$( "#DealerFormEdit" ).submit();
+    		else if($(this).text()=="Save Changes"){
+    			var form = $( "#DealerFormEdit" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
-    		else if($(this).text()=="Delete"){ 	console.log("D");
-    			$("#DealerDelete").submit();
+    		else if($(this).text()=="Delete"){
+    			var form = $("#DealerDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     	});
 
     	$("a.btn-danger").click(function(){
-    		$("#DeleteDealerID").val($(this).parent().prev().prev().prev().text());
+            var id = $(this).data('id');
+    		$("#DeleteDealerID").val(id);
+            $("#DealerDelete").attr('action', '/manage-dealers/' + id);
     	});
 
     	$("a.btn-secondary").click(function(){
-    		var DealerId = $(this).parent().prev().prev().prev().text();
-    		//console.log($("#DealerLocation"+DealerId).val());
-    		$("#DealerNumberEdit").val($(this).parent().prev().prev().text());
-    		$("#DealerNameEdit").val($(this).parent().prev().text());
-    		$("#DealerLocationEdit").val($("#DealerLocation"+DealerId).val());
-    		$("#DealerRegionEdit").val($("#DealerRegion"+DealerId).val());
+    		var btn = $(this);
+            var DealerId = btn.data('id');
+    		$("#DealerNumberEdit").val(btn.data('number'));
+    		$("#DealerNameEdit").val(btn.data('name'));
+    		$("#DealerLocationEdit").val(btn.data('location'));
+    		$("#DealerRegionEdit").val(btn.data('region'));
     		$("#DealerID").val(DealerId);
-    		$("#DealerDistrictEdit").val($("#DealerDistrict"+DealerId).val());
-
+    		$("#DealerDistrictEdit").val(btn.data('district'));
+            $("#DealerFormEdit").attr('action', '/manage-dealers/' + DealerId);
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\DealerRequest', '#DealerForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\DealerRequest', '#DealerFormEdit') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\DealerRequest', '#DealerDelete') !!}
 @endpush
