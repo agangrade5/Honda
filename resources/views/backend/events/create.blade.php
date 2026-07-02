@@ -1,6 +1,14 @@
 @extends('layouts.backend.app')
 @section('title', $title)
 @section('content')
+<style>
+    form .form-group.validate-has-error span.validate-has-error {
+        color: #cc3f44;
+        display: block;
+        padding-top: 5px;
+        font-size: 12px;
+    }
+</style>
 <div class="main-content">
     @include('layouts.backend.content_header', compact('title'))
 

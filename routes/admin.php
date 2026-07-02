@@ -8,7 +8,8 @@ use App\Http\Controllers\Backend\{
     SocialMediaController,
     CountryController,
     DealerController,
-    RestrictedRiderController
+    RestrictedRiderController,
+    GroupController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +36,8 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-social-media' => SocialMediaController::class,
             'manage-countries' => CountryController::class,
             'manage-dealers' => DealerController::class,
-            'manage-restricted-riders' => RestrictedRiderController::class
+            'manage-restricted-riders' => RestrictedRiderController::class,
+            'manage-groups' => GroupController::class
         ]
     );
 });
