@@ -19,13 +19,6 @@
         </ul>
     </nav>
 
-    <div class="dx-warning hidden">
-        <div>
-            <h2>How to Include Charts Library in Xenon Theme</h2>
-            <p>The reason why you don't see charts in this page is because of license restrictions from DevExpress company.</p>
-        </div>
-    </div>
-
     {{-- Charts init script (runs at document ready) --}}
     <script type="text/javascript">
         jQuery(document).ready(function($) {
