@@ -7,11 +7,25 @@ use App\Http\Controllers\Backend\{
     RegionsController,
     SocialMediaController,
     CountryController,
+    DealerController,
+    RestrictedRiderController
 };
 use Illuminate\Support\Facades\Route;
 
-//Resource Route
-Route::middleware('auth')->group(function () {
+//Admin Route
+Route::middleware(['admin.auth', 'no.cache'])->group(function () {
+    //Truck Import
+    Route::post('manage-trucks/import', [TruckController::class, 'import'])->name('manage-trucks.import');
+    // Manage Countries States Routes
+    Route::prefix('manage-countries/states')
+        ->name('manage-countries.states.')
+        ->controller(CountryController::class)
+        ->group(function () {
+            Route::post('/add', 'addState')->name('add');
+            Route::post('/edit', 'editState')->name('edit');
+            Route::post('/delete', 'deleteState')->name('delete');
+        });
+    // Resource Routes
     Route::resources(
         [
             'manage-events' => EventController::class,
@@ -20,6 +34,8 @@ Route::middleware('auth')->group(function () {
             'manage-regions' => RegionsController::class,
             'manage-social-media' => SocialMediaController::class,
             'manage-countries' => CountryController::class,
+            'manage-dealers' => DealerController::class,
+            'manage-restricted-riders' => RestrictedRiderController::class
         ]
     );
 });

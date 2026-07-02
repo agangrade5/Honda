@@ -23,6 +23,9 @@
 window.onbeforeunload = function(e) {
     $(".page-loading-overlay").removeClass('loaded');
 }
+window.addEventListener("pageshow", function (event) {
+    $(".page-loading-overlay").addClass("loaded");
+});
 </script>
 <style>.datepicker{z-index:1200 !important;}</style>
 

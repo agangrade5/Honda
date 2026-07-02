@@ -57,14 +57,14 @@
             <span class="title">Manage Countries</span>
             </a>
         </li>
-        <li>
-            <a href="ManageDealers.php">
+        <li class="{{ request()->routeIs('manage-dealers.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-dealers.index') }}">
             <i class="glyphicon glyphicon-star-empty"></i>
             <span class="title">Manage Dealers</span>
             </a>
         </li>
-        <li>
-            <a href="ManageRestrictedRiders.php">
+        <li class="{{ request()->routeIs('manage-restricted-riders.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-restricted-riders.index') }}">
             <i class="glyphicon glyphicon-remove"></i>
             <span class="title">Manage Restricted Riders</span>
             </a>

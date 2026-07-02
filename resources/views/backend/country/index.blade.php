@@ -6,15 +6,13 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
 
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
@@ -44,30 +42,40 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if(!empty($countries) && $countries->Success==1){
-                        foreach ($countries->Country as $key => $countrie) { ?>
+                    @foreach ($countries as $countrie)
                     <tr>
-                        <td><?php echo $countrie->CountryID;?></td>
-                        <td><?php echo $countrie->CountryName;?></td>
-                        <td><?php echo $countrie->CountryCode;?></td>
-                        <td><?php echo $countrie->Region;?></td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $countrie->CountryName }}</td>
+                        <td>{{ $countrie->CountryCode }}</td>
+                        <td>{{ $countrie->Region }}</td>
                         <td>
-                            <input type="hidden" id="RegionID<?php echo $countrie->CountryID;?>" value="<?php echo $countrie->RegionID;?>">
-                            <a href="javascript:;" id="CID<?php echo $countrie->CountryID;?>" onclick="jQuery('#truck-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
+                            <input type="hidden" id="RegionID{{ $countrie->CountryID }}" value="{{ $countrie->RegionID }}">
+                            <a href="javascript:;"
+                               id="CID{{ $countrie->CountryID }}"
+                               data-id="{{ $countrie->CountryID }}"
+                               data-name="{{ $countrie->CountryName }}"
+                               data-code="{{ $countrie->CountryCode }}"
+                               data-region="{{ $countrie->RegionID }}"
+                               onclick="jQuery('#truck-modal-edit').modal('show');"
+                               class="btn btn-secondary btn-sm btn-icon icon-left">
+                               Edit
                             </a>
-                            <?php if(Auth::getUsers()->userlevel==1){ ?>
-                            <a href="javascript:;" id="<?php echo $countrie->CountryID;?>" onclick="jQuery('#country-modal-delete').modal('show');" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
-                            <?php } ?>
-                            <input type="hidden" id="StateName<?php echo $countrie->CountryID;?>" value="
-                                <?php foreach ($countrie->StateName as $Statekey => $Statevalue): ?>
-                                <option value='<?php echo $Statevalue->stateid;?>'><?php echo $Statevalue->statename;?></option>
-                                <?php endforeach ?>
-                                ">
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;"
+                               data-id="{{ $countrie->CountryID }}"
+                               onclick="jQuery('#country-modal-delete').modal('show');"
+                               class="btn btn-danger btn-icon">
+                               <i class="icon-white icon-heart"></i> Delete
+                            </a>
+                            @endif
+                            <input type="hidden" id="StateName{{ $countrie->CountryID }}" value="
+                                @foreach ($countrie->StateName as $Statevalue)
+                                    <option value='{{ $Statevalue->stateid }}'>{{ $Statevalue->statename }}</option>
+                                @endforeach
+                            ">
                         </td>
                     </tr>
-                    <?php }} ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -78,20 +86,20 @@
 <!-- content @e -->
 
 <!-- Delete Modal -->
-<div class="modal fade custom-width" id="country-modal-delete">
+<div class="modal fade custom-width" id="country-modal-delete" tabindex="-1" role="dialog" aria-labelledby="country-modal-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="delete-modal-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="CountryDelete">
+            <form method="post" action="#" id="CountryDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteCountryID" id="DeleteCountryID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="country">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -99,18 +107,19 @@
 </div>
 
 <!-- Edit State Modal -->
-<div class="modal fade custom-width" id="state-modal-edit-delete">
+<div class="modal fade custom-width" id="state-modal-edit-delete" tabindex="-1" role="dialog" aria-labelledby="state-modal-edit-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit State-Province-District </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="state-edit-label">Edit State-Province-District </h4>
             </div>
-            <form method="post" action="Action.php" id="stateEditForm">
+            <form method="post" action="#" id="stateEditForm">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">State-Province-District Name</label>
+                            <label class="control-label" for="StateNameEdit1">State-Province-District Name</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
@@ -121,17 +130,14 @@
                     </div>
                 </div>
                 <input type="hidden" name="StateIDEdit" id="StateIDEdit" value="">
-                <input type="hidden" name="action" value="edit">
-                <input type="hidden" name="controller" value="state">
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-secondary btn-info" data-dismiss="modal">Save</button>
-                    <button type="button" class="btn btn-danger btn-info" data-dismiss="modal"> Delete </button>
+                    <button type="button" class="btn btn-white" id="closeStateModal">Close</button>
+                    <button type="button" class="btn btn-secondary btn-info" id="saveStateBtn">Save</button>
+                    <button type="button" class="btn btn-danger btn-info" id="deleteStateBtn"> Delete </button>
                 </div>
             </form>
-            <form method="post" action="Action.php" id="stateDeleteForm">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="state">
+            <form method="post" action="#" id="stateDeleteForm">
+                @csrf
                 <input type="hidden" name="StateIDDelete" id="StateIDDelete" value="">
             </form>
         </div>
@@ -139,18 +145,19 @@
 </div>
 
 <!-- Create Country Modal -->
-<div class="modal fade custom-width" id="truck-modal">
+<div class="modal fade custom-width" id="truck-modal" tabindex="-1" role="dialog" aria-labelledby="truck-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Country</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="create-modal-label">Add Country</h4>
             </div>
-            <form method="post" action="Action.php" id="CountryForm">
+            <form method="post" action="{{ route('manage-countries.store') }}" id="CountryForm">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Country Name</label>
+                            <label class="control-label" for="CountryName">Country Name</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
@@ -160,43 +167,53 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="street1" class="control-label">Region</label>
+                            <label for="RegionID" class="control-label">Region</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" id="RegionID" name="RegionID">
-                                    <?php /* foreach($regions->Regions as $region){?>
-                                    <option value="<?php echo $region->RegionID;?>"><?php echo $region->RegionName;?></option>
-                                    <?php }  */?>
+                                    @foreach($regions as $region)
+                                        <option value="{{ $region->regionid }}">{{ $region->regionname }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="controller" value="country">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="CountryCode" class="control-label">Country Code</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="CountryCode" name="CountryCode" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info btn-secondary">Create</button>
+                </div>
             </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info btn-secondary" data-dismiss="modal">Create</button>
-            </div>
         </div>
     </div>
 </div>
 
 <!-- Edit Country Modal -->
-<div class="modal fade custom-width" id="truck-modal-edit">
+<div class="modal fade custom-width" id="truck-modal-edit" tabindex="-1" role="dialog" aria-labelledby="truck-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Country</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="edit-modal-label">Edit Country</h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="Action.php" id="CountryFormEdit">
+                <form method="post" action="#" id="CountryFormEdit">
+                    @csrf
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Country Name</label>
+                            <label class="control-label" for="CountryNameEdit">Country Name</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
@@ -206,15 +223,25 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="street1" class="control-label">Region</label>
+                            <label for="RegionIDEdit" class="control-label">Region</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" id="RegionIDEdit" name="RegionID">
-                                    <?php /* foreach($regions->Regions as $region){?>
-                                    <option value="<?php echo $region->RegionID;?>"><?php echo $region->RegionName;?></option>
-                                    <?php } */ ?>
+                                    @foreach($regions as $region)
+                                        <option value="{{ $region->regionid }}">{{ $region->regionname }}</option>
+                                    @endforeach
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="CountryCodeEdit" class="control-label">Country Code</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="CountryCodeEdit" name="CountryCode" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -242,14 +269,12 @@
                             </select>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="country">
                     <input type="hidden" id="CountryID" name="CountryID" value="">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info btn-secondary" data-dismiss="modal">Save Changes</button>
+                <button type="button" class="btn btn-info btn-secondary">Save Changes</button>
             </div>
         </div>
     </div>
@@ -259,99 +284,173 @@
 @push('scripts')
 <script>
     $( document ).ready(function() {
+        // Standard action submit handlers
     	$("button.btn-info").click(function(){
     		if($(this).text()=="Create"){
-    			$( "#CountryForm" ).submit();
+    			var form = $( "#CountryForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Save Changes"){
-    			$( "#CountryFormEdit" ).submit();
+    			var form = $( "#CountryFormEdit" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Delete"){
-    			$("#CountryDelete").submit();
-    		}
-    		else if($(this).text()=="Save"){
-    			//$("#stateEditForm").submit();
-
-    			$.ajax({
-    				method: "POST",
-    				url: "Action.php",
-    				data: $("#stateEditForm").serialize(),
-    			})
-    	  		.done(function( msg ) {
-    				var str = $("#StateName"+$("#CountryID").val()).val();
-                    var newStr = str.replace("<option value='"+$("#StateIDEdit").val()+"'>"+$("#OLDStateNameEdit").val()+"</option>","<option value='"+$("#StateIDEdit").val()+"'>"+msg+"</option>");
-                    $("#StateName"+$("#CountryID").val()).val(newStr);
-                    $("#CID"+$("#CountryID").val()).trigger("click");
-    	  		});
-    		}
-    		else if($(this).text()==" Delete "){
-                //console.log("e");
-    			//$("#stateDeleteForm").submit();
-    			$.ajax({
-    				method: "POST",
-    				url: "Action.php",
-    				data: $("#stateDeleteForm").serialize(),
-    			})
-    	  		.done(function( msg ) {
-    				var str = $("#StateName"+$("#CountryID").val()).val();
-                    //console.log("OLD STR ="+$("#OLDStateNameEdit").val());
-                    var newStr = str.replace("<option value='"+$("#StateIDEdit").val()+"'>"+$("#OLDStateNameEdit").val()+"</option>","");
-                    //console.log("OLD STR ="+newStr);
-                    $("#StateName"+$("#CountryID").val()).val(newStr);
-                    $("#CID"+$("#CountryID").val()).trigger("click");
-    	  		});
+    			var form = $("#CountryDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     	});
+
+        // Trigger Delete
     	$("a.btn-danger").click(function(){
-    		$("#DeleteCountryID").val($(this).parent().prev().prev().prev().prev().text());
+            var id = $(this).data('id');
+    		$("#DeleteCountryID").val(id);
+            $("#CountryDelete").attr('action', '/manage-countries/' + id);
     	});
 
-    	$("button.btn-white").click(function(){
-    		//console.log("aa");
-    		$("#CID"+$("#CountryID").val()).trigger("click");
+        // Trigger Edit Close to reopen Edit Country Modal
+    	$("#closeStateModal").click(function(){
+            jQuery('#state-modal-edit-delete').modal('hide');
+    		$("#CID" + $("#CountryID").val()).trigger("click");
     	});
 
+        // Double click/click action on state select box to open state edit/delete modal
     	$("#multi-select-state").click(function(){
     		var cID = $(this).val();
-    		//console.log(cID[0]);
-    		//console.log($(this).find("[value='"+cID[0]+"']").text());
-    		$("#StateIDEdit").val(cID[0]);
-    		$("#StateIDDelete").val(cID[0]);
-    		$("#OLDStateNameEdit").val($(this).find("[value='"+cID[0]+"']").text());
-    		$("#StateNameEdit1").val($(this).find("[value='"+cID[0]+"']").text());
-    		jQuery('#state-modal-edit-delete').modal('show');
-    		$("#truck-modal-edit").find("button.close").trigger("click");
+            if (cID && cID.length > 0) {
+                $("#StateIDEdit").val(cID[0]);
+                $("#StateIDDelete").val(cID[0]);
 
+                var stateText = $(this).find("option[value='" + cID[0] + "']").text();
+                $("#OLDStateNameEdit").val(stateText);
+                $("#StateNameEdit1").val(stateText);
+
+                jQuery('#state-modal-edit-delete').modal('show');
+                $("#truck-modal-edit").modal('hide');
+            }
     	});
 
+        // Save State AJAX callback
+        $("#saveStateBtn").click(function(){
+            $.ajax({
+                method: "POST",
+                url: "{{ route('manage-countries.states.edit') }}",
+                data: $("#stateEditForm").serialize(),
+            })
+            .done(function( msg ) {
+                jQuery('#state-modal-edit-delete').modal('hide');
+                var countryId = $("#CountryID").val();
+                var stateId = $("#StateIDEdit").val();
+                var oldText = $("#OLDStateNameEdit").val();
+
+                var str = $("#StateName" + countryId).val();
+                var oldOption = "<option value='" + stateId + "'>" + oldText + "</option>";
+                var newOption = "<option value='" + stateId + "'>" + msg + "</option>";
+                var newStr = str.replace(oldOption, newOption);
+
+                $("#StateName" + countryId).val(newStr);
+                $("#CID" + countryId).trigger("click");
+            });
+        });
+
+        // Delete State AJAX callback
+        $("#deleteStateBtn").click(function(){
+            $.ajax({
+                method: "POST",
+                url: "{{ route('manage-countries.states.delete') }}",
+                data: $("#stateDeleteForm").serialize(),
+            })
+            .done(function( msg ) {
+                jQuery('#state-modal-edit-delete').modal('hide');
+                var countryId = $("#CountryID").val();
+                var stateId = $("#StateIDEdit").val();
+                var oldText = $("#OLDStateNameEdit").val();
+
+                var str = $("#StateName" + countryId).val();
+                var oldOption = "<option value='" + stateId + "'>" + oldText + "</option>";
+                var newStr = str.replace(oldOption, "");
+
+                $("#StateName" + countryId).val(newStr);
+                $("#CID" + countryId).trigger("click");
+            });
+        });
+
+        // Populate Edit Modal
     	$("a.btn-secondary").click(function(){
-    		var CID = $(this).parent().prev().prev().prev().prev().text();
+    		var btn = $(this);
+            var CID = btn.data('id');
     		$("#multi-select-state").empty();
-    		$("#CountryNameEdit").val($(this).parent().prev().prev().prev().text());
-
-    		$("#RegionIDEdit").val($("#RegionID"+CID).val());
+    		$("#CountryNameEdit").val(btn.data('name'));
+    		$("#CountryCodeEdit").val(btn.data('code'));
+    		$("#RegionIDEdit").val(btn.data('region'));
     		$("#CountryID").val(CID);
-    		//console.log(($("#StateName"+CID)).val());
-    		$("#multi-select-state").append(($("#StateName"+CID)).val());
+    		$("#multi-select-state").append($("#StateName" + CID).val());
+            $("#CountryFormEdit").attr('action', '/manage-countries/' + CID);
     	});
+
+        // Add State AJAX callback
     	$("#add_state").click(function(){
-    		CountryID = $("#CountryID").val();
-    		StateName = $("#StateNameEdit").val();
+    		var countryId = $("#CountryID").val();
+    		var stateName = $("#StateNameEdit").val();
+            if (stateName.trim() === '') return;
+
     		$.ajax({
     			method: "POST",
-    			url: "Action.php",
-    			data: { action: "add", controller: "state" , CountryID: CountryID, StateName: StateName}
+    			url: "{{ route('manage-countries.states.add') }}",
+    			data: {
+                    action: "add",
+                    controller: "state",
+                    CountryID: countryId,
+                    StateName: stateName,
+                    _token: '{{ csrf_token() }}'
+                }
     		})
       		.done(function( msg ) {
-      			//$("#multi-select-state").append();
-    			var str = $("#StateName"+CountryID).val();
-    			str += 	"<option value='"+msg+"'>"+StateName+"</option>";
-    			//console.log(str);
-    		 	$("#StateName"+CountryID).val(str);
-    			$("#CID"+CountryID).trigger("click");
-
+    			var str = $("#StateName" + countryId).val();
+    			str += "<option value='" + msg + "'>" + stateName + "</option>";
+    		 	$("#StateName" + countryId).val(str);
+    			$("#CID" + countryId).trigger("click");
+                $("#StateNameEdit").val('');
       		});
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    // Only reset forms if they aren't sub-state forms that are currently active
+                    if (this.id !== 'stateEditForm' && this.id !== 'stateDeleteForm') {
+                        this.reset();
+                        if (typeof $(this).validate === 'function') {
+                            var validator = $(this).validate();
+                            if (validator) {
+                                validator.resetForm();
+                            }
+                        }
+                        $(this).find('.has-error').removeClass('has-error');
+                        $(this).find('.error').removeClass('error');
+                        $(this).find('.help-block').remove();
+                    }
+                });
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\CountryRequest', '#CountryForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\CountryRequest', '#CountryFormEdit') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\CountryRequest', '#CountryDelete') !!}
 @endpush

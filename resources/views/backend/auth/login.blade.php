@@ -3,11 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="description" content="Xenon Boostrap Admin Panel" />
 	<meta name="author" content="" />
-	
+
 	<title>Login</title>
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
@@ -22,10 +22,13 @@
 
 	<script src="{{ asset('assets/js/jquery-1.11.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-cookie/jquery.cookie.js') }}"></script>
-	<script type="text/javascript">	 
-		window.onbeforeunload = function(e) {
-			$(".page-loading-overlay").removeClass('loaded'); 	
-		}
+	<script type="text/javascript">
+		window.onbeforeunload = function () {
+            $(".page-loading-overlay").removeClass("loaded");
+        };
+        window.addEventListener("pageshow", function (event) {
+            $(".page-loading-overlay").addClass("loaded");
+        });
 	</script>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -46,7 +49,7 @@
 
 						// Reveal Login form
 						setTimeout(function(){ $(".fade-in-effect").addClass('in'); }, 1);
-						
+
 						// Validation and Ajax action
 						$("form#login").validate({
 							rules: {
@@ -57,7 +60,7 @@
 									required: true
 								}
 							},
-							
+
 							messages: {
 								username: {
 									required: 'Please enter your username.'
@@ -66,18 +69,18 @@
 									required: 'Please enter your password.'
 								}
 							},
-							
+
 							submitHandler: function(form)
 							{
-								form.submit();								
+								form.submit();
 							}
 						});
-						
+
 						// Set Form focus
 						$("form#login .form-group:has(.form-control):first .form-control").focus();
 					});
 				</script>
-				
+
 				<!-- Errors container -->
 				<div class="errors-container">
 					@if ($errors->any())
@@ -90,23 +93,23 @@
 						</div>
 					@endif
 				</div>
-				
+
 				<!-- Add class "fade-in-effect" for login form effect -->
 				<form method="post" role="form" action="{{ route('login.post') }}" id="login" class="login-form fade-in-effect">
 					@csrf
-					
+
 					<div class="login-header">
 						<a href="{{ route('login') }}" class="logo">
 							<img src="{{ asset('assets/images/logo@2x.png') }}" alt="" width="200" />
 							<span>log in</span>
 						</a>
 					</div>
-	
+
 					<div class="form-group">
 						<label class="control-label" for="username">Username</label>
 						<input type="text" class="form-control input-dark" name="username" id="username" autocomplete="off" value="{{ old('username') }}" />
 					</div>
-					
+
 					<div class="form-group">
 						<label class="control-label" for="passwd">Password</label>
 						<input type="password" class="form-control input-dark" name="passwd" id="passwd" autocomplete="off" />
