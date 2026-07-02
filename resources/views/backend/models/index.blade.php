@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#region-modal').modal('show');">
@@ -42,24 +42,31 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if(isset($models->Models) && $models->Success==1) {
-                            foreach ($models->Models as $key => $model) { ?>
+                    @foreach ($models->Models as $model)
                     <tr>
-                        <td><?php echo $model->ModelID;?></td>
-                        <td><?php echo $model->ModelName?></td>
-                        <td><?php echo $model->GroupName?></td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $model->ModelName }}</td>
+                        <td>{{ $model->GroupName }}</td>
                         <td>
-                            <input type="hidden" id="GroupID<?php echo $model->ModelID;?>" value="<?php echo $model->GroupID?>">
-                            <a href="javascript:;" onclick="jQuery('#region-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
+                            <a href="javascript:;" 
+                               data-id="{{ $model->ModelID }}"
+                               data-name="{{ $model->ModelName }}"
+                               data-group-id="{{ $model->GroupID }}"
+                               onclick="jQuery('#region-modal-edit').modal('show');" 
+                               class="btn btn-secondary btn-sm btn-icon icon-left">
+                               Edit
                             </a>
-                            <?php if(Auth::getUsers()->userlevel==1){ ?>
-                            <a href="javascript:;" id="<?php echo $model->GroupID;?>" onclick="jQuery('#model-modal-delete').modal('show');" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
-                            <?php } ?>
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;" 
+                               data-id="{{ $model->ModelID }}" 
+                               onclick="jQuery('#model-modal-delete').modal('show');" 
+                               class="btn btn-danger btn-icon">
+                               <i class="icon-white icon-heart"></i> Delete
+                            </a>
+                            @endif
                         </td>
                     </tr>
-                    <?php } } ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -74,16 +81,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="model-modal-delete-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="ModelDelete">
+            <form method="post" action="#" id="ModelDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteModelID" id="DeleteModelID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="model">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -95,11 +102,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Model</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="region-modal-label">Add Model</h4>
             </div>
             <div class="modal-body">
-                <form id="ModelForm" method="post" action="Action.php">
+                <form id="ModelForm" method="post" action="{{ route('manage-models.store') }}">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -111,27 +119,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="group" class="control-label">Group</label>
+                                <label for="VehicleModel" class="control-label">Group</label>
                                 <select class="form-control" id="VehicleModel" name="GroupID">
                                     <option value="0">None</option>
-                                    <?php
-                                        if(isset($groups->Success) && $groups->Success==1){
-                                        	foreach ($groups->Groups as $key => $group) {
-                                        		echo '<option value="'.$group->GroupID.'">'.$group->GroupName.'</option>';
-                                        	}
-                                        }
-                                        ?>
+                                    @foreach ($groups->Groups as $group)
+                                    <option value="{{ $group->GroupID }}">{{ $group->GroupName }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="controller" value="model">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
+                <button type="button" class="btn btn-info">Create</button>
             </div>
         </div>
     </div>
@@ -142,15 +144,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Model</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="region-modal-edit-label">Edit Model</h4>
             </div>
             <div class="modal-body">
-                <form id="ModelEditForm" method="post" action="Action.php">
+                <form id="ModelEditForm" method="post" action="#">
+                    @csrf
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="field-1" class="control-label">Model Name</label>
+                                <label for="ModelNameEdit" class="control-label">Model Name</label>
                                 <input type="text" class="form-control" id="ModelNameEdit" name="ModelName" placeholder="">
                             </div>
                         </div>
@@ -158,28 +162,22 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="group" class="control-label">Group</label>
+                                <label for="GroupIDEdit" class="control-label">Group</label>
                                 <select class="form-control" id="GroupIDEdit" name="GroupID">
                                     <option value="0">None</option>
-                                    <?php
-                                        if(isset($groups->Success) && $groups->Success==1){
-                                        	foreach ($groups->Groups as $key => $group) {
-                                        		echo '<option value="'.$group->GroupID.'">'.$group->GroupName.'</option>';
-                                        	}
-                                        }
-                                        ?>
+                                    @foreach ($groups->Groups as $group)
+                                    <option value="{{ $group->GroupID }}">{{ $group->GroupName }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="model">
                     <input type="hidden" id="ModelID" name="ModelID" value="">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
+                <button type="button" class="btn btn-info">Save Changes</button>
             </div>
         </div>
     </div>
@@ -191,24 +189,69 @@
     $( document ).ready(function() {
     	$("button.btn-info").click(function(){
     		if($(this).text()=="Create"){
-    			$( "#ModelForm" ).submit();
+    			var form = $( "#ModelForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Save Changes"){
-    			$( "#ModelEditForm" ).submit();
+    			var form = $( "#ModelEditForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Delete"){
-    			$("#ModelDelete").submit();
+    			var form = $("#ModelDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     	});
+
     	$("a.btn-danger").click(function(){
-    		$("#DeleteModelID").val($(this).parent().prev().prev().prev().text());
+            var id = $(this).data('id');
+    		$("#DeleteModelID").val(id);
+            $("#ModelDelete").attr('action', '/manage-models/' + id);
     	});
+
     	$("a.btn-secondary").click(function(){
-    		var TmpGroupID = $(this).parent().prev().prev().prev().text();
-    		$("#ModelNameEdit").val($(this).parent().prev().prev().text());
-    		$("#ModelID").val(TmpGroupID);
-    		$("#GroupIDEdit").val($("#GroupID"+TmpGroupID).val());
+    		var btn = $(this);
+            var ModelID = btn.data('id');
+    		$("#ModelNameEdit").val(btn.data('name'));
+    		$("#ModelID").val(ModelID);
+    		$("#GroupIDEdit").val(btn.data('group-id') || 0);
+            $("#ModelEditForm").attr('action', '/manage-models/' + ModelID);
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\ModelsRequest', '#ModelForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\ModelsRequest', '#ModelEditForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\ModelsRequest', '#ModelDelete') !!}
 @endpush

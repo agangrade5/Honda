@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Backend;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\NoScripts;
 
 class ModelsRequest extends FormRequest
 {
@@ -17,13 +17,40 @@ class ModelsRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
+        $routeName = $this->route() ? $this->route()->getName() : '';
+
+        if ($this->isMethod('get') || $routeName === 'manage-models.index' || empty($routeName)) {
+            return [
+                'ModelName' => ['required', 'string', 'max:50', new NoScripts()],
+                'GroupID' => ['nullable', 'integer', new NoScripts()],
+                'DeleteModelID' => ['required', 'integer', 'exists:models,modelid', new NoScripts()],
+            ];
+        }
+
+        if ($routeName === 'manage-models.destroy') {
+            return [
+                'DeleteModelID' => ['required', 'integer', 'exists:models,modelid', new NoScripts()],
+            ];
+        }
+
         return [
-            //
+            'ModelName' => ['required', 'string', 'max:50', new NoScripts()],
+            'GroupID' => ['nullable', 'integer'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     */
+    public function messages(): array
+    {
+        return [
+            'ModelName.required' => 'Please enter the model name.',
+            'DeleteModelID.required' => 'The model ID is required.',
+            'DeleteModelID.exists' => 'The selected model to delete is invalid.',
         ];
     }
 }
