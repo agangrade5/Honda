@@ -16,12 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['admin.auth', 'no.cache'])->group(function () {
     //Truck Import
     Route::post('manage-trucks/import', [TruckController::class, 'import'])->name('manage-trucks.import');
-
-    Route::prefix('manage-countries')->name('manage-countries.')->group(function () {
-        Route::post('states/add', [CountryController::class, 'addState'])->name('states.add');
-        Route::post('states/edit', [CountryController::class, 'editState'])->name('states.edit');
-        Route::post('states/delete', [CountryController::class, 'deleteState'])->name('states.delete');
-    });
+    // Manage Countries States Routes
+    Route::prefix('manage-countries/states')
+        ->name('manage-countries.states.')
+        ->controller(CountryController::class)
+        ->group(function () {
+            Route::post('/add', 'addState')->name('add');
+            Route::post('/edit', 'editState')->name('edit');
+            Route::post('/delete', 'deleteState')->name('delete');
+        });
     // Resource Routes
     Route::resources(
         [
