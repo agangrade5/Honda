@@ -17,11 +17,14 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
     //Truck Import
     Route::post('manage-trucks/import', [TruckController::class, 'import'])->name('manage-trucks.import');
     // Manage Countries States Routes
-    Route::controller(CountryController::class)->group(function () {
-        Route::post('manage-countries/states/add', 'addState')->name('manage-countries.states.add');
-        Route::post('manage-countries/states/edit', 'editState')->name('manage-countries.states.edit');
-        Route::post('manage-countries/states/delete', 'deleteState')->name('manage-countries.states.delete');
-    });
+    Route::prefix('manage-countries/states')
+        ->name('manage-countries.states.')
+        ->controller(CountryController::class)
+        ->group(function () {
+            Route::post('/add', 'addState')->name('add');
+            Route::post('/edit', 'editState')->name('edit');
+            Route::post('/delete', 'deleteState')->name('delete');
+        });
     // Resource Routes
     Route::resources(
         [
