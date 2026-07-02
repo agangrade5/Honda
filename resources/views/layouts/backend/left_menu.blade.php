@@ -63,8 +63,8 @@
             <span class="title">Manage Dealers</span>
             </a>
         </li>
-        <li>
-            <a href="ManageRestrictedRiders.php">
+        <li class="{{ request()->routeIs('manage-restricted-riders.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-restricted-riders.index') }}">
             <i class="glyphicon glyphicon-remove"></i>
             <span class="title">Manage Restricted Riders</span>
             </a>

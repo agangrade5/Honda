@@ -74,7 +74,7 @@
 <!-- content @e -->
 
 <!-- Dealer Delete Modal -->
-<div class="modal fade custom-width" id="dealer-modal-delete">
+<div class="modal fade custom-width" id="dealer-modal-delete" tabindex="-1" role="dialog" aria-labelledby="dealer-modal-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -95,7 +95,7 @@
 </div>
 
 <!-- Dealer Create Modal -->
-<div class="modal fade custom-width" id="user-modal">
+<div class="modal fade custom-width" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="user-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -153,7 +153,7 @@
 </div>
 
 <!-- Dealer Edit Modal -->
-<div class="modal fade custom-width" id="user-modal-edit">
+<div class="modal fade custom-width" id="user-modal-edit" tabindex="-1" role="dialog" aria-labelledby="user-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -50,20 +50,20 @@
                         <td>{{ $countrie->Region }}</td>
                         <td>
                             <input type="hidden" id="RegionID{{ $countrie->CountryID }}" value="{{ $countrie->RegionID }}">
-                            <a href="javascript:;" 
-                               id="CID{{ $countrie->CountryID }}" 
+                            <a href="javascript:;"
+                               id="CID{{ $countrie->CountryID }}"
                                data-id="{{ $countrie->CountryID }}"
                                data-name="{{ $countrie->CountryName }}"
                                data-code="{{ $countrie->CountryCode }}"
                                data-region="{{ $countrie->RegionID }}"
-                               onclick="jQuery('#truck-modal-edit').modal('show');" 
+                               onclick="jQuery('#truck-modal-edit').modal('show');"
                                class="btn btn-secondary btn-sm btn-icon icon-left">
                                Edit
                             </a>
                             @if(!auth()->check() || auth()->user()?->userlevel == 1)
-                            <a href="javascript:;" 
-                               data-id="{{ $countrie->CountryID }}" 
-                               onclick="jQuery('#country-modal-delete').modal('show');" 
+                            <a href="javascript:;"
+                               data-id="{{ $countrie->CountryID }}"
+                               onclick="jQuery('#country-modal-delete').modal('show');"
                                class="btn btn-danger btn-icon">
                                <i class="icon-white icon-heart"></i> Delete
                             </a>
@@ -86,7 +86,7 @@
 <!-- content @e -->
 
 <!-- Delete Modal -->
-<div class="modal fade custom-width" id="country-modal-delete" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" data-backdrop="static" data-keyboard="false">
+<div class="modal fade custom-width" id="country-modal-delete" tabindex="-1" role="dialog" aria-labelledby="country-modal-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,7 +107,7 @@
 </div>
 
 <!-- Edit State Modal -->
-<div class="modal fade custom-width" id="state-modal-edit-delete" tabindex="-1" role="dialog" aria-labelledby="state-edit-label" data-backdrop="static" data-keyboard="false">
+<div class="modal fade custom-width" id="state-modal-edit-delete" tabindex="-1" role="dialog" aria-labelledby="state-modal-edit-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,8 +144,8 @@
     </div>
 </div>
 
-<!-- Create Modal -->
-<div class="modal fade custom-width" id="truck-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label" data-backdrop="static" data-keyboard="false">
+<!-- Create Country Modal -->
+<div class="modal fade custom-width" id="truck-modal" tabindex="-1" role="dialog" aria-labelledby="truck-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -199,8 +199,8 @@
     </div>
 </div>
 
-<!-- Edit Modal -->
-<div class="modal fade custom-width" id="truck-modal-edit" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" data-backdrop="static" data-keyboard="false">
+<!-- Edit Country Modal -->
+<div class="modal fade custom-width" id="truck-modal-edit" tabindex="-1" role="dialog" aria-labelledby="truck-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -325,11 +325,11 @@
             if (cID && cID.length > 0) {
                 $("#StateIDEdit").val(cID[0]);
                 $("#StateIDDelete").val(cID[0]);
-                
+
                 var stateText = $(this).find("option[value='" + cID[0] + "']").text();
                 $("#OLDStateNameEdit").val(stateText);
                 $("#StateNameEdit1").val(stateText);
-                
+
                 jQuery('#state-modal-edit-delete').modal('show');
                 $("#truck-modal-edit").modal('hide');
             }
@@ -347,12 +347,12 @@
                 var countryId = $("#CountryID").val();
                 var stateId = $("#StateIDEdit").val();
                 var oldText = $("#OLDStateNameEdit").val();
-                
+
                 var str = $("#StateName" + countryId).val();
                 var oldOption = "<option value='" + stateId + "'>" + oldText + "</option>";
                 var newOption = "<option value='" + stateId + "'>" + msg + "</option>";
                 var newStr = str.replace(oldOption, newOption);
-                
+
                 $("#StateName" + countryId).val(newStr);
                 $("#CID" + countryId).trigger("click");
             });
@@ -370,11 +370,11 @@
                 var countryId = $("#CountryID").val();
                 var stateId = $("#StateIDEdit").val();
                 var oldText = $("#OLDStateNameEdit").val();
-                
+
                 var str = $("#StateName" + countryId).val();
                 var oldOption = "<option value='" + stateId + "'>" + oldText + "</option>";
                 var newStr = str.replace(oldOption, "");
-                
+
                 $("#StateName" + countryId).val(newStr);
                 $("#CID" + countryId).trigger("click");
             });
@@ -398,14 +398,14 @@
     		var countryId = $("#CountryID").val();
     		var stateName = $("#StateNameEdit").val();
             if (stateName.trim() === '') return;
-            
+
     		$.ajax({
     			method: "POST",
     			url: "{{ route('manage-countries.states.add') }}",
-    			data: { 
-                    action: "add", 
-                    controller: "state", 
-                    CountryID: countryId, 
+    			data: {
+                    action: "add",
+                    controller: "state",
+                    CountryID: countryId,
                     StateName: stateName,
                     _token: '{{ csrf_token() }}'
                 }
