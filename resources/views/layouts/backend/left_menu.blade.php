@@ -75,38 +75,38 @@
             <span class="title">Vehicle Groups</span>
             </a>
         </li>
-        <li>
-            <a href="ViewSignedWaivers.php">
+        <li class="{{ request()->routeIs('manage-signed-waivers.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-signed-waivers.index') }}">
             <i class="glyphicon glyphicon-paperclip"></i>
             <span class="title">Manage Signed Waiver</span>
             </a>
         </li>
-        <li>
-            <a href="ImportVehicles.php">
+        <li class="{{ request()->routeIs('manage-import-vehicles.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-import-vehicles.index') }}">
             <i class="glyphicon glyphicon-paperclip"></i>
             <span class="title">Manage Import Vehicle</span>
             </a>
         </li>
-        <li>
-            <a href="ManageModels.php">
+        <li class="{{ request()->routeIs('manage-models.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-models.index') }}">
             <i class="glyphicon glyphicon-wrench"></i>
             <span class="title">Manage Models</span>
             </a>
         </li>
-        <li>
-            <a href="ManageUsers.php">
+        <li class="{{ request()->routeIs('manage-users.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-users.index') }}">
             <i class="linecons-user"></i>
             <span class="title">Users</span>
             </a>
         </li>
-        <li>
-            <a href="ManageWaivers.php">
+        <li class="{{ request()->routeIs('manage-waivers.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-waivers.index') }}">
             <i class="linecons-doc"></i>
             <span class="title">Waivers</span>
             </a>
         </li>
-        <li>
-            <a href="ManageEmailTemplates.php">
+        <li class="{{ request()->routeIs('manage-email-templates.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-email-templates.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Email Templates</span>
             </a>
