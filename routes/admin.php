@@ -12,7 +12,7 @@ use App\Http\Controllers\Backend\{
 use Illuminate\Support\Facades\Route;
 
 //Resource Route
-Route::middleware('auth')->group(function () {
+Route::middleware(['admin.auth', 'no.cache'])->group(function () {
     Route::resources(
         [
             'manage-events' => EventController::class,
