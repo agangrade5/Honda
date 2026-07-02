@@ -43,7 +43,7 @@
                 </thead>
                 <tbody class="middle-align">
                     <?php
-                        if(isset($models->Models) && $models->Success==1){
+                        if(isset($models->Models) && $models->Success==1) {
                             foreach ($models->Models as $key => $model) { ?>
                     <tr>
                         <td><?php echo $model->ModelID;?></td>
