@@ -69,8 +69,8 @@
             <span class="title">Manage Restricted Riders</span>
             </a>
         </li>
-        <li>
-            <a href="ManageGroups.php">
+        <li class="{{ request()->routeIs('manage-groups.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-groups.index') }}">
             <i class="glyphicon glyphicon-th"></i>
             <span class="title">Vehicle Groups</span>
             </a>
