@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#template-modal').modal('show');">
@@ -22,47 +22,41 @@
         </li>
     </ul>
     <div class="panel panel-default">
-        <form method="post" action="Action.php" id="EmailTemplateEditForm">
+        <form method="post" action="#" id="EmailTemplateEditForm">
+            @csrf
+            @method('PUT')
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label class="control-label" for="email">Select an email template to edit</label>
-                        <select class="selectboxit" id="EmailTemplateSubjEdit" name="EmailTemplateID">
-                            <optgroup label="Email Templates">
-                                <!--  <option>General Email Template</option>-->
-                                <option value="">Select an Email Template</option>
-                                <?php $hidden_html = '';
-                                    if(isset($emailtemplates->Success) && $emailtemplates->Success==1){
-                                    	foreach ($emailtemplates->EmailTemplates as $key => $emailtemplate) {
-                                    		$hidden_html .= "<input type='hidden' id='TemplateBlobTmp".$emailtemplate->TemplateID."' value='".$emailtemplate->TemplateBlob."'/>";
-                                    		$hidden_html .= "<input type='hidden' id='TemplateSub".$emailtemplate->TemplateID."' value='".$emailtemplate->EmailTemplateSubj."'/>";
-                                    		echo '<option value="'.$emailtemplate->TemplateID.'!$!'.$emailtemplate->EmailSubj.'">'.$emailtemplate->EmailSubj.'</option>';
-                                    	}
-                                    }
-                                    ?>
-                            </optgroup>
+                        <label class="control-label" for="EmailTemplateSubjEdit">Select an email template to edit</label>
+                        <select class="form-control" id="EmailTemplateSubjEdit" name="EmailTemplateID">
+                            <option value="">Select an Email Template</option>
+                            @foreach ($emailtemplates->EmailTemplates as $emailtemplate)
+                                <option value="{{ $emailtemplate->TemplateID }}!$!{{ $emailtemplate->EmailSubj }}">{{ $emailtemplate->EmailSubj }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="nickname2">Subject</label>
+                        <label class="control-label" for="EmailTemplateSub">Subject</label>
                         <input id="EmailTemplateSub" class="form-control" type="text" placeholder="" name="EmailTemplateSub">
                     </div>
                     <div class="form-group" style="text-align:right;">
-                        <button type="button" class="btn btn-info" data-dismiss="modal">Send Test Email</button>
+                        <button type="button" id="btn-send-test-modal" class="btn btn-info">Send Test Email</button>
                     </div>
                     <div class="form-group">
                         <textarea class="form-control ckeditor" name="TemplateBlob1" id="TemplateBlob1" rows="10"></textarea>
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
-                        <?php /* if(Auth::getUsers()->userlevel==1){ ?>
-                        <button type="button" class="btn btn-danger btn-info" onclick="openModel();" data-dismiss="modal">Delete</button>
-                        <?php } */ ?>
+                        <button type="button" id="btn-save-changes" class="btn btn-info">Save Changes</button>
+                        @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                        <button type="button" class="btn btn-danger" onclick="openModel();">Delete</button>
+                        @endif
                     </div>
-                    <?php echo $hidden_html; ?>
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="emailtemplate">
+                    @foreach ($emailtemplates->EmailTemplates as $emailtemplate)
+                        <input type="hidden" id="TemplateBlobTmp{{ $emailtemplate->TemplateID }}" value="{{ $emailtemplate->TemplateBlob }}">
+                        <input type="hidden" id="TemplateSub{{ $emailtemplate->TemplateID }}" value="{{ $emailtemplate->EmailTemplateSubj }}">
+                    @endforeach
                 </div>
             </div>
         </form>
@@ -77,16 +71,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="emailtemplate-modal-delete-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="EmailTemplateDelete">
+            <form method="post" action="#" id="EmailTemplateDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteEmailTemplateID" id="DeleteEmailTemplateID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="emailtemplate">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" id="btn-delete-confirm" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -98,8 +92,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><b>Error - This email template is not setup properly. It is missing the dynamic link.<b> </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="emailtemplate-modal-error-label"><b>Error - This email template is not setup properly. It is missing the dynamic link.<b> </h4>
             </div>
         </div>
     </div>
@@ -110,28 +104,27 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Test Email Template</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="sendemail-template-modal-label">Test Email Template</h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="Action.php" id="EmailTemplateSendTestEmailForm">
+                <form method="post" action="{{ route('manage-email-templates.send-test') }}" id="EmailTemplateSendTestEmailForm">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label" for="nickname2">Email Address</label>
+                                <label class="control-label" for="EmailSubject">Email Address</label>
                                 <input id="EmailSubject" class="form-control" type="text" placeholder="" name="EmailSubject">
                             </div>
                         </div>
                     </div>
                     <input type="hidden" name="EmailTemplateSubject" id="EmailTemplateSubject" value="">
                     <input type="hidden" name="template" value="" id="TestSendEmailTemplate">
-                    <input type="hidden" name="action" value="send">
-                    <input type="hidden" name="controller" value="emailtemplate">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Send</button>
+                <button type="button" id="btn-send-test-confirm" class="btn btn-info">Send</button>
             </div>
         </div>
     </div>
@@ -142,11 +135,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Email Template</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="template-modal-label">Add Email Template</h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="Action.php" id="EmailTemplateForm">
+                <form method="post" action="{{ route('manage-email-templates.store') }}" id="EmailTemplateForm">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -154,8 +148,8 @@
                                 <input type="text" name="EmailTemplateSubj" class="form-control" id="field-1" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="nickname2">Subject</label>
-                                <input id="EmailSubject" class="form-control" type="text" placeholder="" name="EmailSubject">
+                                <label class="control-label" for="EmailSubjectCreate">Subject</label>
+                                <input id="EmailSubjectCreate" class="form-control" type="text" placeholder="" name="EmailSubject">
                             </div>
                         </div>
                     </div>
@@ -166,13 +160,11 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="controller" value="emailtemplate">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
+                <button type="button" id="btn-create-confirm" class="btn btn-info">Create</button>
             </div>
         </div>
     </div>
@@ -181,54 +173,116 @@
 
 @push('scripts')
 <script>
-    $( document ).ready(function() {
-    	$("button.btn-info").click(function(){
-
-    		if($(this).text()=="Create"){
-    			$( "#EmailTemplateForm" ).submit();
-    		}
-    		else if($(this).text()=="Send Test Email"){
-    			var stringText = CKEDITOR.instances.TemplateBlob1.getData();
-    			$("#TestSendEmailTemplate").val(stringText);
-    			$("#EmailTemplateSubject").val($("#EmailTemplateSubjEdit").val());
-    			jQuery('#sendemail-template-modal').modal('show');
-    		}
-    		else if($(this).text()=="Send"){
-    			$( "#EmailTemplateSendTestEmailForm" ).submit();
-    		}
-    		else if($(this).text()=="Save Changes"){
-    			var stringText = CKEDITOR.instances.TemplateBlob1.getData();
-    			var textArea = document.createElement('textarea');
-    		    textArea.innerHTML = stringText;
-    		    var searchStr = textArea.value;
-    		    if(searchStr.toLowerCase().indexOf('<a href="http://~prsurveyphoto~">')>=0){
-    		    	$( "#EmailTemplateEditForm" ).submit();
-    		    }
-    		    else {
-    		    	jQuery('#emailtemplate-modal-error').modal('show');
-    		    	return false;
-    		    }
-    		}
-    		else if($(this).text()=="Delete" && $(this).attr('class')=='btn btn-info'){
-    			$("#EmailTemplateDelete").submit();
-    		}
-    	});
-    	$("#EmailTemplateSubjEdit").change(function(){
-    		$("#TemplateBlob1").html();
-    		var curentVal = $(this).val();
-    		var strArray = curentVal.split("!$!");
-    		$("#DeleteEmailTemplateID").val(strArray[0]);
-    		$("#EmailTemplateSub").val($("#TemplateSub"+strArray[0]).val());
-    		$("#cke_TemplateBlob1 .cke_wysiwyg_frame").contents().find("body").html($("#TemplateBlobTmp"+strArray[0]).val());
-    	});
-    });
     function openModel(){
-    	if($("#EmailTemplateSubjEdit").val()!=""){
-    		jQuery('#emailtemplate-modal-delete').modal('show');
-    	}
-    	else {
-    		alert("Please select Email Template that you want to delete!");
-    	}
+        var val = $("#EmailTemplateSubjEdit").val();
+        if(val && val !== ""){
+            var id = $("#DeleteEmailTemplateID").val();
+            $("#EmailTemplateDelete").attr('action', '/manage-email-templates/' + id);
+            jQuery('#emailtemplate-modal-delete').modal('show');
+        }
+        else {
+            alert("Please select Email Template that you want to delete!");
+        }
     }
+
+    $( document ).ready(function() {
+        $("#btn-create-confirm").click(function(){
+            var form = $( "#EmailTemplateForm" );
+            if (form.valid()) {
+                form.submit();
+            }
+        });
+
+        $("#btn-send-test-modal").click(function(){
+            var stringText = CKEDITOR.instances.TemplateBlob1.getData();
+            $("#TestSendEmailTemplate").val(stringText);
+            $("#EmailTemplateSubject").val($("#EmailTemplateSub").val());
+            jQuery('#sendemail-template-modal').modal('show');
+        });
+
+        $("#btn-send-test-confirm").click(function(){
+            var form = $( "#EmailTemplateSendTestEmailForm" );
+            if (form.valid()) {
+                form.submit();
+            }
+        });
+
+        $("#btn-save-changes").click(function(){
+            var stringText = CKEDITOR.instances.TemplateBlob1.getData();
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = stringText;
+            var searchStr = textArea.value;
+            if(searchStr.toLowerCase().indexOf('<a href="http://~prsurveyphoto~">')>=0){
+                var form = $( "#EmailTemplateEditForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
+            }
+            else {
+                jQuery('#emailtemplate-modal-error').modal('show');
+                return false;
+            }
+        });
+
+        $("#btn-delete-confirm").click(function(){
+            var form = $("#EmailTemplateDelete");
+            if (form.valid()) {
+                form.submit();
+            }
+        });
+
+    	$("#EmailTemplateSubjEdit").change(function(){
+    		var curentVal = $(this).val();
+            if (!curentVal) {
+                $("#DeleteEmailTemplateID").val('');
+                $("#EmailTemplateSub").val('');
+                if (CKEDITOR.instances['TemplateBlob1']) {
+                    CKEDITOR.instances['TemplateBlob1'].setData('');
+                }
+                return;
+            }
+    		var strArray = curentVal.split("!$!");
+            var id = strArray[0];
+    		$("#DeleteEmailTemplateID").val(id);
+    		$("#EmailTemplateSub").val($("#TemplateSub"+id).val());
+            $("#EmailTemplateEditForm").attr('action', '/manage-email-templates/' + id);
+
+            var blobContent = $("#TemplateBlobTmp"+id).val();
+            if (CKEDITOR.instances['TemplateBlob1']) {
+                CKEDITOR.instances['TemplateBlob1'].setData(blobContent);
+            }
+    	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
+    });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\EmailTemplateRequest', '#EmailTemplateForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\EmailTemplateRequest', '#EmailTemplateEditForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\EmailTemplateRequest', '#EmailTemplateDelete') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\EmailTemplateRequest', '#EmailTemplateSendTestEmailForm') !!}
 @endpush

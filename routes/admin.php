@@ -64,6 +64,18 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::get('/stats-reports', 'statsReports')->name('stats');
             Route::get('/demo-graph-reports', 'demoGraphReports')->name('graph');
         });
+    // Manage Email Templates Routes
+    Route::prefix('manage-email-templates')
+        ->name('manage-email-templates.')
+        ->controller(EmailTemplateController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::post('/send-test', 'sendTestEmail')->name('send-test');
+            Route::put('/{manage_email_template}', 'update')->name('update');
+            Route::delete('/{manage_email_template}', 'destroy')->name('destroy');
+        });
+
     // Resource Routes
     Route::resources(
         [
@@ -79,7 +91,6 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-models' => ModelsController::class,
             'manage-users' => UserController::class,
             'manage-waivers' => WaiverController::class,
-            'manage-email-templates' => EmailTemplateController::class,
             'manage-sms-templates' => SmsTemplateController::class
         ]
     );
