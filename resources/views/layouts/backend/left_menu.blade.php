@@ -129,8 +129,8 @@
             <span class="title">Data Management</span>
             </a>
         </li>
-        <li>
-            <a href="ManageBikesAndTimes.php">
+        <li class="{{ request()->routeIs('manage-bikes-and-times.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-bikes-and-times.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Manage Bikes and Times</span>
             </a>
