@@ -76,6 +76,17 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::delete('/{manage_email_template}', 'destroy')->name('destroy');
         });
 
+    // Manage SMS Templates Routes
+    Route::prefix('manage-sms-templates')
+        ->name('manage-sms-templates.')
+        ->controller(SmsTemplateController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{manage_sms_template}', 'update')->name('update');
+            Route::delete('/{manage_sms_template}', 'destroy')->name('destroy');
+        });
+
     // Resource Routes
     Route::resources(
         [
@@ -91,7 +102,6 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-models' => ModelsController::class,
             'manage-users' => UserController::class,
             'manage-waivers' => WaiverController::class,
-            'manage-sms-templates' => SmsTemplateController::class
         ]
     );
 });
