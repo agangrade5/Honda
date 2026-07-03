@@ -1,31 +1,100 @@
 @extends('layouts.backend.app')
 @section('title', $title)
 @section('content')
+@php
+    $getQuestionText = function($q) {
+        if (!$q) return '';
+        $qText = '';
+        $questionTextData = is_array($q) ? ($q['QuestionText'] ?? '') : ($q->QuestionText ?? '');
+        if (is_array($questionTextData) && isset($questionTextData[0])) {
+            $firstText = $questionTextData[0];
+            $qText = is_array($firstText) ? ($firstText['LanguageText'] ?? '') : ($firstText->LanguageText ?? '');
+        } else {
+            $qText = is_string($questionTextData) ? $questionTextData : '';
+        }
+        return $qText;
+    };
+
+    $getQuestionRequired = function($q) {
+        if (!$q) return 'NO';
+        return is_array($q) ? ($q['Required'] ?? 'NO') : ($q->Required ?? 'NO');
+    };
+
+    $getQuestionDependencyQid = function($q) {
+        if (!$q) return null;
+        $dep = is_array($q) ? ($q['Dependency'] ?? null) : ($q->Dependency ?? null);
+        if (!$dep) return null;
+        return is_array($dep) ? ($dep['QuestionID'] ?? null) : ($dep->QuestionID ?? null);
+    };
+
+    $getQuestionDependencyAnswers = function($q) {
+        if (!$q) return [];
+        $dep = is_array($q) ? ($q['Dependency'] ?? null) : ($q->Dependency ?? null);
+        if (!$dep) return [];
+        $answers = is_array($dep) ? ($dep['Answers'] ?? null) : ($dep->Answers ?? null);
+        if (!$answers) return [];
+        return is_string($answers) ? json_decode($answers, true) : (array)$answers;
+    };
+
+    $getAnswerText = function($a) {
+        if (!$a) return '';
+        $aText = '';
+        $answerTextData = is_array($a) ? ($a['AnswerText'] ?? '') : ($a->AnswerText ?? '');
+        if (is_array($answerTextData) && isset($answerTextData[0])) {
+            $firstText = $answerTextData[0];
+            $aText = is_array($firstText) ? ($firstText['LanguageText'] ?? '') : ($firstText->LanguageText ?? '');
+        } else {
+            $aText = is_string($answerTextData) ? $answerTextData : '';
+        }
+        return $aText;
+    };
+
+    $getAnswerRequired = function($a) {
+        if (!$a) return 'NO';
+        return is_array($a) ? ($a['Required'] ?? 'NO') : ($a->Required ?? 'NO');
+    };
+
+    $getAnswerType = function($a) {
+        if (!$a) return 1;
+        return is_array($a) ? ($a['AnswerType'] ?? 1) : ($a->AnswerType ?? 1);
+    };
+
+    $getAnswerMailedFlag = function($a) {
+        if (!$a) return 0;
+        return is_array($a) ? ($a['MailedFlag'] ?? 0) : ($a->MailedFlag ?? 0);
+    };
+@endphp
 <!-- content @s -->
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <div class="custom-width" id="question-modal">
         <div class="">
             <div class="">
-                <form method="post" action="Action.php" id="SessionQuestionForm">
+                @if(isset($qid))
+                <form method="post" action="{{ route('manage-survey-questions.update', $qid) }}" id="SessionQuestionForm">
+                    @method('PUT')
+                @else
+                <form method="post" action="{{ route('manage-survey-questions.store') }}" id="SessionQuestionForm">
+                @endif
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <label class="control-label" for="social_media">Question Name: </label>
+                                <label class="control-label" for="QuestionName">Question Name: </label>
                             </div>
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="QuestionName" name="QuestionName" value="<?php if(isset($question_data->QuestionText[0]->LanguageText) && !empty($question_data->QuestionText[0]->LanguageText)){ echo $question_data->QuestionText[0]->LanguageText;}elseif(isset($_SESSION['tmp_ques_name'])) echo $_SESSION['tmp_ques_name']; unset($_SESSION['tmp_ques_name']); ?>" placeholder="">
+                                    <input type="text" class="form-control" id="QuestionName" name="QuestionName" value="{{ $getQuestionText($question_data) ?: session('tmp_ques_name', '') }}" placeholder="" required>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -36,16 +105,16 @@
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-                                <label class="control-label" for="social_media">Required: </label>
+                                <label class="control-label">Required: </label>
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
-                                    <input type="radio" <?php if(isset($question_data->Required) && !empty($question_data->Required) && $question_data->Required=="YES"){ echo 'checked="checked"';}elseif(isset($_SESSION['tmp_ques_required']) && $_SESSION['tmp_ques_required']=="YES") echo 'checked="checked"'; unset($_SESSION['tmp_ques_required']); ?> class="" id="QuestionRequired" value="YES" name="QuestionRequired" placeholder=""> YES
+                                    <input type="radio" {{ $getQuestionRequired($question_data) == 'YES' || session('tmp_ques_required') == 'YES' ? 'checked="checked"' : '' }} id="QuestionRequired" value="YES" name="QuestionRequired"> YES
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
-                                    <input type="radio" <?php if(isset($question_data->Required) && !empty($question_data->Required) && $question_data->Required=="NO"){ echo 'checked="checked"';}elseif(isset($_SESSION['tmp_ques_required']) && $_SESSION['tmp_ques_required']=="NO") echo 'checked="checked"'; unset($_SESSION['tmp_ques_required']); ?> class="" id="QuestionRequired1" value="NO" name="QuestionRequired" placeholder=""> NO
+                                    <input type="radio" {{ (!isset($question_data) && !session()->has('tmp_ques_required')) || $getQuestionRequired($question_data) == 'NO' || session('tmp_ques_required') == 'NO' ? 'checked="checked"' : '' }} id="QuestionRequired1" value="NO" name="QuestionRequired"> NO
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -55,38 +124,37 @@
                             </div>
                         </div>
                         <div class="row" id="AddQuestionDependency">
-                            <?php if(isset($_SESSION['questions']) && !empty($_SESSION['questions'])) { ?>
+                            @if(session('questions') && !empty(session('questions')))
                             <div class="col-md-4">
-                                <label class="control-label" for="social_media">Dependency</label>
+                                <label class="control-label">Dependency</label>
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <?php
-                                        $q_count = 1;
-                                        foreach($_SESSION['questions'] as $q_key => $question){
-                                        ?>
-                                    <input type="radio" <?php if(isset($question_data->Dependency->QuestionID) && $question_data->Dependency->QuestionID==$q_key){ echo "checked='checked'";} ?> value="<?php echo $q_key; ?>" id="DependenceyQuestion-<?php echo $q_key; ?>" name="DependenceyQuestion" placeholder="">
-                                    <?php echo $question->QuestionText[0]->LanguageText; ?>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <?php
-                                                    $a_count = 1;
-                                                    $dependency_answers = array();
-                                                    if(isset($question_data->Dependency->Answers) && !empty($question_data->Dependency->Answers)){
-                                                    	$dependency_answers = json_decode($question_data->Dependency->Answers);
-                                                    }
-                                                    foreach($_SESSION['questions'][$q_key]->Answers as $a_key => $answer){ ?>
-                                                <input type="checkbox" <?php if(isset($dependency_answers) && is_array($dependency_answers) && in_array($a_key,$dependency_answers) && $question_data->Dependency->QuestionID==$q_key){ echo "checked='checked'";} ?> value="<?php echo ($a_key); ?>" id="DependenceyAnswer-<?php echo $a_key; ?>" name="DependenceyAnswer[]" placeholder="">
-                                                <?php echo $answer->AnswerText[0]->LanguageText; ?>
-                                                <?php $a_count++; } ?>
+                                    @php $q_count = 1; @endphp
+                                    @foreach(session('questions') as $q_key => $question)
+                                        @if(!isset($qid) || $qid != $q_key)
+                                        <input type="radio" {{ $getQuestionDependencyQid($question_data) == $q_key ? "checked='checked'" : '' }} value="{{ $q_key }}" id="DependenceyQuestion-{{ $q_key }}" name="DependenceyQuestion">
+                                        {{ $getQuestionText($question) }}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    @php
+                                                        $dependency_answers = $getQuestionDependencyAnswers($question_data);
+                                                        $answersArray = isset($question->Answers) ? (array)$question->Answers : (isset($question['Answers']) ? (array)$question['Answers'] : []);
+                                                    @endphp
+                                                    @foreach($answersArray as $a_key => $answer)
+                                                    <input type="checkbox" {{ is_array($dependency_answers) && in_array($a_key, $dependency_answers) && $getQuestionDependencyQid($question_data) == $q_key ? "checked='checked'" : '' }} value="{{ $a_key }}" id="DependenceyAnswer-{{ $a_key }}" name="DependenceyAnswer[]">
+                                                    {{ $getAnswerText($answer) }}
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <?php $q_count++; } ?>
+                                        @endif
+                                        @php $q_count++; @endphp
+                                    @endforeach
                                 </div>
                             </div>
-                            <?php } ?>
+                            @endif
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -117,61 +185,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="middle-align">
-                                                <?php if(isset($_GET['QID'])){ ?>
-                                                <?php if(isset($question_data->Answers) && !empty($question_data->Answers)) {
-                                                    $answer_coount = 1;
-                                                    foreach($question_data->Answers as $a_key => $answer){ ?>
-                                                <tr id="row-<?php echo $a_key; ?>">
-                                                    <td><?php echo $a_key; ?></td>
-                                                    <td><?php echo $answer->AnswerText[0]->LanguageText; ?></td>
-                                                    <td><?php echo $answer->Required; ?></td>
-                                                    <td><?php echo $answer->AnswerType; ?></td>
-                                                    <td>
-                                                        <input type="hidden" name="answermailedflag" value="<?php echo $answer->MailedFlag; ?>">
-                                                        <a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">
-                                                        Edit
-                                                        </a>
-                                                        <a href="javascript:;" id="" onclick="javascript:deleteAnswer(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
-                                                    </td>
-                                                </tr>
-                                                <?php $answer_coount++; }} ?>
-                                                <?php } else { ?>
-                                                <?php if(isset($_SESSION['answers']) && !empty($_SESSION['answers'])) {
-                                                    $answer_coount = 1;
-                                                    foreach($_SESSION['answers'] as $a_key => $answer){ ?>
-                                                <tr id="row-<?php echo $a_key; ?>">
-                                                    <td><?php echo $a_key; ?></td>
-                                                    <td><?php echo $answer->AnswerText[0]->LanguageText; ?></td>
-                                                    <td><?php echo $answer->Required; ?></td>
-                                                    <td><?php echo $answer->AnswerType; ?></td>
-                                                    <td>
-                                                        <input type="hidden" name="answermailedflag" value="">
-                                                        <a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">
-                                                        Edit
-                                                        </a>
-                                                        <a href="javascript:;" id="" onclick="javascript:deleteAnswer(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
-                                                    </td>
-                                                </tr>
-                                                <?php $answer_coount++; }} } ?>
+                                                @if(session('answers'))
+                                                    @foreach(session('answers') as $a_key => $answer)
+                                                    <tr id="row-{{ $a_key + 1 }}">
+                                                        <td>{{ $a_key + 1 }}</td>
+                                                        <td>{{ $getAnswerText($answer) }}</td>
+                                                        <td>{{ $getAnswerRequired($answer) }}</td>
+                                                        <td>{{ $getAnswerType($answer) }}</td>
+                                                        <td>
+                                                            <input type="hidden" name="MailedFlag" value="{{ $getAnswerMailedFlag($answer) }}">
+                                                            <a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">
+                                                            Edit
+                                                            </a>
+                                                            <a href="javascript:;" onclick="javascript:deleteAnswer(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <?php if(isset($_GET['QID'])){ ?>
-                        <input type="hidden" name="action" value="edit">
-                        <input type="hidden" name="QuestionIndex" value="<?php echo $_GET['QID']; ?>" id="EditQuestionIndex">
-                        <?php } else { ?>
-                        <input type="hidden" name="action" value="add">
-                        <?php } ?>
-                        <input type="hidden" name="controller" value="surveyquestionaddsession">
-                        <?php if(isset($survey_id) && !empty($survey_id)){ ?>
-                        <input name="SurveyIndex" value="<?php echo $survey_id; ?>" type="hidden"/>
-                        <?php } ?>
+                        <input type="hidden" name="SurveyIndex" value="{{ $survey_id }}">
+                        <input type="hidden" name="QuestionIndex" value="{{ $qid }}" id="EditQuestionIndex">
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" class="hog-button btn btn-info btn-secondary" id="" value="<?php if(isset($_GET['QID'])){ echo 'Update'; } else { echo 'Create';}?>"/>
+                        <input type="submit" class="btn btn-info btn-secondary" value="{{ isset($qid) ? 'Update' : 'Create' }}">
                     </div>
                 </form>
             </div>
@@ -185,361 +226,114 @@
 @include('backend.survey-answers.modals')
 
 @endsection
+
 @push('scripts')
 <script>
     $( document ).ready(function() {
+        $("#AddQuestionDependency input:radio").click(function(){
+            $('#AddQuestionDependency input[type=checkbox]').removeAttr('checked');
+            $('#AddQuestionDependency input[type=checkbox]').attr('disabled', 'disabled');
+            $(this).next().find("input[type=checkbox]").removeAttr('disabled');
+        });
 
-    	$("#AddQuestionDependency input:radio").click(function(){
-    		//$("#AddQuestionDependency input:radio").attr("checked", false);
-    		$('#AddQuestionDependency input[type=checkbox]').removeAttr('checked');
-    		$('#AddQuestionDependency input[type=checkbox]').attr('disabled', 'disabled');
-    		$(this).next().find("input[type=checkbox]").removeAttr('disabled');
-    		//$(this).attr("checked", true);
-    	});
-    	$("button.btn-info").click(function(){
-    		if($(this).attr("id")=="sessionanswer"){
-    			$.ajax({
-    			method: "POST",
-    			url: "Action.php?QuestionIndex="+$("#EditQuestionIndex").val(),
-    			data: $( "#SessionAnswerForm" ).serialize()
-    		})
-      		.done(function( ans_data ) {
-    			var ans_obj = JSON.parse(ans_data);
+        $("button.btn-info").click(function(){
+            if($(this).attr("id")=="sessionanswer"){
+                $.ajax({
+                    method: "POST",
+                    url: "/manage-survey-answers",
+                    data: $( "#SessionAnswerForm" ).serialize() + "&QuestionIndex=" + $("#EditQuestionIndex").val()
+                })
+                .done(function( ans_data ) {
+                    var ans_obj = ans_data;
+                    var response_html = "<tr id=row-"+ans_obj.Count+">";
+                    response_html += "<td>"+ans_obj.Count+"</td>";
+                    response_html += "<td>"+ans_obj.AnswerText+"</td>";
+                    response_html += "<td>"+ans_obj.Required+"</td>";
+                    response_html += "<td>"+ans_obj.AnswerType+"</td>";
+                    response_html += '<td><input type="hidden" name="MailedFlag" value="'+($("#AnswerMailed").is(':checked') ? 1 : 0)+'"><a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">Edit</a><a href="javascript:;" id="" onclick="javascript:deleteAnswer(this)" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a></td></tr>';
 
-    			var response_html = "<tr id=row-"+ans_obj.Count+">";
-    			response_html += "<td>"+ans_obj.Count+"</td>";
-    			response_html += "<td>"+ans_obj.AnswerText+"</td>";
-    			response_html += "<td>"+ans_obj.Required+"</td>";
-    			response_html += "<td>"+ans_obj.AnswerType+"</td>";
-    			response_html += '<td><a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">Edit</a><a href="javascript:;" id="" onclick="javascript:deleteAnswer(this)" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a></td></tr>';
+                    $("#SessionAnswerTable").find("tbody").append(response_html);
+                    $('#answer-modal').modal('hide');
+                });
+            }
+            else if($(this).attr("id")=="editsessionanswer"){
+                $.ajax({
+                    method: "POST",
+                    url: "/manage-survey-answers/" + $("#EditAnswerIndex").val(),
+                    data: $( "#EditSessionAnswerForm" ).serialize() + "&QuestionIndex=" + $("#EditQuestionIndex").val()
+                })
+                .done(function( ans_data ) {
+                    var ans_obj = ans_data;
+                    var response_html = "";
+                    response_html += "<td>"+ans_obj.Count+"</td>";
+                    response_html += "<td>"+ans_obj.AnswerText+"</td>";
+                    response_html += "<td>"+ans_obj.Required+"</td>";
+                    response_html += "<td>"+ans_obj.AnswerType+"</td>";
+                    response_html += '<td><input type="hidden" name="MailedFlag" value="'+($("#EditAnswerMailed").is(':checked') ? 1 : 0)+'"><a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">Edit</a><a href="javascript:;" id="" onclick="javascript:deleteAnswer(this)" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a></td>';
 
-    			if($("#EditQuestionSession").val()=="addquestionsession"){
-    					$("#SessionAnswerTable").find("tbody").append(response_html);
-    				}
-    				else {
-    					//Manage Dependent Data
-    					dependent_question_answer(ans_obj.Response);
-
-    					$("#SessionAnswerTable").find("tbody").append(response_html);
-    				}
-      		});
-    		}
-    		else if($(this).attr("id")=="editsessionanswer"){  //This is for edit answer
-    			$.ajax({
-    				method: "POST",
-    				url: "Action.php?QuestionIndex="+$("#EditQuestionIndex").val(),
-    				data: $( "#EditSessionAnswerForm" ).serialize()
-    			})
-    	  		.done(function( ans_data ) {
-    				var ans_obj = JSON.parse(ans_data);
-
-    	  			var response_html = "";
-    				response_html += "<td>"+ans_obj.Count+"</td>";
-    				response_html += "<td>"+ans_obj.AnswerText+"</td>";
-    				response_html += "<td>"+ans_obj.Required+"</td>";
-    				response_html += "<td>"+ans_obj.AnswerType+"</td>";
-    				response_html += '<td><a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">Edit</a><a href="javascript:;" id="" onclick="javascript:deleteAnswer(this)" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a></td>';
-    				//$("#EditQuestionSession").val("addquestionsession");
-    				if($("#EditQuestionSession").val()=="addquestionsession"){ //console.log("if");
-    					$("#SessionAnswerTable").find("#row-"+ans_obj.Count).html(response_html);
-    				}
-    				else{
-    					//Manage Dependent Data
-    					dependent_question_answer(ans_obj.Response);
-    					//console.log("elseif");
-    					$("#SessionAnswerTable").find("#row-"+ans_obj.Count).html(response_html);
-    				}
-    				//console.log("noelseif");
-    			});
-    		}
-    		else if($(this).attr("id")=="deletesessionanswer"){  // This is for deleting answer
-    			$.ajax({
-    				method: "POST",
-    				url: "Action.php?QuestionIndex="+$("#EditQuestionIndex").val(),
-    				data: $( "#DeleteSessionAnswerForm" ).serialize()
-    			})
-    	  		.done(function( ans_data ) {
-    				var ans_obj = JSON.parse(ans_data);
-    				if($("#SessionAnswerTable").val()=="addquestionsession"){
-    					$("#row-"+ans_obj.Count).remove();
-    				}
-    				else {
-    					//Manage Dependent Data
-    					dependent_question_answer(ans_obj.Response);
-    					$("#SessionAnswerTable").find("#row-"+ans_obj.Count).remove();
-    				}
-
-    			});
-    		}
-    		// This is for add questions
-    		if($(this).attr("id")=="sessionquestion"){
-    			$.ajax({
-    			method: "POST",
-    			url: "Action.php",
-    			data: $( "#SessionQuestionForm" ).serialize()
-    		})
-      		.done(function( ans_data ) {
-
-      			//Convert PHP JSON Response to Javascript Object.
-      			var ans_obj = JSON.parse(ans_data);
-      			dependent_question_answer(ans_obj.Response);
-
-
-    			var response_html = "<tr id='question-id-"+ans_obj.Count+"'>";
-    				response_html += "<td>"+ans_obj.Count+"</td>";
-    				response_html += "<td>"+ans_obj.QuestionText+"</td>";
-    				response_html += "<td>"+ans_obj.Required+"</td>";
-                	response_html += '<td><a href="javascript:;"  onclick="javascript:EditQuestions(this);" class="btn btn-secondary btn-sm btn-icon icon-left">Edit</a><a href="javascript:;" id="" onclick="javascript:deleteQuestion(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a></td></tr>';
-    				$("#SessionQuestionTable").find("tbody").append(response_html);
-
-      		});
-    		}
-    		else // This is for add Survey
-    		if($(this).attr("id")=="sessionsurvey"){
-    			$.ajax({
-    			method: "POST",
-    			url: "Action.php",
-    			data: $( "#SessionSurveyForm" ).serialize()
-    		})
-      		.done(function( ans_data ) {
-
-      			//Convert PHP JSON Response to Javascript Object.
-      			//console.log(ans_data);
-
-      		});
-    		}
-    		else if($(this).attr("id")=="editsessionquestion"){ // This is for edit question
-    			$.ajax({
-    			method: "POST",
-    			url: "Action.php?QuestionIndex="+$("#EditQuestionIndex").val(),
-    			data: $( "#EditSessionQuestionForm" ).serialize()
-    		})
-      		.done(function( ans_data ) {
-    			var ans_obj = JSON.parse(ans_data);
-    			//console.log(ans_obj.Dependency.Answers);
-    			$("#edit-dependency-answer-"+ans_obj.Dependency.QuestionID).val(ans_obj.Dependency.Answers);
-    			var response_html = "";
-    				response_html += "<td>"+ans_obj.Count+"</td>";
-    				response_html += "<td>"+ans_obj.QuestionText+"</td>";
-    				response_html += "<td>"+ans_obj.Required+"</td>";
-                	response_html += '<td><a href="javascript:;"  onclick="javascript:EditQuestions(this);" class="btn btn-secondary btn-sm btn-icon icon-left">Edit</a><a href="javascript:;" id="" onclick="javascript:deleteQuestion(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a></td>';
-    				$("#SessionQuestionTable").find("#question-id-"+ans_obj.Count).html(response_html);
-
-      		});
-    		}
-    		else if($(this).attr("id")=="deletesessionquestion"){
-    			$.ajax({
-    				method: "POST",
-    				url: "Action.php",
-    				data: $( "#DeleteSessionQuestionForm" ).serialize()
-    			})
-    	  		.done(function( ans_data ) {
-    				var ans_obj = JSON.parse(ans_data);
-    				$("#DependenceyQuestion"+(parseInt(ans_obj.Count)-1)).next().remove();
-    				$("#DependenceyQuestion"+(parseInt(ans_obj.Count)-1)).remove();
-    				$("#SessionQuestionTable").find("#question-id-"+ans_obj.Count).remove();
-    			});
-    		}
-
-    	});
+                    $("#SessionAnswerTable").find("#row-"+ans_obj.Count).html(response_html);
+                    $('#answer-edit-modal').modal('hide');
+                });
+            }
+            else if($(this).attr("id")=="deletesessionanswer"){
+                $.ajax({
+                    method: "POST",
+                    url: "/manage-survey-answers/" + $("#DeleteAnswerIndex").val(),
+                    data: $( "#DeleteSessionAnswerForm" ).serialize() + "&QuestionIndex=" + $("#EditQuestionIndex").val()
+                })
+                .done(function( ans_data ) {
+                    var ans_obj = ans_data;
+                    $("#SessionAnswerTable").find("#row-"+ans_obj.Count).remove();
+                    $('#answer-modal-delete').modal('hide');
+                });
+            }
+        });
     });
 
-    function dependent_question_answer(Response){
-    	//Manage Dependency of Add/Edit Question.
-    	var depend_html_e = '<div class="col-md-4">';
-    	depend_html_e += '<label class="control-label" for="social_media">Dependency</label>';
-    	depend_html_e += '</div><div class="col-md-8"><div class="form-group">';
-
-    	var depend_html_a = depend_html_e;
-    	var dependent_q_count =1;
-    	$.each(Response,function(index_q,value_q){
-
-    		//This code for Add dependent.
-    		depend_html_a += '<input type="radio" class="" value="'+(parseInt(index_q))+'" id="DependenceyQuestion-'+(parseInt(index_q)+1)+'" name="DependenceyQuestion" placeholder="">';
-    		depend_html_a += value_q.QuestionText;
-    		depend_html_a += '<div class="row"><div class="col-md-12"><div class="form-group">';
-
-
-    		depend_html_e += '<input type="hidden" id="question-'+(parseInt(index_q)+1)+'-answer" value=\''+JSON.stringify(value_q.Answers)+'\'/>';
-    		var depend_q_edit = "";
-    		var depedent_q_checked = "";
-    		if (typeof (value_q.Dependency.QuestionID) !== "undefined") {
-    			depend_q_edit = value_q.Dependency.QuestionID;
-    			depedent_q_checked = "checked='checked'";
-    		}
-    		depend_html_e += '<input type="hidden" id="edit-dependency-question-'+(parseInt(index_q)+1)+'" value="'+depend_q_edit+'"/>';
-    		var depend_a_edit = "";
-    		if (typeof (value_q.Dependency.Answers) !== "undefined") {
-    			depend_a_edit = value_q.Dependency.Answers;
-    			//console.log(value_q.Dependency.Answers);
-    		}
-    		depend_html_e += '<input type="hidden" id="edit-dependency-answer-'+(parseInt(index_q)+1)+'" value="'+depend_a_edit+'"/>';
-    		depend_html_e += '<input type="radio"  '+depedent_q_checked+' onclick="javascript:radioClick(this);" value="'+dependent_q_count+'" id="EditDependenceyQuestion-'+dependent_q_count+'" name="DependenceyQuestion" placeholder="">';
-    		depend_html_e += value_q.QuestionText;
-
-    		//Manage Answer
-    		depend_html_e += '<div class="row"><div class="col-md-12"><div class="form-group">';
-    		$.each(value_q.Answers,function(index_a,value_a){
-
-    			//This is for add
-    			depend_html_a += '<input type="checkbox" class="" value="'+(parseInt(index_a))+'" id="DependenceyAnswer-'+(parseInt(index_a)+1)+'" name="DependenceyAnswer[]" placeholder="">';
-    			depend_html_a += value_a.AnswerText;
-
-    			depend_html_e += '<input type="checkbox" disabled="disabled" value="'+(parseInt(index_a))+'" id="EditDependenceyAnswer-'+(parseInt(index_a)+1)+'" name="DependenceyAnswer[]" placeholder="">';
-    			depend_html_e += value_a.AnswerText;
-    		});
-    		depend_html_e += '</div></div></div>';
-    		depend_html_a += '</div></div></div>';
-
-    		dependent_q_count++;
-    	});
-    	depend_html_e += '</div></div></div>';
-    	depend_html_a += '</div></div></div>';
-    	$("#EditQuestionDependency").html(depend_html_e);
-    	$("#AddQuestionDependency").html(depend_html_a);
-    	//console.log("Done");
-    }
     function set_question_default_value(qtmpid,qreq){
-    	$("#"+qtmpid).val($("#QuestionName").val());
-    	if($('#QuestionRequired').is(':checked')){
-    		$("#"+qreq).val("YES");
-    	}
-    	else if($('#QuestionRequired1').is(':checked')){
-    		$("#"+qreq).val("NO");
-    	}
+        $("#"+qtmpid).val($("#QuestionName").val());
+        if($('#QuestionRequired').is(':checked')){
+            $("#"+qreq).val("YES");
+        }
+        else if($('#QuestionRequired1').is(':checked')){
+            $("#"+qreq).val("NO");
+        }
     }
 
-    /**
-    * function EditAnswers
-    * @params:c_obj is the current object
-    **/
     function EditAnswers(c_obj){
-    	set_question_default_value("EditTmpQuesName","EditTmpQuesRequired");
-    	$("#EditAnswerName").val($(c_obj).parent().prev().prev().prev().text());
-    	$("#EditAnswerType").val($(c_obj).parent().prev().text());
-    	$("#EditAnswerIndex").val($(c_obj).parent().prev().prev().prev().prev().text());
-    	var req = $(c_obj).parent().prev().prev().text();
+        set_question_default_value("EditTmpQuesName","EditTmpQuesRequired");
+        $("#EditAnswerName").val($(c_obj).parent().prev().prev().prev().text());
+        $("#EditAnswerType").val($(c_obj).parent().prev().text());
+        $("#EditAnswerIndex").val($(c_obj).parent().prev().prev().prev().prev().text());
+        var req = $(c_obj).parent().prev().prev().text();
 
-    	if(req=="YES"){
-    		$("#EditAnswerRequired").prop('checked', true);
-    	}
-    	else if(req=="NO"){
-    		$("#EditAnswerRequired1").prop('checked', true);
-    	}
-
-    	//console.log($(c_obj).prev().val());
-    	if($(c_obj).prev().val()=="1"){
-    		$("#EditAnswerMailed").prop('checked', true);
-    	}
-    	else if($(c_obj).prev().val()=="0"){
-    		//console.log("elseif");
-    		$("#EditAnswerMailed1").prop('checked', true);
-    	}
-    	$('#answer-edit-modal').modal('show');
-    }
-
-    /**
-    * function AddQuestions
-    * @params:c_obj is the current object
-    **/
-    function AddQuestions(c_obj) {
-    	$("#QuestionName").val("");
-    	$("#AddQuestionDependency input:radio").attr("checked", false);
-    	$("#SessionAnswerTable").find("tbody").html("");
-    	$("#EditQuestionSession").val("addquestionsession");
-    	$("#DeleteQuestionSession").val("addquestionsession");
-    	$("#AddQuestionSession").val("addquestionsession");
-    	$('#question-modal').modal('show');
+        var MailedFlag = $(c_obj).prev().val();
+        if(MailedFlag=="1"){
+            $("#EditAnswerMailed").prop('checked', true);
+        }
+        else {
+            $("#EditAnswerMailed1").prop('checked', true);
+        }
+        if(req=="YES"){
+            $("#EditAnswerRequired").prop('checked', true);
+        }
+        else {
+            $("#EditAnswerRequired1").prop('checked', true);
+        }
+        $('#answer-edit-modal').modal('show');
     }
 
     function AddAnswer(c_obj) {
-    	set_question_default_value("tmpQuesName","tmpQuesRequired");
-    	$("#AnswerName").val("");
-    	$("#AnswerName").val("");
-    	$("#AnswerType").val("");
-    	$("#AddQuestionDependency input:radio").attr("checked", false);
-    	$('#answer-modal').modal('show');
-    }
-
-    /**
-    * function EditQuestions
-    * @params:c_obj is the current object
-    **/
-    function EditQuestions(c_obj){
-
-    	$("#EditQuestionName").val($(c_obj).parent().prev().prev().text());
-    	var index = $(c_obj).parent().prev().prev().prev().text();
-    	$("#EditQuestionIndex").val(index);
-    	var req = $(c_obj).parent().prev().text();
-    	if(req=="YES"){
-    		$("#EditQuestionRequired").prop('checked', true);
-    	}
-    	else if(req=="NO"){
-    		$("#EditQuestionRequired1").prop('checked', true);
-    	}
-
-
-    	$('input[type=checkbox]').attr('disabled', 'disabled');
-    	$('input[type=checkbox]').removeAttr('checked');
-    	$("#EditDependenceyQuestion-"+$("#edit-dependency-question-"+index).val()).attr('checked', 'checked');
-    	$("#EditDependenceyQuestion-"+$("#edit-dependency-question-"+index).val()).next().find("input:checkbox").each(function() {
-       		$(this).removeAttr('disabled');
-    	});
-
-    	//Manage check box selection.
-    	if (typeof ($("#edit-dependency-answer-"+index).val()) === "undefined") {
-    		//console.log("Un");
-    	}
-    	else {
-    		//console.log($("#edit-dependency-answer-"+index).val().split(','));
-    		$.each($("#edit-dependency-answer-"+index).val().split(','),function(tmp_index,value){
-    			$("#EditDependenceyQuestion-"+$("#edit-dependency-question-"+index).val()).next().find("#EditDependenceyAnswer-"+value).attr('checked', 'checked');
-    		});
-    	}
-
-    	$("#EditQuestionSession").val("editquestionsession");
-    	$("#DeleteQuestionSession").val("editquestionsession");
-    	$("#AddQuestionSession").val("editquestionsession");
-
-    	//Show Answers
-    	if (typeof ($("#question-"+parseInt(index)+"-answer").val()) === "undefined") {
-    		//console.log("Un");
-    	}
-    	else {
-    		var ans_obj = JSON.parse($("#question-"+parseInt(index)+"-answer").val());
-    		var answer_html = "";
-    		$.each(ans_obj,function(index,value){
-    		 	answer_html += "<tr id='row-"+(parseInt(index)+1)+"'>";
-    			answer_html += "<td>"+(parseInt(index)+1)+"</td>";
-    			answer_html += "<td>"+value.AnswerText+"</td>";
-    			answer_html += "<td>"+value.Required+"</td>";
-    			answer_html += "<td>"+value.AnswerType+"</td>";
-    			answer_html += '<td><a href="javascript:;" onclick="javascript:EditAnswers(this);" class="btn btn-secondary btn-sm btn-icon icon-left">Edit</a><a href="javascript:;" id="" onclick="javascript:deleteAnswer(this)" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a></td></tr>';
-
-    		});
-    		$("#EditSessionAnswerTable").find("tbody").html(answer_html);
-    	}
-     	$('#question-edit-modal').modal('show');
-    }
-
-    //Enable selected Radio button
-    function radioClick(c_obj){
-    	$('input[type=checkbox]').removeAttr('checked');
-    	$('input[type=checkbox]').attr('disabled', 'disabled');
-    	//console.log("Click");
-    	$(c_obj).next().find("input:checkbox").each(function() {
-    		$(this).removeAttr('disabled');
-    	});
+        set_question_default_value("tmpQuesName","tmpQuesRequired");
+        $("#AnswerName").val("");
+        $("#AnswerType").val("");
+        $("#AddQuestionDependency input:radio").attr("checked", false);
+        $('#answer-modal').modal('show');
     }
 
     function deleteAnswer(c_obj){
-    	$("#DeleteAnswerIndex").val($(c_obj).parent().prev().prev().prev().prev().text());
-    	$('#answer-modal-delete').modal('show');
-    }
-
-    function deleteQuestion(c_obj){
-    	$("#DeleteQuestionIndex").val($(c_obj).parent().prev().prev().prev().text());
-    	$('#question-delete-modal').modal('show');
+        $("#DeleteAnswerIndex").val($(c_obj).parent().prev().prev().prev().prev().text());
+        $('#answer-modal-delete').modal('show');
     }
 </script>
 @endpush
