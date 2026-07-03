@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\WaiverRequest;
+use App\Models\Legal;
 use Illuminate\Http\Request;
 
 class WaiverController extends Controller
@@ -12,56 +14,64 @@ class WaiverController extends Controller
      */
     public function index()
     {
+        $legalWaivers = Legal::all();
+
+        foreach ($legalWaivers as $waiver) {
+            $waiver->WaiverID = $waiver->legalid;
+            $waiver->WaiverName = $waiver->legalname;
+            $waiver->WaiverHTML = $waiver->legalhtml;
+        }
+
+        $waivers = (object)[
+            'Success' => 1,
+            'Waivers' => $legalWaivers,
+        ];
+
         return view('backend.waivers.index', [
             'title' => 'Manage Waivers',
+            'waivers' => $waivers,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(WaiverRequest $request)
     {
-        //
-    }
+        Legal::create([
+            'legalname' => $request->input('WaiverName'),
+            'legalhtml' => $request->input('WaiverHTML'),
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return redirect()->back()->with('msg', 'The Waiver has been created successfully');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(WaiverRequest $request, string $id)
     {
-        //
+        // WaiverID is expected as a delimited string ID!$!Name
+        $parts = explode('!$!', $request->input('WaiverID'));
+        $legalId = $parts[0] ?? $id;
+
+        $waiver = Legal::findOrFail($legalId);
+        $waiver->update([
+            'legalhtml' => $request->input('WaiverHTML1'),
+        ]);
+
+        return redirect()->back()->with('msg', 'The Waiver has been updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(WaiverRequest $request, string $id)
     {
-        //
+        $legalId = $request->input('DeleteWaiverID');
+        $waiver = Legal::findOrFail($legalId);
+        $waiver->delete();
+
+        return redirect()->back()->with('msg', 'The Waiver has been deleted successfully');
     }
 }

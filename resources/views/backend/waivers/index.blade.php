@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#waiver-modal').modal('show');">
@@ -22,37 +22,32 @@
         </li>
     </ul>
     <div class="panel panel-default">
-        <form method="post" action="Action.php" id="WaiverEditForm">
+        <form method="post" action="#" id="WaiverEditForm">
+            @csrf
+            @method('PUT')
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label class="control-label" for="waiver">Select a Waiver to edit</label>
-                        <select name="WaiverID" class="selectboxit" id="WaiverNameEdit">
-                            <optgroup label="Waivers">
-                                <option value="">Select an Waiver</option>
-                                <?php $hidden_html = '';
-                                    if(isset($waivers->Success) && $waivers->Success==1){
-                                    	foreach ($waivers->Waivers as $key => $waiver) {
-                                    		$hidden_html .= '<div style="display:none;" id="WaiverHTML'.$waiver->WaiverID.'" > '.$waiver->WaiverHTML.'</div>';
-                                    		echo '<option value="'.$waiver->WaiverID."!$!".$waiver->WaiverName.'">'.$waiver->WaiverName.'</option>';
-                                    	}
-                                    }
-                                    ?>
-                            </optgroup>
+                        <label class="control-label" for="WaiverNameEdit">Select a Waiver to edit</label>
+                        <select name="WaiverID" class="form-control" id="WaiverNameEdit">
+                            <option value="">Select a Waiver</option>
+                            @foreach ($waivers->Waivers as $waiver)
+                                <option value="{{ $waiver->WaiverID }}!$!{{ $waiver->WaiverName }}">{{ $waiver->WaiverName }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control ckeditor" name="WaiverHTML1" rows="10">   </textarea>
+                        <textarea class="form-control ckeditor" id="WaiverHTML1" name="WaiverHTML1" rows="10"></textarea>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
-                        <?php /* if(Auth::getUsers()->userlevel==1){ ?>
-                        <button type="button" class="btn btn-danger btn-info" onclick="openModel();" data-dismiss="modal">Delete</button>
-                        <?php } */ ?>
+                        <button type="button" class="btn btn-info">Save Changes</button>
+                        @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                        <button type="button" class="btn btn-danger" onclick="openModel();">Delete</button>
+                        @endif
                     </div>
-                    <?php echo $hidden_html; ?>
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="waiver">
+                    @foreach ($waivers->Waivers as $waiver)
+                        <div style="display:none;" id="WaiverHTML{{ $waiver->WaiverID }}">{!! $waiver->WaiverHTML !!}</div>
+                    @endforeach
                 </div>
             </div>
         </form>
@@ -67,16 +62,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="waiver-modal-delete-label">Are you sure? </h4>
             </div>
-            <form method="POST" action="Action.php" id="WaiverDelete">
+            <form method="POST" action="#" id="WaiverDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteWaiverID" id="DeleteWaiverID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="waiver">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -88,10 +83,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Waiver</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="waiver-modal-label">Add Waiver</h4>
             </div>
-            <form method="post" action="Action.php" id="WaiverForm">
+            <form method="post" action="{{ route('manage-waivers.store') }}" id="WaiverForm">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -104,18 +100,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <textarea name="WaiverHTML" class="form-control ckeditor" rows="10">
-                                </textarea>
+                                <textarea name="WaiverHTML" class="form-control ckeditor" rows="10"></textarea>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="controller" value="waiver">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info">Create</button>
+                </div>
             </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
-            </div>
         </div>
     </div>
 </div>
@@ -123,25 +117,89 @@
 
 @push('scripts')
 <script>
+    function openModel(){
+        var val = $("#WaiverNameEdit").val();
+        if(val && val !== ""){
+            var id = $("#DeleteWaiverID").val();
+            $("#WaiverDelete").attr('action', '/manage-waivers/' + id);
+            jQuery('#waiver-modal-delete').modal('show');
+        }
+        else {
+            alert("Please select Waiver that you want to delete!");
+        }
+    }
+
     $( document ).ready(function() {
     	$("button.btn-info").click(function(){
     		if($(this).text()=="Create"){
-    			$( "#WaiverForm" ).submit();
+    			var form = $( "#WaiverForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Save Changes"){
-    			$( "#WaiverEditForm" ).submit();
+    			var form = $( "#WaiverEditForm" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
-    		else if($(this).text()=="Delete" && (!($(this).hasClass('btn-danger')))){
-    			$("#WaiverDelete").submit();
+    		else if($(this).text()=="Delete"){
+    			var form = $("#WaiverDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     	});
+
     	$("#WaiverNameEdit").change(function(){
-    		$("#TemplateBlob1").html();
     		var curentVal = $(this).val();
+            if (!curentVal) {
+                $("#DeleteWaiverID").val('');
+                if (CKEDITOR.instances['WaiverHTML1']) {
+                    CKEDITOR.instances['WaiverHTML1'].setData('');
+                }
+                return;
+            }
     		var strArray = curentVal.split("!$!");
-    		$("#DeleteWaiverID").val(strArray[0]);
-    		$("#cke_WaiverHTML1 .cke_wysiwyg_frame").contents().find("body").html($("#WaiverHTML"+strArray[0]).html());
+            var id = strArray[0];
+    		$("#DeleteWaiverID").val(id);
+            $("#WaiverEditForm").attr('action', '/manage-waivers/' + id);
+    		
+            var htmlContent = $("#WaiverHTML" + id).html();
+            if (CKEDITOR.instances['WaiverHTML1']) {
+                CKEDITOR.instances['WaiverHTML1'].setData(htmlContent);
+            }
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\WaiverRequest', '#WaiverForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\WaiverRequest', '#WaiverEditForm') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\WaiverRequest', '#WaiverDelete') !!}
 @endpush
