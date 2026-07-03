@@ -21,6 +21,7 @@ use App\Http\Controllers\Backend\{
     SurveyController,
     SurveyQuestionController,
     SurveyAnswerController,
+    DataManagementController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -89,6 +90,9 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::put('/{manage_sms_template}', 'update')->name('update');
             Route::delete('/{manage_sms_template}', 'destroy')->name('destroy');
         });
+
+    // Manage Data Management Routes
+    Route::get('manage-data-management', [DataManagementController::class, 'index'])->name('manage-data-management.index');
 
     // Resource Routes
     Route::resources(

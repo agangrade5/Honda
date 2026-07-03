@@ -123,8 +123,8 @@
             <span class="title">Manage Surveys</span>
             </a>
         </li>
-        <li>
-            <a href="ManageData.php">
+        <li class="{{ request()->routeIs('manage-data-management.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-data-management.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Data Management</span>
             </a>
