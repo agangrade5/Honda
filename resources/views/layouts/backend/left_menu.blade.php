@@ -135,8 +135,8 @@
             <span class="title">Manage Bikes and Times</span>
             </a>
         </li>
-        <li>
-            <a href="PreRegEmails.php">
+        <li class="{{ request()->routeIs('manage-pre-reg-email.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-pre-reg-email.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Pre Reg-Emails</span>
             </a>

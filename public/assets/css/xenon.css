@@ -6596,6 +6596,12 @@ div.scrollable {
   cursor: not-allowed;
   color: #979898;
 }
+.dx-success {
+    background: #FFF;
+    border: 5px solid #68B828;
+    padding: 20px;
+    margin-bottom: 30px;
+}
 .dx-warning {
   background: #FFF;
   border: 5px solid #ffba00;
@@ -6629,14 +6635,14 @@ div.scrollable {
   margin-top: -15px;
 }
 lesshat-selector {
-  -lh-property: 0; } 
+  -lh-property: 0; }
 @-webkit-keyframes loaderAnimate{ 0%{ -webkit-transform: rotate(0deg); } 100%{ -webkit-transform: rotate(220deg); }}
 @-moz-keyframes loaderAnimate{ 0%{ -moz-transform: rotate(0deg); } 100%{ -moz-transform: rotate(220deg); }}
 @-o-keyframes loaderAnimate{ 0%{ -o-transform: rotate(0deg); } 100%{ -o-transform: rotate(220deg); }}
 @keyframes loaderAnimate{ 0%{-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-ms-transform: rotate(0deg);transform: rotate(0deg); } 100%{-webkit-transform: rotate(220deg);-moz-transform: rotate(220deg);-ms-transform: rotate(220deg);transform: rotate(220deg); };
 }
 lesshat-selector {
-  -lh-property: 0; } 
+  -lh-property: 0; }
 @-webkit-keyframes loaderAnimate2{ 0%{ box-shadow: inset #555555 0 0 0 8px; -webkit-transform: rotate(-140deg); } 50%{ box-shadow: inset #555555 0 0 0 2px; } 100%{ box-shadow: inset #555555 0 0 0 8px; -webkit-transform: rotate(140deg); }}
 @-moz-keyframes loaderAnimate2{ 0%{ box-shadow: inset #555555 0 0 0 8px; -moz-transform: rotate(-140deg); } 50%{ box-shadow: inset #555555 0 0 0 2px; } 100%{ box-shadow: inset #555555 0 0 0 8px; -moz-transform: rotate(140deg); }}
 @-o-keyframes loaderAnimate2{ 0%{ box-shadow: inset #555555 0 0 0 8px; -o-transform: rotate(-140deg); } 50%{ box-shadow: inset #555555 0 0 0 2px; } 100%{ box-shadow: inset #555555 0 0 0 8px; -o-transform: rotate(140deg); }}
@@ -6682,14 +6688,14 @@ lesshat-selector {
   margin-top: -15px;
 }
 lesshat-selector {
-  -lh-property: 0; } 
+  -lh-property: 0; }
 @-webkit-keyframes loaderAnimate2{ 0%{ -webkit-transform: rotate(0deg); } 100%{ -webkit-transform: rotate(220deg); }}
 @-moz-keyframes loaderAnimate2{ 0%{ -moz-transform: rotate(0deg); } 100%{ -moz-transform: rotate(220deg); }}
 @-o-keyframes loaderAnimate2{ 0%{ -o-transform: rotate(0deg); } 100%{ -o-transform: rotate(220deg); }}
 @keyframes loaderAnimate2{ 0%{-webkit-transform: rotate(0deg);-moz-transform: rotate(0deg);-ms-transform: rotate(0deg);transform: rotate(0deg); } 100%{-webkit-transform: rotate(220deg);-moz-transform: rotate(220deg);-ms-transform: rotate(220deg);transform: rotate(220deg); };
 }
 lesshat-selector {
-  -lh-property: 0; } 
+  -lh-property: 0; }
 @-webkit-keyframes loaderAnimate22{ 0%{ box-shadow: inset #ffffff 0 0 0 8px; -webkit-transform: rotate(-140deg); } 50%{ box-shadow: inset #ffffff 0 0 0 2px; } 100%{ box-shadow: inset #ffffff 0 0 0 8px; -webkit-transform: rotate(140deg); }}
 @-moz-keyframes loaderAnimate22{ 0%{ box-shadow: inset #ffffff 0 0 0 8px; -moz-transform: rotate(-140deg); } 50%{ box-shadow: inset #ffffff 0 0 0 2px; } 100%{ box-shadow: inset #ffffff 0 0 0 8px; -moz-transform: rotate(140deg); }}
 @-o-keyframes loaderAnimate22{ 0%{ box-shadow: inset #ffffff 0 0 0 8px; -o-transform: rotate(-140deg); } 50%{ box-shadow: inset #ffffff 0 0 0 2px; } 100%{ box-shadow: inset #ffffff 0 0 0 8px; -o-transform: rotate(140deg); }}
@@ -10653,7 +10659,7 @@ input[type="checkbox"].iswitch-xlg.touch:hover:checked:before {
   }
 }
 lesshat-selector {
-  -lh-property: 0; } 
+  -lh-property: 0; }
 @-webkit-keyframes glowAnimation{ 0%{ box-shadow: rgba(104, 184, 40, 0.2) 0 0 0 1px; } 100%{ box-shadow: rgba(104, 184, 40, 0.8) 0 0 3px 1px; }}
 @-moz-keyframes glowAnimation{ 0%{ box-shadow: rgba(104, 184, 40, 0.2) 0 0 0 1px; } 100%{ box-shadow: rgba(104, 184, 40, 0.8) 0 0 3px 1px; }}
 @-o-keyframes glowAnimation{ 0%{ box-shadow: rgba(104, 184, 40, 0.2) 0 0 0 1px; } 100%{ box-shadow: rgba(104, 184, 40, 0.8) 0 0 3px 1px; }}
@@ -15031,7 +15037,7 @@ button.toast-close-button {
   animation-direction: alternate;
 }
 .xe-widget.xe-weather .xe-background.xe-background-animated lesshat-selector {
-  -lh-property: 0; } 
+  -lh-property: 0; }
 @-webkit-keyframes weatherBgMove{ 0% { left: 0%; } 50% { left: 10%; } 100% { left: 0%; }}
 @-moz-keyframes weatherBgMove{ 0% { left: 0%; } 50% { left: 10%; } 100% { left: 0%; }}
 @-o-keyframes weatherBgMove{ 0% { left: 0%; } 50% { left: 10%; } 100% { left: 0%; }}
