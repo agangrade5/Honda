@@ -117,8 +117,8 @@
             <span class="title">SMS Templates</span>
             </a>
         </li>
-        <li>
-            <a href="ManageSurveys.php">
+        <li class="{{ request()->routeIs('manage-surveys.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-surveys.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Manage Surveys</span>
             </a>

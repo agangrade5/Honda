@@ -18,6 +18,9 @@ use App\Http\Controllers\Backend\{
     EmailTemplateController,
     SmsTemplateController,
     ReportController,
+    SurveyController,
+    SurveyQuestionController,
+    SurveyAnswerController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -102,6 +105,9 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-models' => ModelsController::class,
             'manage-users' => UserController::class,
             'manage-waivers' => WaiverController::class,
+            'manage-surveys' => SurveyController::class,
+            'manage-survey-questions' => SurveyQuestionController::class,
+            'manage-survey-answers' => SurveyAnswerController::class,
         ]
     );
 });
