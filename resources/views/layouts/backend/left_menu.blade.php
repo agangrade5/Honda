@@ -141,8 +141,8 @@
             <span class="title">Pre Reg-Emails</span>
             </a>
         </li>
-        <li>
-            <a href="ManagePreRegistrationHTML.php">
+        <li class="{{ request()->routeIs('manage-pre-reg-html.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-pre-reg-html.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Manage Pre Registration</span>
             </a>

@@ -24,6 +24,7 @@ use App\Http\Controllers\Backend\{
     DataManagementController,
     BikeAndTimeController,
     PreRegEmailController,
+    PreRegHtmlController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -97,6 +98,8 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
     Route::get('manage-data-management', [DataManagementController::class, 'index'])->name('manage-data-management.index');
     // Manage PreReg Email Routes
     Route::get('manage-pre-reg-email', [PreRegEmailController::class, 'index'])->name('manage-pre-reg-email.index');
+    // Manage PreReg Html Routes
+    Route::get('manage-pre-reg-html', [PreRegHtmlController::class, 'index'])->name('manage-pre-reg-html.index');
     // Resource Routes
     Route::resources(
         [
