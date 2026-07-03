@@ -1,26 +1,27 @@
 <!-- Add Answer -->
-<div class="modal fade custom-width" id="answer-modal">
+<div class="modal fade custom-width" id="answer-modal" tabindex="-1" role="dialog" aria-labelledby="answer-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Add Answer</h4>
             </div>
-            <form method="post" action="Action.php" id="SessionAnswerForm">
+            <form method="post" action="#" id="SessionAnswerForm">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Answer Text</label>
+                            <label class="control-label" for="AnswerName">Answer Text</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
-                                <input type="text" class="form-control" id="AnswerName" name="AnswerName" placeholder="">
+                                <input type="text" class="form-control" id="AnswerName" name="AnswerName" placeholder="" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Answer Type</label>
+                            <label class="control-label" for="AnswerType">Answer Type</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
@@ -31,26 +32,26 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Required</label>
+                            <label class="control-label">Required</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">No
-                                <input type="hidden" class="" id="AnswerRequired" value="No" name="AnswerRequired" placeholder="">
+                                <input type="hidden" id="AnswerRequired" value="No" name="AnswerRequired">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Is this answer the mailed flag?</label>
+                            <label class="control-label">Is this answer the mailed flag?</label>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group"> YES
-                                <input type="radio" class="" id="AnswerMailed" value="1" name="AnswerMailed" placeholder="">
+                                <input type="radio" class="" id="AnswerMailed" value="1" name="AnswerMailed">
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group"> NO
-                                <input type="radio" checked="checked" class="" id="AnswerMailed1" value="0" name="AnswerMailed" placeholder="">
+                                <input type="radio" checked="checked" class="" id="AnswerMailed1" value="0" name="AnswerMailed">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -61,19 +62,11 @@
                     </div>
                     <input type="hidden" name="tmp_ques_name" value="" id="tmpQuesName">
                     <input type="hidden" name="tmp_ques_required" value="" id="tmpQuesRequired">
-                    <input type="hidden" name="action" value="add">
-                    <?php if(isset($survey_id) && !empty($survey_id)){ ?>
-                    <input name="SurveyIndex" value="<?php echo $survey_id; ?>" type="hidden"/>
-                    <?php } if(isset($_GET['QID'])){ ?>
-                    <input name="QuestionIndex" value="<?php echo $_GET['QID']; ?>" type="hidden"/>
-                    <input type="hidden" name="controller" value="answersessioneditquestionsurvey">
-                    <?php } else{  ?>
-                    <input type="hidden" name="controller" value="answersessionaddquestionsurvey">
-                    <?php } ?>
+                    <input type="hidden" name="QuestionIndex" value="{{ $qid ?? '' }}">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-info btn-secondary"  value="Create">
+                    <button type="button" id="sessionanswer" class="btn btn-info btn-secondary">Create</button>
                 </div>
             </form>
         </div>
@@ -81,57 +74,59 @@
 </div>
 
 <!-- Edit Answer -->
-<div class="modal fade custom-width" id="answer-edit-modal">
-    <div class="modal-dialog">
+<div class="modal fade custom-width" id="answer-edit-modal" tabindex="-1" role="dialog" aria-labelledby="answer-edit-modal-label" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">  
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Edit Answer</h4>
             </div>
-            <form method="post" action="Action.php" id="EditSessionAnswerForm">
+            <form method="post" action="#" id="EditSessionAnswerForm">
+                @csrf
+                @method('PUT')
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Answer Text</label>
+                            <label class="control-label" for="EditAnswerName">Answer Text</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
-                                <input type="text" class="form-control" id="EditAnswerName" name="AnswerName" placeholder="">
+                                <input type="text" class="form-control" id="EditAnswerName" name="AnswerName" placeholder="" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Answer Type</label>
+                            <label class="control-label" for="EditAnswerType">Answer Type</label>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">1
-                                <input type="hidden" value="1" class="form-control" id="EditAnswerType" name="AnswerType" placeholder="">
+                                <input type="hidden" value="1" class="form-control" id="EditAnswerType" name="AnswerType">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Required</label>
+                            <label class="control-label">Required</label>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group"> NO
-                                <input type="hidden" class="" id="EditAnswerRequired" value="NO" name="AnswerRequired" placeholder="">
+                                <input type="hidden" id="EditAnswerRequired" value="NO" name="AnswerRequired">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="control-label" for="social_media">Is this answer the mailed flag?</label>
+                            <label class="control-label">Is this answer the mailed flag?</label>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group"> YES
-                                <input type="radio" class="" id="EditAnswerMailed" value="1" name="AnswerMailed" placeholder="">
+                                <input type="radio" class="" id="EditAnswerMailed" value="1" name="AnswerMailed">
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group"> NO
-                                <input type="radio" class="" id="EditAnswerMailed1" value="0" name="AnswerMailed" placeholder="">
+                                <input type="radio" class="" id="EditAnswerMailed1" value="0" name="AnswerMailed">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -142,20 +137,12 @@
                     </div>
                     <input type="hidden" name="tmp_ques_name" value="" id="EditTmpQuesName">
                     <input type="hidden" name="tmp_ques_required" value="" id="EditTmpQuesRequired">
-                    <input type="hidden" name="action" value="edit">
                     <input type="hidden" name="AnswerIndex" id="EditAnswerIndex" value="">
-                    <?php if(isset($survey_id) && !empty($survey_id)){ ?>
-                    <input name="SurveyIndex" value="<?php echo $survey_id; ?>" type="hidden"/>
-                    <?php } if(isset($_GET['QID'])){ ?>
-                    <input name="QuestionIndex" value="<?php echo $_GET['QID']; ?>" type="hidden"/>
-                    <input type="hidden" name="controller" value="answersessioneditquestionsurvey">
-                    <?php } else{  ?>
-                    <input type="hidden" name="controller" value="answersessionaddquestionsurvey">
-                    <?php } ?>
+                    <input type="hidden" name="QuestionIndex" value="{{ $qid ?? '' }}">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-info btn-secondary" id=""  value="Update">
+                    <button type="button" id="editsessionanswer" class="btn btn-info btn-secondary">Update</button>
                 </div>
             </form>
         </div>
@@ -163,27 +150,21 @@
 </div>
 
 <!-- Delete Answer -->
-<div class="modal fade custom-width" id="answer-modal-delete">
+<div class="modal fade custom-width" id="answer-modal-delete" tabindex="-1" role="dialog" aria-labelledby="answer-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="DeleteSessionAnswerForm">
+            <form method="post" action="#" id="DeleteSessionAnswerForm">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="AnswerIndex" id="DeleteAnswerIndex" value="">
-                <input type="hidden" name="action" value="delete">
-                <?php if(isset($survey_id) && !empty($survey_id)){ ?>
-                <input name="SurveyIndex" value="<?php echo $survey_id; ?>" type="hidden"/>
-                <?php } if(isset($_GET['QID'])){ ?>
-                <input name="QuestionIndex" value="<?php echo $_GET['QID']; ?>" type="hidden"/>
-                <input type="hidden" name="controller" value="answersessioneditquestionsurvey">
-                <?php } else{  ?>
-                <input type="hidden" name="controller" value="answersessionaddquestionsurvey">
-                <?php } ?>
+                <input type="hidden" name="QuestionIndex" value="{{ $qid ?? '' }}">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-info" id="deletesessionanswer" value="Delete" >
+                    <button type="button" id="deletesessionanswer" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>

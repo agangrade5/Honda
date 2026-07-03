@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li>
@@ -40,23 +40,23 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if(isset($surveys) && !empty($surveys) && $surveys->Success==1){
-                            foreach ($surveys->Survey as $key => $survey) { ?>
-                    <tr>
-                        <td><?php echo $survey->SurveyID;?></td>
-                        <td><?php echo $survey->SurveyName;?></td>
-                        <td>
-                            <input type="hidden" id="SurveyID<?php echo $survey->SurveyID;?>" value="<?php echo $survey->SurveyID;?>">
-                            <a href="EditSurvey.php?SurveyID=<?php echo $survey->SurveyID;?>" id="CID<?php echo $survey->SurveyID;?>" onclick="jQuery('#truck-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
-                            </a>
-                            <?php if(Auth::getUsers()->userlevel==1){ ?>
-                            <a href="javascript:void(0);" id="<?php echo $survey->SurveyID;?>" onclick="deleteSurvey(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
-                            <?php } ?>
-                        </td>
-                    </tr>
-                    <?php } } ?>
+                    @if(isset($surveys) && !empty($surveys) && $surveys->Success==1)
+                        @foreach ($surveys->Survey as $survey)
+                        <tr>
+                            <td>{{ $survey->SurveyID }}</td>
+                            <td>{{ $survey->SurveyName }}</td>
+                            <td>
+                                <input type="hidden" id="SurveyID{{ $survey->SurveyID }}" value="{{ $survey->SurveyID }}">
+                                <a href="{{ route('manage-surveys.edit', $survey->SurveyID) }}" id="CID{{ $survey->SurveyID }}" class="btn btn-secondary btn-sm btn-icon icon-left">
+                                Edit
+                                </a>
+                                @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                                <a href="javascript:void(0);" id="{{ $survey->SurveyID }}" onclick="deleteSurvey(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -67,17 +67,17 @@
 <!-- content @e -->
 
 <!-- Delete Modal -->
-<div class="modal fade custom-width" id="survey-modal-delete">
+<div class="modal fade custom-width" id="survey-modal-delete" tabindex="-1" role="dialog" aria-labelledby="template-modal-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="DeleteSessionSurveyForm">
+            <form method="post" action="#" id="DeleteSessionSurveyForm">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="SurveyIndex" id="DeleteSurveyIndex" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="survey">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-info" id="deletesessionanswer" value="Delete" >
@@ -89,10 +89,12 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset("assets/js/jquery.session.js")}}"></script>
+<script src="{{ asset('assets/js/jquery.session.js') }}"></script>
 <script type="text/javascript">
     function deleteSurvey(c_obj){
-        $("#DeleteSurveyIndex").val($(c_obj).attr("id"));
+        var id = $(c_obj).attr("id");
+        $("#DeleteSurveyIndex").val(id);
+        $("#DeleteSessionSurveyForm").attr('action', '/manage-surveys/' + id);
         $('#survey-modal-delete').modal('show');
     }
 
