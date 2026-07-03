@@ -5,15 +5,15 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('msg'))
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{{ session('msg') }}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
         <li><a href="javascript:;" onclick="jQuery('#user-modal').modal('show');">
@@ -44,32 +44,40 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if( !empty($users) && isset($users->Success) && $users->Success==1){
-                            foreach ($users->Users as $key => $user) { ?>
+                    @foreach ($users->Users as $user)
                     <tr>
-                        <td><?php echo $user->UserID;?></td>
-                        <td><?php echo $user->UserFullName;?></td>
-                        <td><?php echo $user->UserName;?></td>
-                        <td><?php echo $user->UserPhone;?></td>
-                        <td><?php echo $user->UserTypeTitle;?></td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $user->UserFullName }}</td>
+                        <td>{{ $user->UserName }}</td>
+                        <td>{{ $user->UserPhone }}</td>
+                        <td>{{ $user->UserTypeTitle }}</td>
                         <td>
-                            <input type="hidden" id="UserLevel<?php echo $user->UserID;?>" value="<?php echo $user->UserLevel;?>">
-                            <input type="hidden" id="UserPass<?php echo $user->UserID;?>" value="<?php echo $user->UserPass;?>">
-                            <input type="hidden" id="UserRegion<?php echo $user->UserID;?>" value='<?php echo json_encode(unserialize($user->AllowRegion));?>'>
-                            <input type="hidden" id="UserEvents<?php echo $user->UserID;?>" value='<?php echo json_encode(unserialize($user->AllowEvents));?>'>
-                            <input type="hidden" id="UserCountry<?php echo $user->UserID;?>" value='<?php echo json_encode(unserialize($user->AllowCountry));?>'>
-                            <a href="javascript:;" onclick="jQuery('#user-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Edit
+                            <a href="javascript:;" 
+                               data-id="{{ $user->UserID }}"
+                               data-first-name="{{ $user->firstname }}"
+                               data-last-name="{{ $user->lastname }}"
+                               data-username="{{ $user->UserName }}"
+                               data-phone="{{ $user->UserPhone }}"
+                               data-level="{{ $user->UserLevel }}"
+                               data-pass="{{ $user->UserPass }}"
+                               data-regions="{{ json_encode($user->AllowRegion) }}"
+                               data-events="{{ json_encode($user->AllowEvents) }}"
+                               data-countries="{{ json_encode($user->AllowCountry) }}"
+                               onclick="jQuery('#user-modal-edit').modal('show');" 
+                               class="btn btn-secondary btn-sm btn-icon icon-left">
+                               Edit
                             </a>
-                            <?php if(Auth::getUsers()->userlevel==1){ ?>
-                            <a href="javascript:;" id="<?php echo $user->UserID;?>" onclick="jQuery('#user-modal-delete').modal('show');" class="btn btn-danger btn-icon">
-                            <i class="icon-white icon-heart"></i> Delete
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <a href="javascript:;" 
+                               data-id="{{ $user->UserID }}" 
+                               onclick="jQuery('#user-modal-delete').modal('show');" 
+                               class="btn btn-danger btn-icon">
+                               <i class="icon-white icon-heart"></i> Delete
                             </a>
-                            <?php } ?>
+                            @endif
                         </td>
                     </tr>
-                    <?php } } ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -84,16 +92,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Are you sure? </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="user-modal-delete-label">Are you sure? </h4>
             </div>
-            <form method="post" action="Action.php" id="UserDelete">
+            <form method="post" action="#" id="UserDelete">
+                @csrf
+                @method('DELETE')
                 <input type="hidden" name="DeleteUserID" id="DeleteUserID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="user">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -105,10 +113,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add User</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="user-modal-label">Add User</h4>
             </div>
-            <form method="post" action="Action.php" id="User">
+            <form method="post" action="{{ route('manage-users.store') }}" id="User">
+                @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -133,26 +142,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Permission Level</label>
-                                <script type="text/javascript">
-                                    jQuery(document).ready(function($)
-                                    {
-                                        $("#sboxit-1").selectBoxIt().on('open', function()
-                                        {
-                                            // Adding Custom Scrollbar
-                                            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                        });
-                                    });
-                                </script>
+                                <label for="sboxit-1" class="control-label">Permission Level</label>
                                 <select class="form-control" id="sboxit-1" name="UserLevel">
                                     <option value="0">Select</option>
-                                    <?php
-                                        if(isset($usertypes->Success) && $usertypes->Success==1){
-                                        	foreach ($usertypes->UserTypes as $key => $usertype) {
-                                        		echo '<option value="'.$usertype->UserTypeId.'">'.$usertype->UserTypeTitle.'</option>';
-                                        	}
-                                        }
-                                        ?>
+                                    @foreach ($usertypes->UserTypes as $usertype)
+                                    <option value="{{ $usertype->UserTypeId }}">{{ $usertype->UserTypeTitle }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -168,61 +163,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">User Password</label>
+                                <label for="UserPassword" class="control-label">User Password</label>
                                 <input type="text" class="form-control" id="UserPassword" name="UserPass" placeholder="">
                             </div>
                         </div>
                     </div>
-                    <!-- Added by khushbu for Add -->
-                    <script type="text/javascript">
-                        jQuery(document).ready(function($)
-                                {
-                                	//code for region
-                                    $("#region").select2({
-                                        placeholder: 'Choose the region.',
-                                        allowClear: true
-                                    }).on('select2-open', function()
-                                    {
-                                        // Adding Custom Scrollbar
-                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                    });
-
-                                    //code for event
-                                    $("#events").select2({
-                                        placeholder: 'Choose the events.',
-                                        allowClear: true
-                                    }).on('select2-open', function()
-                                    {
-                                        // Adding Custom Scrollbar
-                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                    });
-
-                                    //code for country
-                                    $("#country").select2({
-                                        placeholder: 'Choose the countrys.',
-                                        allowClear: true
-                                    }).on('select2-open', function()
-                                    {
-                                        // Adding Custom Scrollbar
-                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                    });
-
-                                });
-                    </script>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">Region</label>
+                                <label for="region" class="control-label">Region</label>
                                 <select class="form-control" id="region" multiple name="Region[]">
                                     <option></option>
                                     <optgroup label="Region">
-                                        <?php
-                                            if(!empty($regions->Regions)) {
-                                                foreach ($regions->Regions as $key => $region) {
-                                                    echo "<option value='".$region->RegionID."'>".$region->RegionName."</option>";
-                                                }
-                                            }
-                                        ?>
+                                        @foreach ($regions->Regions as $region)
+                                        <option value="{{ $region->RegionID }}">{{ $region->RegionName }}</option>
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
@@ -231,19 +186,15 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">Events</label>
+                                <label for="events" class="control-label">Events</label>
                                 <select class="form-control" id="events" multiple name="Events[]">
                                     <option></option>
                                     <optgroup label="Events">
-                                        <?php
-                                            if (!empty($events->Events)) {
-                                                foreach ($events->Events as $key => $region) {
-                                                    foreach ($region as $key=>$event ) {
-                                                        echo "<option value='".$event->EventID."'>".$event->EventName."</option>";
-                                                    }
-                                                }
-                                            }
-                                        ?>
+                                        @foreach ($events->Events as $regionGroup)
+                                            @foreach ($regionGroup as $event)
+                                            <option value="{{ $event->EventID }}">{{ $event->EventName }}</option>
+                                            @endforeach
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
@@ -252,30 +203,23 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">Country</label>
+                                <label for="country" class="control-label">Country</label>
                                 <select class="form-control" id="country" multiple name="Country[]">
                                     <option></option>
                                     <optgroup label="Country">
-                                        <?php
-                                            if (!empty($countries->Country)) {
-                                                foreach ($countries->Country as $key => $Countrys) {
-                                                    echo "<option value='".$Countrys->CountryID."'>".$Countrys->CountryName."</option>";
-                                                }
-                                            }
-                                        ?>
+                                        @foreach ($countries->Country as $Countrys)
+                                        <option value="{{ $Countrys->CountryID }}">{{ $Countrys->CountryName }}</option>
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <!-- Added by khushbu -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-info">Create</button>
                 </div>
-                <input type="hidden" name="action" value="add">
-                <input type="hidden" name="controller" value="user">
             </form>
         </div>
     </div>
@@ -286,21 +230,23 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit User</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="user-modal-edit-label">Edit User</h4>
             </div>
-            <form method="post" action="Action.php" id="UserEdit">
+            <form method="post" action="#" id="UserEdit">
+                @csrf
+                @method('PUT')
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="firstName2" class="control-label">First Name</label>
+                                <label for="FirstNameEdit" class="control-label">First Name</label>
                                 <input type="text" class="form-control" id="FirstNameEdit" name="FirstName" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastName2" class="control-label">Last Name</label>
+                                <label for="LastNameEdit" class="control-label">Last Name</label>
                                 <input type="text" class="form-control" id="LastNameEdit" name="LastName" placeholder="">
                             </div>
                         </div>
@@ -308,32 +254,18 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="username2" class="control-label">Username</label>
+                                <label for="UserNameEdit" class="control-label">Username</label>
                                 <input type="text" class="form-control" id="UserNameEdit" name="UserName" placeholder="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Permission Level</label>
-                                <script type="text/javascript">
-                                    jQuery(document).ready(function($)
-                                    {
-                                        $("#sboxit-2").selectBoxIt().on('open', function()
-                                        {
-                                            // Adding Custom Scrollbar
-                                            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                        });
-                                    });
-                                </script>
+                                <label for="UserLevelEdit" class="control-label">Permission Level</label>
                                 <select class="form-control" id="UserLevelEdit" name="UserLevel">
                                     <option value="0">Select</option>
-                                    <?php
-                                        if(isset($usertypes->Success) && $usertypes->Success==1){
-                                        	foreach ($usertypes->UserTypes as $key => $usertype) {
-                                        		echo '<option value="'.$usertype->UserTypeId.'">'.$usertype->UserTypeTitle.'</option>';
-                                        	}
-                                        }
-                                        ?>
+                                    @foreach ($usertypes->UserTypes as $usertype)
+                                    <option value="{{ $usertype->UserTypeId }}">{{ $usertype->UserTypeTitle }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -341,7 +273,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone2" class="control-label">Phone Number</label>
+                                <label for="UserPhoneEdit" class="control-label">Phone Number</label>
                                 <input type="text" class="form-control" id="UserPhoneEdit" name="UserPhone" placeholder="">
                             </div>
                         </div>
@@ -349,61 +281,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">User Password</label>
+                                <label for="UserPasswordEdit" class="control-label">User Password</label>
                                 <input type="text" class="form-control" id="UserPasswordEdit" name="UserPass" placeholder="">
                             </div>
                         </div>
                     </div>
-                    <!-- Added by khushbu -->
-                    <script type="text/javascript">
-                        jQuery(document).ready(function($)
-                        {
-                        	//code for region
-                            $("#region1").select2({
-                                placeholder: 'Choose the region.',
-                                allowClear: true
-                            }).on('select2-open', function()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-
-                            //code for event
-                            $("#events1").select2({
-                                placeholder: 'Choose the events.',
-                                allowClear: true
-                            }).on('select2-open', function()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-
-                            //code for country
-                            $("#country1").select2({
-                                placeholder: 'Choose the countrys.',
-                                allowClear: true
-                            }).on('select2-open', function()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-
-                        });
-                    </script>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">Region</label>
+                                <label for="region1" class="control-label">Region</label>
                                 <select class="form-control" id="region1" multiple name="Region[]">
                                     <option></option>
                                     <optgroup label="Region">
-                                        <?php
-                                            if (!empty($regions->Regions)) {
-                                                foreach ($regions->Regions as $key => $region) {
-                                                    echo "<option value='".$region->RegionID."'>".$region->RegionName."</option>";
-                                                }
-                                            }
-                                        ?>
+                                        @foreach ($regions->Regions as $region)
+                                        <option value="{{ $region->RegionID }}">{{ $region->RegionName }}</option>
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
@@ -412,19 +304,15 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">Events</label>
+                                <label for="events1" class="control-label">Events</label>
                                 <select class="form-control" id="events1" multiple name="Events[]">
                                     <option></option>
                                     <optgroup label="Events">
-                                        <?php
-                                            if (!empty($events->Events)) {
-                                                foreach ($events->Events as $key => $region) {
-                                                    foreach ($region as $key=>$event ) {
-                                                        echo "<option value='".$event->EventID."'>".$event->EventName."</option>";
-                                                    }
-                                                }
-                                            }
-                                        ?>
+                                        @foreach ($events->Events as $regionGroup)
+                                            @foreach ($regionGroup as $event)
+                                            <option value="{{ $event->EventID }}">{{ $event->EventName }}</option>
+                                            @endforeach
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
@@ -433,30 +321,23 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="phone" class="control-label">Country</label>
+                                <label for="country1" class="control-label">Country</label>
                                 <select class="form-control" id="country1" multiple name="Country[]">
                                     <option></option>
                                     <optgroup label="Country">
-                                        <?php
-                                            if (!empty($countries->Country)) {
-                                                foreach ($countries->Country as $key => $Countrys) {
-                                                    echo "<option value='".$Countrys->CountryID."'>".$Countrys->CountryName."</option>";
-                                                }
-                                            }
-                                        ?>
+                                        @foreach ($countries->Country as $Countrys)
+                                        <option value="{{ $Countrys->CountryID }}">{{ $Countrys->CountryName }}</option>
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <!-- Added by khushbu -->
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="controller" value="user">
                     <input type="hidden" id="UserID" name="UserID" value="">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Save Changes</button>
+                    <button type="button" class="btn btn-info">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -467,60 +348,125 @@
 @push('scripts')
 <script>
     $( document ).ready(function() {
+        // Setup select2 plugins for modals
+        $("#region").select2({
+            placeholder: 'Choose the region.',
+            allowClear: true
+        });
+        $("#events").select2({
+            placeholder: 'Choose the events.',
+            allowClear: true
+        });
+        $("#country").select2({
+            placeholder: 'Choose the countrys.',
+            allowClear: true
+        });
+
+        $("#region1").select2({
+            placeholder: 'Choose the region.',
+            allowClear: true
+        });
+        $("#events1").select2({
+            placeholder: 'Choose the events.',
+            allowClear: true
+        });
+        $("#country1").select2({
+            placeholder: 'Choose the countrys.',
+            allowClear: true
+        });
+
     	$("button.btn-info").click(function(){
     		if($(this).text()=="Create"){
-                //console.log("create");
-    			$( "#User" ).submit();
+    			var form = $( "#User" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Save Changes"){
-                //console.log("edit");
-    			$( "#UserEdit" ).submit();
+    			var form = $( "#UserEdit" );
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     		else if($(this).text()=="Delete"){
-    			$("#UserDelete").submit();
+    			var form = $("#UserDelete");
+                if (form.valid()) {
+                    form.submit();
+                }
     		}
     	});
 
     	$("a.btn-danger").click(function(){
-    		$("#DeleteUserID").val($(this).parent().prev().prev().prev().prev().prev().text());
+            var id = $(this).data('id');
+    		$("#DeleteUserID").val(id);
+            $("#UserDelete").attr('action', '/manage-users/' + id);
     	});
+
     	$("a.btn-secondary").click(function(){
-    		var fullname = $(this).parent().prev().prev().prev().prev().text();
-    		var splitStr = fullname.split(" ");
-    		var UserId = $(this).parent().prev().prev().prev().prev().prev().text();
-    		$("#FirstNameEdit").val(splitStr[0]);
-    		$("#LastNameEdit").val(splitStr[1]);
-    		$("#UserNameEdit").val($(this).parent().prev().prev().prev().text());
-    		$("#UserPhoneEdit").val($(this).parent().prev().prev().text());
+    		var btn = $(this);
+    		var UserId = btn.data('id');
+    		$("#FirstNameEdit").val(btn.data('first-name'));
+    		$("#LastNameEdit").val(btn.data('last-name'));
+    		$("#UserNameEdit").val(btn.data('username'));
+    		$("#UserPhoneEdit").val(btn.data('phone'));
     		$("#UserID").val(UserId);
-    		$("#UserLevelEdit").val($("#UserLevel"+UserId).val());
-    		$("#UserPasswordEdit").val($("#UserPass"+UserId).val());
+    		$("#UserLevelEdit").val(btn.data('level') || 0);
+    		$("#UserPasswordEdit").val(btn.data('pass'));
 
-    		//Manage User Events Blob.
-    		var UserEventsJSON = $("#UserEvents"+UserId).val();
-    		//console.log(UserEventsJSON);
+    		// Manage User Events select2 value binding
     		var UserEventsArray = [];
-    		$.each(JSON.parse(UserEventsJSON),function(index,EDV){
-    			UserEventsArray.push({id:EDV,text:$('#events1 option[value="'+EDV+'"]').text()});
+    		$.each(btn.data('events') || [], function(index, EDV){
+    			UserEventsArray.push({id:EDV, text:$('#events1 option[value="'+EDV+'"]').text()});
     		});
-    		$("#events1").select2('data',UserEventsArray);
+    		$("#events1").select2('data', UserEventsArray);
 
-    		//Manage User Country Blob.
-    		var UserCountryJSON = $("#UserCountry"+UserId).val();
+    		// Manage User Country select2 value binding
     		var UserCountryArray = [];
-    		$.each(JSON.parse(UserCountryJSON),function(index,EDV){
-    			UserCountryArray.push({id:EDV,text:$('#country1 option[value="'+EDV+'"]').text()});
+    		$.each(btn.data('countries') || [], function(index, EDV){
+    			UserCountryArray.push({id:EDV, text:$('#country1 option[value="'+EDV+'"]').text()});
     		});
-    		$("#country1").select2('data',UserCountryArray);
+    		$("#country1").select2('data', UserCountryArray);
 
-    		//Manage User Region Blob.
-    		var UserRegionJSON = $("#UserRegion"+UserId).val();
+    		// Manage User Region select2 value binding
     		var UserRegionArray = [];
-    		$.each(JSON.parse(UserRegionJSON),function(index,EDV){
-    			UserRegionArray.push({id:EDV,text:$('#region1 option[value="'+EDV+'"]').text()});
+    		$.each(btn.data('regions') || [], function(index, EDV){
+    			UserRegionArray.push({id:EDV, text:$('#region1 option[value="'+EDV+'"]').text()});
     		});
-    		$("#region1").select2('data',UserRegionArray);
+    		$("#region1").select2('data', UserRegionArray);
+
+            $("#UserEdit").attr('action', '/manage-users/' + UserId);
     	});
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
+
+        // Reset validation errors and form inputs on modal close
+        $('.modal').on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            if (form.length > 0) {
+                form.each(function() {
+                    this.reset();
+                    $(this).find('select').val(0).trigger('change');
+                    if (typeof $(this).validate === 'function') {
+                        var validator = $(this).validate();
+                        if (validator) {
+                            validator.resetForm();
+                        }
+                    }
+                    $(this).find('.has-error').removeClass('has-error');
+                    $(this).find('.error').removeClass('error');
+                    $(this).find('.help-block').remove();
+                });
+            }
+        });
     });
 </script>
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\Backend\UserRequest', '#User') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\UserRequest', '#UserEdit') !!}
+{!! JsValidator::formRequest('App\Http\Requests\Backend\UserRequest', '#UserDelete') !!}
 @endpush
