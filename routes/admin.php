@@ -22,6 +22,8 @@ use App\Http\Controllers\Backend\{
     SurveyQuestionController,
     SurveyAnswerController,
     DataManagementController,
+    BikeAndTimeController,
+    PreRegEmailController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -93,7 +95,8 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
 
     // Manage Data Management Routes
     Route::get('manage-data-management', [DataManagementController::class, 'index'])->name('manage-data-management.index');
-
+    // Manage PreReg Email Routes
+    Route::get('manage-pre-reg-email', [PreRegEmailController::class, 'index'])->name('manage-pre-reg-email.index');
     // Resource Routes
     Route::resources(
         [
@@ -112,6 +115,7 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-surveys' => SurveyController::class,
             'manage-survey-questions' => SurveyQuestionController::class,
             'manage-survey-answers' => SurveyAnswerController::class,
+            'manage-bikes-and-times' => BikeAndTimeController::class,
         ]
     );
 });

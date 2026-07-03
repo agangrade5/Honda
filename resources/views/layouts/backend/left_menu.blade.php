@@ -129,14 +129,14 @@
             <span class="title">Data Management</span>
             </a>
         </li>
-        <li>
-            <a href="ManageBikesAndTimes.php">
+        <li class="{{ request()->routeIs('manage-bikes-and-times.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-bikes-and-times.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Manage Bikes and Times</span>
             </a>
         </li>
-        <li>
-            <a href="PreRegEmails.php">
+        <li class="{{ request()->routeIs('manage-pre-reg-email.*') ? 'active' : '' }}">
+            <a href="{{ route('manage-pre-reg-email.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Pre Reg-Emails</span>
             </a>
