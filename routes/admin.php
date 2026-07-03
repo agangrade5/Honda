@@ -21,6 +21,8 @@ use App\Http\Controllers\Backend\{
     SurveyController,
     SurveyQuestionController,
     SurveyAnswerController,
+    DataManagementController,
+    BikeAndTimeController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -90,6 +92,9 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::delete('/{manage_sms_template}', 'destroy')->name('destroy');
         });
 
+    // Manage Data Management Routes
+    Route::get('manage-data-management', [DataManagementController::class, 'index'])->name('manage-data-management.index');
+
     // Resource Routes
     Route::resources(
         [
@@ -108,6 +113,7 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             'manage-surveys' => SurveyController::class,
             'manage-survey-questions' => SurveyQuestionController::class,
             'manage-survey-answers' => SurveyAnswerController::class,
+            'manage-bikes-and-times' => BikeAndTimeController::class,
         ]
     );
 });
