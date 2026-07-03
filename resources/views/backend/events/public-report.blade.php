@@ -806,42 +806,7 @@
                     </div>
                 </div>
         <!-- Demo Charts -->
-        <div class="row" style="margin-top:20px;">
-            <div class="col-sm-6">
-                <div class="chart-item-bg xe-label">
-                    <p class="num" style="padding-top:10px; margin-left:15px; font-size:28px !important; color:black;">Age Demographics:</p>
-                    <div id="age-demo-chart" style="height:250px; padding:0 15px 15px 15px;"></div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="chart-item-bg xe-label">
-                    <p class="num" style="padding-top:10px; margin-left:15px; font-size:28px !important; color:black;">Intent to Purchase:</p>
-                    <div id="intent-to-purchase-chart" style="height:250px; padding:0 15px 15px 15px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row" style="margin-top:20px;">
-            <div class="col-sm-6">
-                <div class="chart-item-bg xe-label">
-                    <p class="num" style="padding-top:10px; margin-left:15px; font-size:28px !important; color:black;">Intent to Learn:</p>
-                    <div id="intent-to-learn-chart" style="height:250px; padding:0 15px 15px 15px;"></div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="chart-item-bg xe-label">
-                    <p class="num" style="padding-top:10px; margin-left:15px; font-size:28px !important; color:black;">Previously Owned Brands:</p>
-                    <div id="previously-owned-chart" style="height:250px; padding:0 15px 15px 15px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row" style="margin-top:20px;">
-            <div class="col-sm-12">
-                <div class="chart-item-bg xe-label">
-                    <p class="num" style="padding-top:10px; margin-left:15px; font-size:28px !important; color:black;">Currently Owned Brands:</p>
-                    <div id="currently-owned-chart" style="height:250px; padding:0 15px 15px 15px;"></div>
-                </div>
-            </div>
-        </div>
+        
 
             </div>{{-- /modal-body --}}
             <div class="modal-footer">
