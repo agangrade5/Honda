@@ -612,7 +612,7 @@
                             <div class="xe-icon"><i class="linecons-cloud"></i></div>
                             <div class="xe-label">
                                 <strong class="num" id="htmlResponse2"><img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle"/></strong>
-                                <span>Total Dyno</span>
+                                <span>Total Jumpstart</span>
                             </div>
                         </div>
                     </div>
@@ -632,7 +632,7 @@
                             <div class="xe-icon"><i class="linecons-cloud"></i></div>
                             <div class="xe-label">
                                 <strong class="num" id="htmlResponse4"><img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle"/></strong>
-                                <span>Unique Demo Registrations</span>
+                                <span>Total Demo Registrations</span>
                             </div>
                         </div>
                     </div>
@@ -653,6 +653,85 @@
                             <div class="xe-label">
                                 <strong class="num" id="htmlResponse8"><img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle"/></strong>
                                 <span>Average Female Age</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 1: Active Military and Market Segments -->
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-6">
+                        <div class="chart-item-bg" style="background-color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #e4e4e4;">
+                            <p style="font-size: 16px; color: #333; margin-bottom: 15px; font-weight: bold; text-transform: uppercase;">Active Military</p>
+                            <div id="possible-answer-demo-chart" style="height:250px; position: relative;">
+                                <div id="possible-answer-demo-loader" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                                    <img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle" />
+                                </div>
+                                <div style="height: 250px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="chart-item-bg" style="background-color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #e4e4e4;">
+                            <p style="font-size: 16px; color: #333; margin-bottom: 15px; font-weight: bold; text-transform: uppercase;">Market Segments</p>
+                            <div id="customer-segments-demo-chart" style="height:250px; position: relative;">
+                                <div id="customer-segments-demo-loader" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                                    <img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle" />
+                                </div>
+                                <div style="height: 250px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 2: Intent to Purchase and Age Demographics -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="chart-item-bg" style="background-color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #e4e4e4;">
+                            <p style="font-size: 16px; color: #333; margin-bottom: 15px; font-weight: bold; text-transform: uppercase;">Intent to Purchase</p>
+                            <div id="intent-to-purchase-demo-chart" style="height: 300px; position: relative;">
+                                <div id="intent-to-purchase-demo-loader" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                                    <img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="chart-item-bg" style="background-color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #e4e4e4;">
+                            <p style="font-size: 16px; color: #333; margin-bottom: 15px; font-weight: bold; text-transform: uppercase;">Age Demographics</p>
+                            <div id="age-demographics-demo-chart" style="height: 300px; position: relative;">
+                                <div id="age-demographics-demo-loader" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                                    <img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 3: Currently Owned Brand -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="chart-item-bg" style="background-color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #e4e4e4;">
+                            <p style="font-size: 16px; color: #333; margin-bottom: 15px; font-weight: bold; text-transform: uppercase;">Currently Owned Brand</p>
+                            <div id="currently-owned-demo-chart" style="height: 250px; position: relative;">
+                                <div id="currently-owned-demo-loader" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                                    <img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 4: Demo Rides by Group -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="chart-item-bg" style="background-color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #e4e4e4;">
+                            <p style="font-size: 16px; color: #333; margin-bottom: 15px; font-weight: bold; text-transform: uppercase;">Demo Rides by Group</p>
+                            <div id="report-demo-chart-wrapper" style="height: 250px; position: relative;">
+                                <div id="report-demo-loader" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                                    <img src="{{ asset('assets/images/ajax-loader.gif') }}" class="img-responsive img-circle" />
+                                </div>
+                                <div id="report-demo-chart" style="height: 250px;"></div>
                             </div>
                         </div>
                     </div>
@@ -699,52 +778,30 @@ jQuery(document).ready(function($) {
 
     // Demo report date-range button
     $("#demoReportBtn").click(function() {
-        $('#htmlResponse1').html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle"/>');
-        $('#htmlResponse2').html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle"/>');
-        $('#htmlResponse3').html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle"/>');
-        $('#htmlResponse4').html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle"/>');
-        $('#htmlResponse7').html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle"/>');
-        $('#htmlResponse8').html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle"/>');
-
-        $.ajax({
-            url: '{{ route("event.report.demo", $encodedId) }}',
-            data: {
-                startDate: $("#startDate").val(),
-                endDate:   $("#endDate").val()
-            },
-            dataType: 'json'
-        }).done(function(data) {
-            if (data) {
-                $('#htmlResponse1').html(data.TotalDemoRides    || 0);
-                $('#htmlResponse2').html(data.Jumpstart         || 0);
-                $('#htmlResponse3').html(data.LeadGen           || 0);
-                $('#htmlResponse4').html(data.DemoRegistrations || 0);
-            }
-        });
-
-        $.ajax({
-            url: '{{ route("event.report.stats", $encodedId) }}',
-            data: {
-                startDate: $("#startDate").val(),
-                endDate:   $("#endDate").val()
-            },
-            dataType: 'json'
-        }).done(function(data) {
-            if (data) {
-                $('#htmlResponse7').html(data.AverageAgeMale   || 0);
-                $('#htmlResponse8').html(data.AverageAgeFemale || 0);
-            }
-        });
+        loadDemoReportData($("#startDate").val(), $("#endDate").val());
     });
 });
 
-function popUPDemoReport() {
-    // Auto-fire initial load with today's date
-    $('#htmlResponse1,#htmlResponse2,#htmlResponse3,#htmlResponse4,#htmlResponse7,#htmlResponse8')
-        .html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle"/>');
+function loadDemoReportData(startDate, endDate) {
+    // Show loaders on widgets
+    jQuery('#htmlResponse1, #htmlResponse2, #htmlResponse3, #htmlResponse4, #htmlResponse7, #htmlResponse8')
+        .html('<img src="{{ asset("assets/images/ajax-loader.gif") }}" class="img-responsive img-circle" />');
 
+    // Show loaders on charts
+    jQuery('#possible-answer-demo-loader, #customer-segments-demo-loader, #intent-to-purchase-demo-loader, #age-demographics-demo-loader, #currently-owned-demo-loader, #report-demo-loader').show();
+    
+    // Empty charts/containers
+    jQuery("#possible-answer-demo-chart div, #customer-segments-demo-chart div").empty();
+    jQuery("#intent-to-purchase-demo-chart, #age-demographics-demo-chart, #currently-owned-demo-chart, #report-demo-chart").empty();
+
+    var params = {};
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
+
+    // 1. demoReports (TDR, Jumpstart, LeadGen, DemoRegistrations)
     jQuery.ajax({
         url: '{{ route("event.report.demo", $encodedId) }}',
+        data: params,
         dataType: 'json'
     }).done(function(data) {
         if (data) {
@@ -755,15 +812,216 @@ function popUPDemoReport() {
         }
     });
 
+    // 2. demoReports2 (Market Segments)
+    jQuery.ajax({
+        url: '{{ route("event.report.demo2", $encodedId) }}',
+        data: params,
+        dataType: 'json'
+    }).done(function(data) {
+        if (data) {
+            var doughnut1_data_source_demo = [
+                {segment: "Young Adult", val: data.segment1 || 0},
+                {segment: "Core", val: data.segment2 || 0},
+                {segment: "Female", val: data.segment3 || 0},
+                {segment: "Hispanic", val: data.segment4 || 0},
+                {segment: "African American", val: data.segment5 || 0},
+                {segment: "Other", val: data.segment6 || 0},
+            ];
+
+            var segmentTotalDemo = data.segmentTotal || 1;
+
+            jQuery("#customer-segments-demo-chart div").dxPieChart({
+                dataSource: doughnut1_data_source_demo,
+                tooltip: {
+                    enabled: true,
+                    customizeText: function() {
+                        return this.argumentText + "<br/>" + this.valueText + " (" + (((parseInt(this.valueText)) / parseInt(segmentTotalDemo)) * 100).toFixed(2) + "%)";
+                    }
+                },
+                size: { height: 250 },
+                legend: { visible: true },
+                series: [{
+                    type: "doughnut",
+                    argumentField: "segment",
+                    label: { visible: true },
+                }],
+                palette: ['#fcd036','#0E62C7','#00b19d','#F5821F','#CE3A3A','#14722A'],
+            });
+        }
+        jQuery("#customer-segments-demo-loader").hide();
+    });
+
+    // 3. statsReports (Demographics, Active Military, Brand Charts)
     jQuery.ajax({
         url: '{{ route("event.report.stats", $encodedId) }}',
+        data: params,
         dataType: 'json'
     }).done(function(data) {
         if (data) {
             jQuery('#htmlResponse7').html(data.AverageAgeMale   || 0);
             jQuery('#htmlResponse8').html(data.AverageAgeFemale || 0);
+
+            // Active Military Doughnut Chart
+            var doughnut_military = [
+                {possibleAnswer: "YES, ACTIVE", val: data.possibleAnswerYesActive || 0},
+                {possibleAnswer: "YES, VETERAN", val: data.possibleAnswerYesVeteran || 0},
+                {possibleAnswer: "NO", val: data.possibleAnswerNo || 0},
+            ];
+            var totalAnswer = data.possibleAnswerTotal || 1;
+
+            jQuery("#possible-answer-demo-chart div").dxPieChart({
+                dataSource: doughnut_military,
+                tooltip: {
+                    enabled: true,
+                    customizeText: function() {
+                        return this.argumentText + "<br/>" + this.valueText + " (" + ((parseInt(this.valueText) / parseInt(totalAnswer)) * 100).toFixed(2) + "%)";
+                    }
+                },
+                size: { height: 250 },
+                legend: { visible: true },
+                series: [{
+                    type: "doughnut",
+                    argumentField: "possibleAnswer",
+                    label: { visible: true },
+                }],
+                palette: ['#68b828','#7c38bc','#0e62c7'],
+            });
+
+            // Intent to Purchase Bar Chart
+            jQuery("#intent-to-purchase-demo-chart").dxChart({
+                dataSource: [
+                    {stat: "Less than 3 Months", time: data.IntendToPurchaseGraph?.LessThanThreeMonths || 0},
+                    {stat: "3 Months to a Year", time: data.IntendToPurchaseGraph?.ThreeToTwelveMonths || 0},
+                    {stat: "More than a Year",   time: data.IntendToPurchaseGraph?.MoreThanOneYear || 0},
+                    {stat: "Not Sure",           time: data.IntendToPurchaseGraph?.NotSure || 0}
+                ],
+                tooltip: {
+                    enabled: true,
+                    customizeText: function() { return this.argumentText + "<br/>" + this.valueText; }
+                },
+                series: {
+                    argumentField: "stat",
+                    valueField: "time",
+                    name: "Time",
+                    type: "bar",
+                    color: '#c00000',
+                    label: { visible: true },
+                },
+                commonAxisSettings: {
+                    label: { visible: true },
+                    grid: { visible: true }
+                },
+                legend: { visible: true },
+                argumentAxis: { valueMarginsEnabled: true }
+            });
+
+            // Age Demographics Bar Chart
+            jQuery("#age-demographics-demo-chart").dxChart({
+                dataSource: [
+                    {stat: "Under 30", age: data.UnderThirty || 0},
+                    {stat: "30 - 40",  age: data.BetweenThirtyFourty || 0},
+                    {stat: "40 - 50",  age: data.BetweenFourtyFifty || 0},
+                    {stat: "Above 50", age: data.AboveFifty || 0}
+                ],
+                tooltip: {
+                    enabled: true,
+                    customizeText: function() { return this.argumentText + "<br/>" + this.valueText; }
+                },
+                series: {
+                    argumentField: "stat",
+                    valueField: "age",
+                    name: "Age Average",
+                    type: "bar",
+                    color: '#7c38bc',
+                    label: { visible: true },
+                },
+                commonAxisSettings: {
+                    label: { visible: true },
+                    grid: { visible: true }
+                },
+                legend: { visible: true },
+                argumentAxis: { valueMarginsEnabled: true }
+            });
+
+            // Currently Owned Brand Chart
+            jQuery("#currently-owned-demo-chart").dxChart({
+                dataSource: [
+                    {stat: "Harley-Davidson", brand: data.CurrentlyOwnedGraph?.HarleyDavidson || 0},
+                    {stat: "BMW",             brand: data.CurrentlyOwnedGraph?.BMW || 0},
+                    {stat: "Ducati",          brand: data.CurrentlyOwnedGraph?.Ducati || 0},
+                    {stat: "Honda",           brand: data.CurrentlyOwnedGraph?.Honda || 0},
+                    {stat: "Kawasaki",        brand: data.CurrentlyOwnedGraph?.Kawasaki || 0},
+                    {stat: "Suzuki",          brand: data.CurrentlyOwnedGraph?.Suzuki || 0},
+                    {stat: "Triumph",         brand: data.CurrentlyOwnedGraph?.Triumph || 0},
+                    {stat: "Yamaha",          brand: data.CurrentlyOwnedGraph?.Yamaha || 0},
+                    {stat: "Other",           brand: data.CurrentlyOwnedGraph?.Other || 0},
+                ],
+                tooltip: {
+                    enabled: true,
+                    customizeText: function() { return this.argumentText + "<br/>" + this.valueText; }
+                },
+                series: {
+                    argumentField: "stat",
+                    valueField: "brand",
+                    name: "Brand",
+                    type: "bar",
+                    color: '#F5821F',
+                    label: { visible: true },
+                },
+                commonAxisSettings: {
+                    label: { visible: true },
+                    grid: { visible: true }
+                },
+                legend: { visible: true },
+                argumentAxis: { valueMarginsEnabled: true }
+            });
         }
+        jQuery("#possible-answer-demo-loader, #intent-to-purchase-demo-loader, #age-demographics-demo-loader, #currently-owned-demo-loader").hide();
     });
+
+    // 4. demoGraphReports (Demo rides by group)
+    jQuery.ajax({
+        url: '{{ route("event.report.graph", $encodedId) }}',
+        data: params,
+        dataType: 'json'
+    }).done(function(data) {
+        var datasourceVar = [];
+        if (data) {
+            jQuery.each(data, function(index, val) {
+                datasourceVar.push({
+                    stat: index,
+                    age: val.count || 0
+                });
+            });
+        }
+
+        jQuery("#report-demo-chart").dxChart({
+            dataSource: datasourceVar,
+            tooltip: {
+                enabled: true,
+                customizeText: function() { return this.argumentText + "<br/>" + this.valueText; }
+            },
+            series: {
+                argumentField: "stat",
+                valueField: "age",
+                name: "Number of Rides",
+                type: "bar",
+                color: '#7c38bc',
+                label: { visible: true },
+            },
+            commonAxisSettings: {
+                label: { visible: true },
+                grid: { visible: true }
+            },
+            legend: { visible: true },
+            argumentAxis: { valueMarginsEnabled: true }
+        });
+        jQuery("#report-demo-loader").hide();
+    });
+}
+
+function popUPDemoReport() {
+    loadDemoReportData();
 }
 </script>
 
