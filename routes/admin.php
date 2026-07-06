@@ -110,7 +110,13 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::post('/select', 'select')->name('select');
         });
     // Manage Generate Cards Routes
-    Route::get('generate-cards', [GenerateCardController::class, 'index'])->name('generate-cards.index');
+    Route::prefix('generate-cards')
+        ->name('generate-cards.')
+        ->controller(GenerateCardController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+        });
     // Resource Routes
     Route::resources(
         [

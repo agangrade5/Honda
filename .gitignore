@@ -19,6 +19,7 @@
 /public/hot
 /public/storage
 /public/API
+/public/history
 /storage/*.key
 /storage/pail
 /vendor
