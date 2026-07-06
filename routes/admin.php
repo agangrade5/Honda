@@ -117,6 +117,16 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'store')->name('store');
         });
+    // Manage Bikes and Times custom model actions
+    Route::prefix('manage-bikes-and-times')
+        ->name('manage-bikes-and-times.')
+        ->controller(BikeAndTimeController::class)
+        ->group(function () {
+            Route::post('/{id}/add-model', 'addModel')->name('add-model');
+            Route::post('/{id}/edit-model', 'editModel')->name('edit-model');
+            Route::post('/{id}/delete-model', 'deleteModel')->name('delete-model');
+            Route::post('/{id}/apply-to-all', 'applyToAll')->name('apply-to-all');
+        });
     // Resource Routes
     Route::resources(
         [
