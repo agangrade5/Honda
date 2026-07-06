@@ -149,11 +149,18 @@
 	@if(session('msg') === 'Error')
 	<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert">
 		<div class="toast toast-error" style="">
-			<button class="toast-close-button" role="button" onclick="jQuery('#toast-container').remove();">×</button>
+			<button class="toast-close-button" role="button">×</button>
 			<div class="toast-title">Invalid Login!</div>
 			<div class="toast-message">You have entered wrong user credentials, please try again.</div>
 		</div>
 	</div>
+	<script>
+	jQuery(document).ready(function($) {
+		$(document).on('click', '#toast-container .toast-close-button', function() {
+			$('#toast-container').remove();
+		});
+	});
+	</script>
 	@endif
 
 </body>
