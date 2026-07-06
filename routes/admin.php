@@ -101,7 +101,14 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
     Route::match(['get', 'post'], 'manage-pre-reg-email', [PreRegEmailController::class, 'index'])->name('manage-pre-reg-email.index');
     Route::post('manage-pre-reg-email/send', [PreRegEmailController::class, 'sendEmail'])->name('manage-pre-reg-email.send');
     // Manage PreReg Html Routes
-    Route::get('manage-pre-reg-html', [PreRegHtmlController::class, 'index'])->name('manage-pre-reg-html.index');
+    Route::prefix('manage-pre-reg-html')
+        ->name('manage-pre-reg-html.')
+        ->controller(PreRegHtmlController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::post('/select', 'select')->name('select');
+        });
     // Manage Generate Cards Routes
     Route::get('generate-cards', [GenerateCardController::class, 'index'])->name('generate-cards.index');
     // Resource Routes
