@@ -5,21 +5,23 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg']) && $_SESSION['msg'] == 'Email has send successfully.'){ ?>
-    <div class="dx-success">
-        <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+
+    @if(session('msg'))
+        @if(session('msg') == 'Email has send successfully.')
+        <div class="dx-success">
+            <div>
+                <p>{{ session('msg') }}</p>
+            </div>
         </div>
-    </div>
-    <?php } else if(isset($_SESSION['msg']) && !empty($_SESSION['msg']) ){ ?>
-    <div class="dx-warning">
-        <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+        @else
+        <div class="dx-warning">
+            <div>
+                <p>{{ session('msg') }}</p>
+            </div>
         </div>
-    </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+        @endif
+    @endif
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Customers</h3>
@@ -30,17 +32,18 @@
                 </a>
             </div>
         </div>
-        <form id="customerEditDate" method="post" action="PreRegEmails.php">
+        <form id="customerEditDate" method="post" action="{{ route('manage-pre-reg-email.index') }}">
+            @csrf
             <div class="col-sm-4 pd-left-zero">
                 <div class="form-group">
                     <label class="control-label">Select Start Date</label>
-                    <input type="text" id="NHRAstartDate" required="" name="NHRAstartDate" class="form-control input-append date form_datetime" data-format="mm/dd/yyyy" value="<?php if(isset($NHRAstartDate)) echo $NHRAstartDate; else echo date('m/01/Y');?>" size="100">
+                    <input type="text" id="NHRAstartDate" required="" name="NHRAstartDate" class="form-control input-append date form_datetime" data-format="mm/dd/yyyy" value="{{ $NHRAstartDate }}" size="100">
                 </div>
             </div>
             <div class="col-sm-4 pd-left-zero">
                 <div class="form-group">
                     <label class="control-label">Select End Date</label>
-                    <input type="text" id="NHRAendDate" required="" name="NHRAendDate" class="form-control input-append date form_datetime" data-format="mm/dd/yyyy" value="<?php if(isset($NHRAendDate)) echo $NHRAendDate; else echo date('m/30/Y');?>" size="100">
+                    <input type="text" id="NHRAendDate" required="" name="NHRAendDate" class="form-control input-append date form_datetime" data-format="mm/dd/yyyy" value="{{ $NHRAendDate }}" size="100">
                 </div>
             </div>
             <div class="col-sm-4">
@@ -60,20 +63,20 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if(isset($customers) && !empty($customers)){
-                            foreach ($customers as $key => $customer) { ?>
-                    <tr>
-                        <td><?php echo $customer['custid'];?></td>
-                        <td><?php echo $customer['custfname'].' '.$customer['custlname'];?></td>
-                        <td><?php echo $customer['custemail'];?></td>
-                        <td>
-                            <a href="javascript:;" onclick="jQuery('#customer-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
-                            Resend Email
-                            </a>
-                        </td>
-                    </tr>
-                    <?php } } ?>
+                    @if(isset($customers) && !$customers->isEmpty())
+                        @foreach ($customers as $customer)
+                        <tr>
+                            <td>{{ $customer->custid }}</td>
+                            <td>{{ $customer->custfname . ' ' . $customer->custlname }}</td>
+                            <td>{{ $customer->custemail }}</td>
+                            <td>
+                                <a href="javascript:;" onclick="jQuery('#customer-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
+                                Resend Email
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
             <script>
@@ -105,11 +108,10 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form id="customerEdit" method="post" action="PreRegEmails.php">
+                        <form id="customerEdit" method="post" action="{{ route('manage-pre-reg-email.send') }}">
+                            @csrf
                             <div class="form-group">
                                 <label for="field-1" class="control-label">Customer Email Address</label>
-                                <input type="hidden" name="action" value="editEmail">
-                                <input type="hidden" name="controller" value="customer">
                                 <input type="hidden" id="customerID" name="customerID" value="">
                                 <input type="text" class="form-control" id="customerEmailEdit" name="customerEmail" placeholder="" required>
                             </div>

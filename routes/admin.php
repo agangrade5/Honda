@@ -97,7 +97,8 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
     // Manage Data Management Routes
     Route::get('manage-data-management', [DataManagementController::class, 'index'])->name('manage-data-management.index');
     // Manage PreReg Email Routes
-    Route::get('manage-pre-reg-email', [PreRegEmailController::class, 'index'])->name('manage-pre-reg-email.index');
+    Route::match(['get', 'post'], 'manage-pre-reg-email', [PreRegEmailController::class, 'index'])->name('manage-pre-reg-email.index');
+    Route::post('manage-pre-reg-email/send', [PreRegEmailController::class, 'sendEmail'])->name('manage-pre-reg-email.send');
     // Manage PreReg Html Routes
     Route::get('manage-pre-reg-html', [PreRegHtmlController::class, 'index'])->name('manage-pre-reg-html.index');
     // Resource Routes
