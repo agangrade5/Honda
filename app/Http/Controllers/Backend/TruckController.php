@@ -62,7 +62,7 @@ class TruckController extends Controller
                 ->update(['truckid' => $truck->truckid]);
         }
 
-        return redirect()->back()->with('msg', 'The Truck has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Truck has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -85,7 +85,7 @@ class TruckController extends Controller
                 ->update(['truckid' => $truck->truckid]);
         }
 
-        return redirect()->back()->with('msg', 'The Truck has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Truck has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -100,7 +100,7 @@ class TruckController extends Controller
         $truck = Truck::findOrFail($id);
         $truck->delete();
 
-        return redirect()->back()->with('msg', 'The Truck has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Truck has been deleted successfully', 'status' => 'success']);
     }
 
     /**

@@ -70,7 +70,7 @@ class PreRegEmailController extends Controller
         $customer = Customer::where('custid', $customerId)->first();
 
         if (!$trans || !$customer) {
-            return redirect()->back()->with('msg', 'Customer or Transaction not found.');
+            return redirect()->back()->with(['msg' => 'Customer or Transaction not found.', 'status' => 'error']);
         }
 
         $appLabel = "Digital Pass";
@@ -78,24 +78,24 @@ class PreRegEmailController extends Controller
         $cardNumber = $customer->cardnumber;
 
         if ($eventId == 0 || empty($eventId)) {
-            return redirect()->back()->with('msg', 'This customer does not have an Event ID.');
+            return redirect()->back()->with(['msg' => 'This customer does not have an Event ID.', 'status' => 'error']);
         }
 
         $event = Event::where('eventid', $eventId)->first();
         if (!$event) {
-            return redirect()->back()->with('msg', 'This customer does not have an Event ID.');
+            return redirect()->back()->with(['msg' => 'This customer does not have an Event ID.', 'status' => 'error']);
         }
 
         $emailTemplateId = $event->registrationsuccessfulemailtemplate;
         $eventName = $event->eventname;
 
         if (!$emailTemplateId) {
-            return redirect()->back()->with('msg', 'No registration success email template configured for this event.');
+            return redirect()->back()->with(['msg' => 'No registration success email template configured for this event.', 'status' => 'error']);
         }
 
         $template = EmailTemplate::where('templateid', $emailTemplateId)->first();
         if (!$template) {
-            return redirect()->back()->with('msg', 'Email template not found.');
+            return redirect()->back()->with(['msg' => 'Email template not found.', 'status' => 'error']);
         }
 
         $emailSubject = $template->emailsubj;
@@ -156,9 +156,9 @@ class PreRegEmailController extends Controller
                 ->where('event_id', $eventId)
                 ->update(['is_sent' => 1]);
 
-            return redirect()->back()->with('msg', 'Email has send successfully.');
+            return redirect()->back()->with(['msg' => 'Email has send successfully.', 'status' => 'success']);
         } catch (\Exception $e) {
-            return redirect()->back()->with('msg', 'Error sending email: ' . $e->getMessage());
+            return redirect()->back()->with(['msg' => 'Error sending email: ' . $e->getMessage(), 'status' => 'error']);
         }
     }
 }

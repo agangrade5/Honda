@@ -112,7 +112,7 @@ class UserController extends Controller
             'clientid' => 1,
         ]);
 
-        return redirect()->back()->with('msg', 'The User has been created successfully');
+        return redirect()->back()->with(['msg' => 'The User has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -134,7 +134,7 @@ class UserController extends Controller
             'allowcountry' => serialize($request->input('Country', [])),
         ]);
 
-        return redirect()->back()->with('msg', 'The User has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The User has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -146,7 +146,7 @@ class UserController extends Controller
         $user = User::findOrFail($userId);
         $user->delete();
 
-        return redirect()->back()->with('msg', 'The User has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The User has been deleted successfully', 'status' => 'success']);
     }
 
     /**

@@ -33,7 +33,7 @@ class RegionsController extends Controller
             'clientid' => auth()->user()?->clientid ?? 1,
         ]);
 
-        return redirect()->back()->with('msg', 'The Region has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Region has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -46,7 +46,7 @@ class RegionsController extends Controller
             'regionname' => $request->input('region_name'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Region has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Region has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -57,6 +57,6 @@ class RegionsController extends Controller
         $region = ReportRegion::findOrFail($id);
         $region->delete();
 
-        return redirect()->back()->with('msg', 'The Region has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Region has been deleted successfully', 'status' => 'success']);
     }
 }

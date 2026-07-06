@@ -274,7 +274,7 @@ class ImportVehiclesController extends Controller
         }
         $msg .= $insertedCount . ' vehicles created successfully';
 
-        session()->flash('msg', $msg);
+        session()->flash(['msg' => $msg, 'status' => 'success']);
 
         return response()->json([
             'Message' => 'Success',

@@ -36,7 +36,7 @@ class GroupController extends Controller
             'groupname' => $request->input('GroupName'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Group has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Group has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -49,7 +49,7 @@ class GroupController extends Controller
             'groupname' => $request->input('GroupName'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Group has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Group has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -60,6 +60,6 @@ class GroupController extends Controller
         $group = VehicleGroup::findOrFail($id);
         $group->delete();
 
-        return redirect()->back()->with('msg', 'The Group has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Group has been deleted successfully', 'status' => 'success']);
     }
 }

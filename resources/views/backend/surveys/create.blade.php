@@ -23,10 +23,16 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    @if(session('msg'))
+    @if(session('status') == 'error')
     <div class="dx-warning">
         <div>
-            <p>{{ session('msg') }}</p>
+            <p>{!! session('msg') !!}</p>
+        </div>
+    </div>
+    @elseif(session('status') == 'success')
+    <div class="dx-success">
+        <div>
+            <p>{!! session('msg') !!}</p>
         </div>
     </div>
     @endif

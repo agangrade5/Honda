@@ -58,7 +58,7 @@ class RestrictedRiderController extends Controller
             'restricttime' => now(),
         ]);
 
-        return redirect()->back()->with('msg', 'The Restricted Rider has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Restricted Rider has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -72,7 +72,7 @@ class RestrictedRiderController extends Controller
             'restrictcomment' => $request->input('RestrictComment'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Restricted Rider has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Restricted Rider has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -83,6 +83,6 @@ class RestrictedRiderController extends Controller
         $rider = RestrictedRider::findOrFail($id);
         $rider->delete();
 
-        return redirect()->back()->with('msg', 'The Restricted Rider has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Restricted Rider has been deleted successfully', 'status' => 'success']);
     }
 }

@@ -47,7 +47,7 @@ class EmailTemplateController extends Controller
             'clientid' => 1,
         ]);
 
-        return redirect()->back()->with('msg', 'The Email Template has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Email Template has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -62,7 +62,7 @@ class EmailTemplateController extends Controller
             'templateblob' => $request->input('TemplateBlob1'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Email Template has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Email Template has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -74,7 +74,7 @@ class EmailTemplateController extends Controller
         $template = EmailTemplate::findOrFail($templateId);
         $template->delete();
 
-        return redirect()->back()->with('msg', 'The Email Template has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Email Template has been deleted successfully', 'status' => 'success']);
     }
 
     /**
@@ -91,9 +91,9 @@ class EmailTemplateController extends Controller
                 $message->to($to)
                         ->subject($subject);
             });
-            return redirect()->back()->with('msg', 'The Test Email has been sent successfully');
+            return redirect()->back()->with(['msg' => 'The Test Email has been sent successfully', 'status' => 'success']);
         } catch (\Exception $e) {
-            return redirect()->back()->with('msg', 'Error sending test email: ' . $e->getMessage());
+            return redirect()->back()->with(['msg' => 'Error sending test email: ' . $e->getMessage(), 'status' => 'error']);
         }
     }
 }

@@ -69,7 +69,7 @@ class ModelsController extends Controller
             'clientid' => '1',
         ]);
 
-        return redirect()->back()->with('msg', 'The Model has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Model has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -89,7 +89,7 @@ class ModelsController extends Controller
             'groupid' => $groupId,
         ]);
 
-        return redirect()->back()->with('msg', 'The Model has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Model has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -101,6 +101,6 @@ class ModelsController extends Controller
         $model = HondaModel::findOrFail($modelId);
         $model->delete();
 
-        return redirect()->back()->with('msg', 'The Model has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Model has been deleted successfully', 'status' => 'success']);
     }
 }

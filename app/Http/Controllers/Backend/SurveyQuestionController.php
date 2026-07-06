@@ -72,9 +72,9 @@ class SurveyQuestionController extends Controller
 
         $surveyId = $request->input('SurveyIndex');
         if ($surveyId) {
-            return redirect()->route('manage-surveys.edit', $surveyId)->with('msg', 'The Question has been created successfully');
+            return redirect()->route('manage-surveys.edit', $surveyId)->with(['msg' => 'The Question has been created successfully', 'status' => 'success']);
         } else {
-            return redirect()->route('manage-surveys.create')->with('msg', 'The Question has been created successfully');
+            return redirect()->route('manage-surveys.create')->with(['msg' => 'The Question has been created successfully', 'status' => 'success']);
         }
     }
 
@@ -96,7 +96,7 @@ class SurveyQuestionController extends Controller
         $question_data = $questions[$qid] ?? null;
 
         if (!$question_data) {
-            return redirect()->back()->with('msg', 'Question not found in session.');
+            return redirect()->back()->with(['msg' => 'Question not found in session.', 'status' => 'error']);
         }
 
         session(['answers' => isset($question_data->Answers) ? (array)$question_data->Answers : []]);
@@ -141,9 +141,9 @@ class SurveyQuestionController extends Controller
 
         $surveyId = $request->input('SurveyIndex');
         if ($surveyId) {
-            return redirect()->route('manage-surveys.edit', $surveyId)->with('msg', 'The Question has been updated successfully');
+            return redirect()->route('manage-surveys.edit', $surveyId)->with(['msg' => 'The Question has been updated successfully', 'status' => 'success']);
         } else {
-            return redirect()->route('manage-surveys.create')->with('msg', 'The Question has been updated successfully');
+            return redirect()->route('manage-surveys.create')->with(['msg' => 'The Question has been updated successfully', 'status' => 'success']);
         }
     }
 
@@ -161,6 +161,6 @@ class SurveyQuestionController extends Controller
             session(['questions' => $questions]);
         }
 
-        return redirect()->back()->with('msg', 'The Question has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Question has been deleted successfully', 'status' => 'success']);
     }
 }
