@@ -134,8 +134,8 @@
         });
 
         // View Signature Trigger
-        $( "#example-1" ).on( "click", "tbody tr td a.btn-secondary", function() {
-            var WaiverDID = $(this).parent().prev().prev().prev().prev().text();
+        $( "#example-1" ).on( "click", "tbody tr td a.btn-view-signature", function() {
+            var WaiverDID = $(this).attr('id');
             $("#WaiverTitle").text($(this).parent().prev().text());
             
             var htmlData = $("#WaiverHTML" + WaiverDID).html();
@@ -147,6 +147,7 @@
             
             $("#WaiverSignedImg").attr("src", imgURL + iname);
             $("#WaiverDEditID").val(WaiverDID);
+            $("#user-modal-edit").modal("show");
         });
 
         // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console

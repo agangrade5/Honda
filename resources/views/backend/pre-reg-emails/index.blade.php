@@ -68,7 +68,7 @@
                             <td>{{ $customer->custfname . ' ' . $customer->custlname }}</td>
                             <td>{{ $customer->custemail }}</td>
                             <td>
-                                <a href="javascript:;" onclick="jQuery('#customer-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
+                                <a href="javascript:;" class="btn btn-secondary btn-sm btn-icon icon-left">
                                 Resend Email
                                 </a>
                             </td>
@@ -138,6 +138,7 @@
     	$("a.btn-secondary").click(function(){
     		$("#customerEmailEdit").val($(this).parent().prev().text());
     		$("#customerID").val($(this).parent().prev().prev().prev().text());
+            jQuery('#customer-modal-edit').modal('show');
     	});
     });
 

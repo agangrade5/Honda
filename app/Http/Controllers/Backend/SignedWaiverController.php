@@ -112,7 +112,7 @@ class SignedWaiverController extends Controller
             // Output actions exactly as expected by the legacy JS
             $actions = '<input type="hidden" id="WaiverDOCLocation' . $row->legaldataid . '" value="' . e($row->legaldoclocation) . '">';
             $actions .= '<div id="WaiverHTML' . $row->legaldataid . '" style="display:none;">' . $row->legalhtml . '</div>';
-            $actions .= '<a href="javascript:;" id="' . $row->legaldataid . '" onclick="jQuery(\'#user-modal-edit\').modal(\'show\');" class="btn btn-secondary btn-sm btn-icon icon-left">View Signature</a>';
+            $actions .= '<a href="javascript:;" id="' . $row->legaldataid . '" class="btn btn-secondary btn-sm btn-icon icon-left btn-view-signature">View Signature</a>';
 
             $data[] = [
                 $row->legaldataid,

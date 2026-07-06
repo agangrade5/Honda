@@ -22,7 +22,7 @@
 
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
-        <li><a href="javascript:;" onclick="jQuery('#template-modal').modal('show');">
+        <li><a href="javascript:;" id="btn-add-sms-template">
             <span class="hidden-xs">Add SMS Template</span>
             </a>
         </li>
@@ -57,7 +57,7 @@
                         <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                         <button type="button" id="btn-save-changes" class="btn btn-info">Save Changes</button>
                         @if(!auth()->check() || auth()->user()?->userlevel == 1)
-                        <button type="button" class="btn btn-danger" onclick="openModel();">Delete</button>
+                        <button type="button" class="btn btn-danger" id="btn-delete-sms-template">Delete</button>
                         @endif
                     </div>
                     @foreach ($smstemplates->SMSTemplates as $emailtemplate)
@@ -141,19 +141,22 @@
 
 @push('scripts')
 <script>
-    function openModel(){
-        var val = $("#EmailTemplateSubjEdit").val();
-        if(val && val !== ""){
-            var id = $("#DeleteEmailTemplateID").val();
-            $("#EmailTemplateDelete").attr('action', '/manage-sms-templates/' + id);
-            jQuery('#emailtemplate-modal-delete').modal('show');
-        }
-        else {
-            alert("Please select SMS Template that you want to delete!");
-        }
-    }
-
     $( document ).ready(function() {
+        $("#btn-add-sms-template").on("click", function() {
+            jQuery('#template-modal').modal('show');
+        });
+
+        $("#btn-delete-sms-template").on("click", function() {
+            var val = $("#EmailTemplateSubjEdit").val();
+            if(val && val !== ""){
+                var id = $("#DeleteEmailTemplateID").val();
+                $("#EmailTemplateDelete").attr('action', '/manage-sms-templates/' + id);
+                jQuery('#emailtemplate-modal-delete').modal('show');
+            }
+            else {
+                alert("Please select SMS Template that you want to delete!");
+            }
+        });
         $("#btn-create-confirm").click(function(){
             var form = $( "#EmailTemplateForm" );
             if (form.valid()) {

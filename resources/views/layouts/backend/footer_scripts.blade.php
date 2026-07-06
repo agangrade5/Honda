@@ -42,3 +42,15 @@
 {{-- <script src={{ asset("assets/js/rwd-table/js/rwd-table.min.js")}}></script> --}}
 <!-- JavaScripts initializations and stuff -->
 <script src={{ asset("assets/js/xenon-custom.js")}}></script>
+
+<script>
+$(document).ready(function() {
+    $(document).on('click', '#btn-logout', function(event) {
+        event.preventDefault();
+        var form = document.getElementById('logout-form');
+        if (form) {
+            form.submit();
+        }
+    });
+});
+</script>

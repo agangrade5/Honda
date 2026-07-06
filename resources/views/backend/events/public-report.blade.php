@@ -245,6 +245,15 @@
     <script type="text/javascript">
         var sample_notification;
         jQuery(document).ready(function($) {
+            $('#popupDemoReports').on('click', function() {
+                jQuery('#report-modal').modal('show');
+                popUPDemoReport();
+            });
+            $('#popupNHRAReports').on('click', function() {
+                jQuery('#NHRA-report-modal').modal('show');
+                popUPNHRAReport();
+            });
+
             window.clearTimeout(sample_notification);
             var notification = setTimeout(function() {
                 var opts = {
@@ -266,10 +275,10 @@
     {{-- ── Demo Reports & NHRA Reports buttons ── --}}
     <div style="font-weight:bold; font-size:15px; width:100%; padding: 10px 20px;">
         <div style="width:15%; float:left;">
-            <a href="javascript:;" class="btn btn-info btn-lg" id="popupReports" onclick="jQuery('#report-modal').modal('show'); popUPDemoReport();">Demo Reports</a>
+            <a href="javascript:;" class="btn btn-info btn-lg" id="popupDemoReports">Demo Reports</a>
         </div>
         <div style="width:15%; float:left; margin-left:10px;">
-            <a href="javascript:;" class="btn btn-info btn-lg" id="popupReports" onclick="jQuery('#NHRA-report-modal').modal('show'); popUPNHRAReport();">NHRA Reports</a>
+            <a href="javascript:;" class="btn btn-info btn-lg" id="popupNHRAReports">NHRA Reports</a>
         </div>
         <div style="clear:both;"></div>
     </div>
