@@ -147,8 +147,8 @@
             <span class="title">Manage Pre Registration</span>
             </a>
         </li>
-        <li>
-            <a href="GenerateCards.php">
+        <li class="{{ request()->routeIs('generate-cards.*') ? 'active' : '' }}">
+            <a href="{{ route('generate-cards.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Generate Cards</span>
             </a>
