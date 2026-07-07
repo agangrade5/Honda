@@ -336,6 +336,6 @@ class DataManagementController extends Controller
         $writer = new Xlsx($spreadsheet);
         $writer->save($filePath);
 
-        return response()->download($filePath, $fileName)->deleteFileAfterSend(true);
+        return response()->download($filePath, $fileName);
     }
 }
