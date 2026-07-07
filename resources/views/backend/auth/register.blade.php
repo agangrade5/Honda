@@ -6,7 +6,7 @@
     <meta name="description" content="With Honda, you’ll receive early access to demos, new product information and much more!">
     <title>Honda Registration</title>
 
-    <link rel="icon" href="{{ asset('assets/images/honda-favicon.png') }}" sizes="16x16" type="image/png">
+    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" sizes="16x16" type="image/png">
     <link rel="stylesheet" href="{{ asset('register-assets/css/materialize.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">

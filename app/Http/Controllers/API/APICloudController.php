@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -38,7 +38,7 @@ class APICloudController extends Controller
         }
 
         $clientID = null;
-        $baseURL = 'honda.kickstartuser.com/API';
+        $baseURL = env('APP_BASE_URL') . '/API';
         $isCloud = true;
         $proxyCourseTime = 20;
         $trikeCourseTime = 28;

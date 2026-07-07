@@ -47,6 +47,5 @@ Route::controller(App\Http\Controllers\Backend\ReportController::class)->group(f
 });
 
 Route::match(['get', 'post'], '/register', [App\Http\Controllers\Backend\Auth\RegistrationController::class, 'index'])->name('register.index');
-Route::match(['get', 'post'], '/API/APICloud.php', [App\Http\Controllers\Api\APICloudController::class, 'handle'])->name('api.apicloud');
-
-
+Route::match(['get', 'post'], '/API/APICloud', [App\Http\Controllers\API\APICloudController::class, 'handle'])->name('api.apicloud');
+Route::match(['get', 'post'], '/api/apicloud', [App\Http\Controllers\API\APICloudController::class, 'handle']);

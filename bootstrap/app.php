@@ -29,8 +29,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'no.cache' => NoCache::class
         ]);
 
-        $middleware->validateCsrfTokens(except: [
-            'API/APICloud.php'
+        $middleware->validateCsrfTokens(except: [           
+            'API/APICloud',
+            'api/apicloud'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
