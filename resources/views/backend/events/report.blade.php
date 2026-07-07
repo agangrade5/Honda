@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <a href="javascript:;" id="btn-logout-report">
                     <i class="fa-lock"></i> Logout
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
@@ -261,6 +261,18 @@
     <script type="text/javascript">
         var sample_notification;
         jQuery(document).ready(function($) {
+            $('#btn-logout-report').on('click', function(e) {
+                e.preventDefault();
+                document.getElementById('logout-form').submit();
+            });
+            $('#popupReports').on('click', function() {
+                jQuery('#report-modal').modal('show');
+                popUPDemoReport();
+            });
+            $('#popupSharedPublicLinkReports').on('click', function() {
+                jQuery('#event-report-modal').modal('show');
+            });
+
             window.clearTimeout(sample_notification);
             var notification = setTimeout(function() {
                 var opts = {
@@ -282,10 +294,10 @@
     {{-- ── Demo Reports & Share Link buttons ── --}}
     <div style="font-weight:bold; font-size:15px; width:100%; padding: 10px 20px;">
         <div style="width:15%; float:left;">
-            <a href="javascript:;" class="btn btn-info btn-lg" id="popupReports" onclick="jQuery('#report-modal').modal('show'); popUPDemoReport();">Demo Reports</a>
+            <a href="javascript:;" class="btn btn-info btn-lg" id="popupReports">Demo Reports</a>
         </div>
         <div style="width:15%; float:right;">
-            <a href="javascript:;" class="btn btn-info btn-lg" id="popupSharedPublicLinkReports" onclick="jQuery('#event-report-modal').modal('show');">Share Link</a>
+            <a href="javascript:;" class="btn btn-info btn-lg" id="popupSharedPublicLinkReports">Share Link</a>
         </div>
         <div style="clear:both;"></div>
     </div>
@@ -551,7 +563,7 @@
 {{-- ════════════════════════════════════════
      Demo Reports Modal  (#report-modal)
 ════════════════════════════════════════ --}}
-<div class="modal fade custom-width" id="report-modal">
+<div class="modal fade custom-width" id="report-modal" tabindex="-1" role="dialog" aria-labelledby="report-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" style="width:90%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -748,7 +760,7 @@
 {{-- ════════════════════════════════════════
      Share Link Modal  (#event-report-modal)
 ════════════════════════════════════════ --}}
-<div class="modal fade custom-width" id="event-report-modal">
+<div class="modal fade custom-width" id="event-report-modal" tabindex="-1" role="dialog" aria-labelledby="event-report-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" style="width:70%;">
         <div class="modal-content">
             <div class="modal-header">

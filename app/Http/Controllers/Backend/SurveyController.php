@@ -149,7 +149,7 @@ class SurveyController extends Controller
 
         session()->forget('questions');
 
-        return redirect()->route('manage-surveys.index')->with('msg', 'The Survey has been created successfully');
+        return redirect()->route('manage-surveys.index')->with(['msg' => 'The Survey has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -315,7 +315,7 @@ class SurveyController extends Controller
 
         session()->forget('questions');
 
-        return redirect()->route('manage-surveys.index')->with('msg', 'The Survey has been updated successfully');
+        return redirect()->route('manage-surveys.index')->with(['msg' => 'The Survey has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -326,7 +326,7 @@ class SurveyController extends Controller
         $survey = Survey::findOrFail($id);
         $survey->delete();
 
-        return redirect()->route('manage-surveys.index')->with('msg', 'The Survey has been deleted successfully');
+        return redirect()->route('manage-surveys.index')->with(['msg' => 'The Survey has been deleted successfully', 'status' => 'success']);
     }
 
     private function normalizeQuestions($questions)

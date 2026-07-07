@@ -52,7 +52,7 @@ class CountryController extends Controller
             'recordstatus' => 1,
         ]);
 
-        return redirect()->back()->with('msg', 'The Country has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Country has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -67,7 +67,7 @@ class CountryController extends Controller
             'countrycode' => $request->input('CountryCode'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Country has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Country has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -82,7 +82,7 @@ class CountryController extends Controller
         $country = Country::findOrFail($id);
         $country->delete();
 
-        return redirect()->back()->with('msg', 'The Country has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Country has been deleted successfully', 'status' => 'success']);
     }
 
     /**

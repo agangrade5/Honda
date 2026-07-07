@@ -6,20 +6,18 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    @if(session('msg'))
-        @if(session('msg') == 'Email has send successfully.')
-        <div class="dx-success">
-            <div>
-                <p>{{ session('msg') }}</p>
-            </div>
+    @if(session('status') == 'error')
+    <div class="dx-warning">
+        <div>
+            <p>{!! session('msg') !!}</p>
         </div>
-        @else
-        <div class="dx-warning">
-            <div>
-                <p>{{ session('msg') }}</p>
-            </div>
+    </div>
+    @elseif(session('status') == 'success')
+    <div class="dx-success">
+        <div>
+            <p>{!! session('msg') !!}</p>
         </div>
-        @endif
+    </div>
     @endif
 
     <div class="panel panel-default">
@@ -70,7 +68,7 @@
                             <td>{{ $customer->custfname . ' ' . $customer->custlname }}</td>
                             <td>{{ $customer->custemail }}</td>
                             <td>
-                                <a href="javascript:;" onclick="jQuery('#customer-modal-edit').modal('show');" class="btn btn-secondary btn-sm btn-icon icon-left">
+                                <a href="javascript:;" class="btn btn-secondary btn-sm btn-icon icon-left">
                                 Resend Email
                                 </a>
                             </td>
@@ -98,7 +96,7 @@
 <!-- content @e -->
 
 <!-- Send Email Modal -->
-<div class="modal fade custom-width" id="customer-modal-edit">
+<div class="modal fade custom-width" id="customer-modal-edit" tabindex="-1" role="dialog" aria-labelledby="customer-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -140,6 +138,7 @@
     	$("a.btn-secondary").click(function(){
     		$("#customerEmailEdit").val($(this).parent().prev().text());
     		$("#customerID").val($(this).parent().prev().prev().prev().text());
+            jQuery('#customer-modal-edit').modal('show');
     	});
     });
 

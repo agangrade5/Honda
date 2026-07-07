@@ -5,18 +5,24 @@
 <div class="main-content">
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
+
+    @if(session('status') == 'error')
     <div class="dx-warning">
         <div>
-            <p><?php echo $_SESSION['msg'];?></p>
+            <p>{!! session('msg') !!}</p>
         </div>
     </div>
-    <?php }
-        unset($_SESSION['msg']); */
-        ?>
+    @elseif(session('status') == 'success')
+    <div class="dx-success">
+        <div>
+            <p>{!! session('msg') !!}</p>
+        </div>
+    </div>
+    @endif
+
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
-        <li><a href="javascript:;" onclick="jQuery('#region-modal').modal('show');">
+        <li><a href="javascript:;" id="btn-create-set">
             <span class="hidden-xs">Create</span>
             </a>
         </li>
@@ -41,20 +47,22 @@
                     </tr>
                 </thead>
                 <tbody class="middle-align">
-                    <?php
-                        if( isset($btSets) && !empty($btSets) && $btSets->Success==1){
-                            foreach ($btSets->BTSets as $key => $btSet) { ?>
+                    @foreach ($btSets as $btSet)
                     <tr>
-                        <td><?php echo $btSet->BTSetID;?></td>
-                        <td><?php echo $btSet->BTSetName?></td>
+                        <td>{{ $btSet->btset_id }}</td>
+                        <td>{{ $btSet->btset_name }}</td>
                         <td>
-                            <a href="EditListModel.php?id=<?php echo $btSet->BTSetID;?>" class="btn btn-secondary btn-sm btn-icon icon-left">
+                            <a href="{{ route('manage-bikes-and-times.edit', $btSet->btset_id) }}" class="btn btn-secondary btn-sm icon-left">
                             Edit
                             </a>
-                            <a href="javascript:;" id="<?php echo $btSet->RegionID;?>" onclick="jQuery('#region-modal-delete').modal('show');" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
+                            @if(!auth()->check() || auth()->user()?->userlevel == 1)
+                            <button type="button" class="btn btn-danger btn-sm btn-delete-set" data-id="{{ $btSet->btset_id }}">
+                            Delete
+                            </button>
+                            @endif
                         </td>
                     </tr>
-                    <?php } } ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -72,13 +80,12 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Are you sure you want to delete this time set? </h4>
             </div>
-            <form method="post" action="Action.php" id="RegionDelete">
-                <input type="hidden" name="DeleteBTSetID" id="DeleteBTSetID" value="">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="controller" value="btset">
+            <form method="post" action="" id="RegionDelete">
+                @csrf
+                @method('DELETE')
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info">Delete</button>
+                    <button type="submit" class="btn btn-info">Delete</button>
                 </div>
             </form>
         </div>
@@ -93,87 +100,50 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Add Set</h4>
             </div>
-            <div class="modal-body">
-                <form id="Region" method="post" action="Action.php">
+            <form id="Region" method="post" action="{{ route('manage-bikes-and-times.store') }}">
+                @csrf
+                <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="field-1" class="control-label">Set Name</label>
-                                <input type="text" class="form-control" id="BTSetName" name="BTSetName" placeholder="">
-                                <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="controller" value="btset">
+                                <label for="BTSetName" class="control-label">Set Name</label>
+                                <input type="text" class="form-control" id="BTSetName" name="BTSetName" placeholder="" required>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info">Create</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info">Create</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<!-- Edit Modal -->
-<div class="modal fade custom-width" id="region-modal-edit" tabindex="-1" role="dialog" aria-labelledby="region-modal-edit-label" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Set</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form id="RegionEdit" method="post" action="Action.php">
-                            <div class="form-group">
-                                <label for="field-1" class="control-label">Set Name</label>
-                                <input type="hidden" name="action" value="edit">
-                                <input type="hidden" name="controller" value="btset">
-                                <input type="hidden" id="BTSetID" name="BTSetID" value="">
-                                <input type="text" class="form-control" id="BTSetNameEdit" name="BTSetName" placeholder="">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info">Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')
 <script>
-    /* $('.btnCancel').on('click', function () {
-        this.blur();
-        $('#region-modal').modal('hide');
-    }); */
     $( document ).ready(function() {
-    	$("button.btn-info").click(function(){
-    		if($(this).text()=="Create"){
-    			$( "#Region" ).submit();
-    		}
-    		else if($(this).text()=="Save Changes"){
-    			$( "#RegionEdit" ).submit();
-    		}
-    		else if($(this).text()=="Delete"){
-    			$("#RegionDelete").submit();
-    		}
-    	});
+        $("#btn-create-set").on("click", function() {
+            jQuery('#region-modal').modal('show');
+        });
 
-    	$("a.btn-danger").click(function(){
-    		$("#DeleteBTSetID").val($(this).parent().prev().prev().text());
-    	});
 
-    	$("a.btn-secondary").click(function(){
-    		$("#BTSetNameEdit").val($(this).parent().prev().text());
-    		$("#BTSetID").val($(this).parent().prev().prev().text());
-    	});
+
+        $(".btn-delete-set").on("click", function() {
+            var id = $(this).data("id");
+            $("#RegionDelete").attr("action", "/manage-bikes-and-times/" + id);
+            jQuery('#region-modal-delete').modal('show');
+        });
+
+        // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console
+        $('.modal').on('hide.bs.modal', function () {
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
     });
 </script>
 @endpush

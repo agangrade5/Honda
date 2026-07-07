@@ -29,7 +29,7 @@ class LoginController extends Controller
 
         if ($user && $user->userpass === $request->input('passwd')) {
             Auth::login($user);
-            return redirect()->route('manage-regions.index')->with('msg', 'The User has been logged in successfully');
+            return redirect()->route('manage-events.index')->with('msg', 'The User has been logged in successfully');
         }
 
         return redirect()->back()

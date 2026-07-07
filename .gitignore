@@ -19,6 +19,8 @@
 /public/hot
 /public/storage
 /public/API
+/public/history
+/public/excel
 /storage/*.key
 /storage/pail
 /vendor

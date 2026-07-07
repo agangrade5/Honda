@@ -42,7 +42,7 @@ class PreRegHtmlController extends Controller
             ]
         );
 
-        return redirect()->back()->with('msg', 'The pre-registration HTML has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The pre-registration HTML has been updated successfully', 'status' => 'success']);
     }
 
     /**

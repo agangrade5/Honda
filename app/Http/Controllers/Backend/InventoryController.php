@@ -74,7 +74,7 @@ class InventoryController extends Controller
             'recordstatus' => 1,
         ]);
 
-        return redirect()->back()->with('msg', 'The Vehicle has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Vehicle has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -96,7 +96,7 @@ class InventoryController extends Controller
             'archive' => $request->input('EventArchive'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Vehicle has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Vehicle has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -107,6 +107,6 @@ class InventoryController extends Controller
         $vehicle = Vehicle::findOrFail($id);
         $vehicle->delete();
 
-        return redirect()->back()->with('msg', 'The Vehicle has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Vehicle has been deleted successfully', 'status' => 'success']);
     }
 }

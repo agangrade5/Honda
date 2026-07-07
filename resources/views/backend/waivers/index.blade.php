@@ -6,17 +6,23 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    @if(session('msg'))
+    @if(session('status') == 'error')
     <div class="dx-warning">
         <div>
-            <p>{{ session('msg') }}</p>
+            <p>{!! session('msg') !!}</p>
+        </div>
+    </div>
+    @elseif(session('status') == 'success')
+    <div class="dx-success">
+        <div>
+            <p>{!! session('msg') !!}</p>
         </div>
     </div>
     @endif
 
     <ul class="nav nav-tabs right-aligned">
         <!-- available classes "right-aligned" -->
-        <li><a href="javascript:;" onclick="jQuery('#waiver-modal').modal('show');">
+        <li><a href="javascript:;" id="btn-add-waiver">
             <span class="hidden-xs">Add Waiver</span>
             </a>
         </li>
@@ -42,7 +48,7 @@
                     <div class="form-group">
                         <button type="button" class="btn btn-info">Save Changes</button>
                         @if(!auth()->check() || auth()->user()?->userlevel == 1)
-                        <button type="button" class="btn btn-danger" onclick="openModel();">Delete</button>
+                        <button type="button" class="btn btn-danger" id="btn-delete-waiver">Delete</button>
                         @endif
                     </div>
                     @foreach ($waivers->Waivers as $waiver)
@@ -117,19 +123,23 @@
 
 @push('scripts')
 <script>
-    function openModel(){
-        var val = $("#WaiverNameEdit").val();
-        if(val && val !== ""){
-            var id = $("#DeleteWaiverID").val();
-            $("#WaiverDelete").attr('action', '/manage-waivers/' + id);
-            jQuery('#waiver-modal-delete').modal('show');
-        }
-        else {
-            alert("Please select Waiver that you want to delete!");
-        }
-    }
-
     $( document ).ready(function() {
+        $("#btn-add-waiver").on("click", function() {
+            jQuery('#waiver-modal').modal('show');
+        });
+
+        $("#btn-delete-waiver").on("click", function() {
+            var val = $("#WaiverNameEdit").val();
+            if(val && val !== ""){
+                var id = $("#DeleteWaiverID").val();
+                $("#WaiverDelete").attr('action', '/manage-waivers/' + id);
+                jQuery('#waiver-modal-delete').modal('show');
+            }
+            else {
+                alert("Please select Waiver that you want to delete!");
+            }
+        });
+
     	$("button.btn-info").click(function(){
     		if($(this).text()=="Create"){
     			var form = $( "#WaiverForm" );

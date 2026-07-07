@@ -97,6 +97,7 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
 
     // Manage Data Management Routes
     Route::get('manage-data-management', [DataManagementController::class, 'index'])->name('manage-data-management.index');
+    Route::get('manage-data-management/export', [DataManagementController::class, 'export'])->name('manage-data-management.export');
     // Manage PreReg Email Routes
     Route::match(['get', 'post'], 'manage-pre-reg-email', [PreRegEmailController::class, 'index'])->name('manage-pre-reg-email.index');
     Route::post('manage-pre-reg-email/send', [PreRegEmailController::class, 'sendEmail'])->name('manage-pre-reg-email.send');
@@ -110,7 +111,23 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::post('/select', 'select')->name('select');
         });
     // Manage Generate Cards Routes
-    Route::get('generate-cards', [GenerateCardController::class, 'index'])->name('generate-cards.index');
+    Route::prefix('generate-cards')
+        ->name('generate-cards.')
+        ->controller(GenerateCardController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+        });
+    // Manage Bikes and Times custom model actions
+    Route::prefix('manage-bikes-and-times')
+        ->name('manage-bikes-and-times.')
+        ->controller(BikeAndTimeController::class)
+        ->group(function () {
+            Route::post('/{id}/add-model', 'addModel')->name('add-model');
+            Route::post('/{id}/edit-model', 'editModel')->name('edit-model');
+            Route::post('/{id}/delete-model', 'deleteModel')->name('delete-model');
+            Route::post('/{id}/apply-to-all', 'applyToAll')->name('apply-to-all');
+        });
     // Resource Routes
     Route::resources(
         [

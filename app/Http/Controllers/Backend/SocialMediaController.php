@@ -38,7 +38,7 @@ class SocialMediaController extends Controller
             'clientid' => auth()->user()?->clientid ?? 1,
         ]);
 
-        return redirect()->back()->with('msg', 'The Social Media has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Social Media has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -58,7 +58,7 @@ class SocialMediaController extends Controller
             'socialblob' => $blob,
         ]);
 
-        return redirect()->back()->with('msg', 'The Social Media has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Social Media has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -69,6 +69,6 @@ class SocialMediaController extends Controller
         $socialmedia = SocialMedia::findOrFail($id);
         $socialmedia->delete();
 
-        return redirect()->back()->with('msg', 'The Social Media has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Social Media has been deleted successfully', 'status' => 'success']);
     }
 }

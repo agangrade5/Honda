@@ -6,10 +6,16 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    @if(session('msg'))
+    @if(session('status') == 'error')
     <div class="dx-warning">
         <div>
-            <p>{{ session('msg') }}</p>
+            <p>{!! session('msg') !!}</p>
+        </div>
+    </div>
+    @elseif(session('status') == 'success')
+    <div class="dx-success">
+        <div>
+            <p>{!! session('msg') !!}</p>
         </div>
     </div>
     @endif
@@ -216,17 +222,17 @@
                                         value='{!! $event->EventDealers !!}'>
 
                                     @if(auth()->user()?->userlevel != 7 && auth()->user()?->userlevel != 3 && auth()->user()?->userlevel != 5 && auth()->user()?->userlevel != 9)
-                                    <a class="btn btn-secondary btn-sm btn-icon icon-left edit" data-toggle="modal"
+                                    <a class="btn btn-secondary btn-sm icon-left edit" data-toggle="modal"
                                         data-id="{{ $event->EventID }}">Edit</a>
                                     @endif
 
-                                    <a href="{{ route('event.report.show', base64_encode($event->EventID)) }}" class="btn btn-info btn-sm btn-icon icon-left">
+                                    <a href="{{ route('event.report.show', base64_encode($event->EventID)) }}" class="btn btn-info btn-sm icon-left">
                                     <i class="fa-bar-chart"></i> Reports
                                     </a>
 
                                     @if(auth()->user()?->userlevel == 1)
                                         <a href="javascript:;" id="{{ $event->EventID }}"
-                                            onclick="jQuery('#event-modal-delete').modal('show');" class="btn btn-danger btn-icon">
+                                            onclick="jQuery('#event-modal-delete').modal('show');" class="btn btn-danger btn-sm">
                                         <i class="icon-white icon-heart"></i> Delete
                                         </a>
                                     @endif
@@ -685,7 +691,7 @@
 </div>
 
 <!-- Delete Modal -->
-<div class="modal fade custom-width" id="event-modal-delete">
+<div class="modal fade custom-width" id="event-modal-delete" tabindex="-1" role="dialog" aria-labelledby="event-modal-delete-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -721,7 +727,7 @@
 </div>
 
 <!-- Event Edit Modal -->
-<div class="modal fade custom-width" id="event-modal">
+<div class="modal fade custom-width" id="event-modal" tabindex="-1" role="dialog" aria-labelledby="event-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" style="width:800px;">
         <div class="modal-content">
             <div class="modal-header">

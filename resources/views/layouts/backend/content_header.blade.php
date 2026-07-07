@@ -11,7 +11,7 @@
     <!-- Right links for user info navbar -->
     <ul class="user-info-menu right-links list-inline list-unstyled">
         <li>
-            <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <a href="javascript:;" id="btn-logout">
                 <i class="fa-lock"></i> Logout
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

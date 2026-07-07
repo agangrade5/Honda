@@ -43,7 +43,7 @@ class WaiverController extends Controller
             'legalhtml' => $request->input('WaiverHTML'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Waiver has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Waiver has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -60,7 +60,7 @@ class WaiverController extends Controller
             'legalhtml' => $request->input('WaiverHTML1'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Waiver has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Waiver has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -72,6 +72,6 @@ class WaiverController extends Controller
         $waiver = Legal::findOrFail($legalId);
         $waiver->delete();
 
-        return redirect()->back()->with('msg', 'The Waiver has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Waiver has been deleted successfully', 'status' => 'success']);
     }
 }

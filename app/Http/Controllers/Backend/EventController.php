@@ -453,7 +453,7 @@ class EventController extends Controller
             }
         }
 
-        return redirect()->route('manage-events.index')->with('msg', 'The Event has been created successfully');
+        return redirect()->route('manage-events.index')->with(['msg' => 'The Event has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -573,7 +573,7 @@ class EventController extends Controller
             'registrationsurveyid' => $request->input('registrationsurveyid') ?: 0,
         ]);
 
-        return redirect()->back()->with('msg', 'The Event has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Event has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -584,6 +584,6 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
         $event->delete();
 
-        return redirect()->back()->with('msg', 'The Event has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Event has been deleted successfully', 'status' => 'success']);
     }
 }

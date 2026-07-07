@@ -6,17 +6,7 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    <?php /* if(isset($_SESSION['msg']) && !empty($_SESSION['msg'])){ ?>
-    <div class="dx-warning">
-        <div>
-            <p><?php echo $_SESSION['msg'];?></p>
-        </div>
-    </div>
-    <?php }
-        unset($_SESSION['msg']); */
-    ?>
-
-    <form id="EventForm" method="post" action="Action.php" class="form-wizard validate" novalidate>
+    <form id="EventForm" method="post" action="javascript:;" class="form-wizard validate" novalidate>
         <ul class="tabs">
             <li class="active">
                 <a href="#fwv-1" data-toggle="tab">
@@ -32,86 +22,13 @@
                 </a>
             </li>
 
-                <li class="exportData">
+            <li class="exportData">
                 <a href="#fwv-3" data-toggle="tab">
                     Generating data
                     <span>3</span>
                 </a>
             </li>
         </ul>
-        <script type="text/javascript">
-            jQuery(document).ready(function($){
-                $(".exportData").click(function(){
-                    //console.log($('input[name="type"]').val());
-                });
-
-                $('input[name="type"]').click(function(){
-                    if($('input[name="type"]:checked').val()=="c"){
-                        $(".next").hide();
-                        $("#EndSubmitForm").show();
-                        $("#data-loading").show();
-                        $("#survey-show").hide();
-                    }
-                    else if($('input[name="type"]:checked').val()=="s"){
-                        $(".next").show();
-                        $("#EndSubmitForm").hide();
-                        $("#data-loading").hide();
-                        $("#survey-show").show();
-                    }
-                    else if($('input[name="type"]:checked').val()=="y"){
-                        $(".next").hide();
-                        $("#EndSubmitForm").show();
-                        $("#data-loading").show();
-                        $("#survey-show").hide();
-                    }
-                });
-
-                $(".previous").click(function(){
-                    if($("div.tab-content").find(".active").attr("id")=="fwv-3"){
-                        $("#EndSubmitForm").hide();
-                    }
-                    $(".next").show();
-                });
-
-                $("#EndSubmitForm").click(function(){
-                    if($('input[name="type"]:checked').val()=="c"){
-                        $(".next").hide();
-                        window.open("http://honda.kickstartuser.com/Export.php?EventID="+$("#eventID").val()+"&action=cust", "_blank");
-                    }
-                    else if($('input[name="type"]:checked').val()=="s"){
-                        $(".next").hide();
-                        window.open("http://honda.kickstartuser.com/Export.php?EventID="+$("#eventID").val()+"&action=survey&SurveyID="+$("#JumpStartSurveyEdit").val(), "_blank");
-                    }
-                    else if($('input[name="type"]:checked').val()=="y"){
-                        $(".next").hide();
-                        window.open("http://honda.kickstartuser.com/Export.php?EventID="+$("#eventID").val()+"&action=honda", "_blank");
-                    }
-                });
-
-                $(".next").click(function(){
-                    //console.log($(this).text());
-                    //console.log($("div.tab-content").find(".active").attr("id"));
-                    if($("div.tab-content").find(".active").attr("id")=="fwv-2"){
-                        if($('input[name="type"]:checked').val()=="c"){ console.log("c");
-                            $(".next").hide();
-                            $("#survey-show").hide();
-                            $("#data-loading").show();
-                        }
-                        else if($('input[name="type"]:checked').val()=="s"){ console.log("s");
-                            $(".next").hide();
-                            $("#survey-show").show();
-                            $("#data-loading").hide();
-                            $("#EndSubmitForm").show();
-                        }
-                        else if($('input[name="type"]:checked').val()=="y"){ console.log("y");
-                            $(".next").hide();
-                            $("#survey-show").hide();
-                            $("#data-loading").show();
-                        }
-                    }
-                });
-            });
-        </script>
         <div class="progress-indicator">
             <span></span>
         </div>
@@ -124,14 +41,12 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label" for="social">Select Event</label>
+                            <label class="control-label" for="eventID">Select Event</label>
                             <select name="eventID" class="selectboxit" id="eventID">
-                                <optgroup label="Saved Social Media Settings">
-                                    <?php
-                                    if(isset($events->Success) && $events->Success==1){
-                                        foreach ($events->Event as $skey => $event) {
-                                            echo '<option value="'.$event->EventID.'">'.$event->EventName.'</option>';
-                                        } }?>
+                                <optgroup label="Saved Events">
+                                    @foreach ($events as $event)
+                                        <option value="{{ $event->eventid }}">{{ $event->eventname }}</option>
+                                    @endforeach
                                 </optgroup>
                             </select>
                         </div>
@@ -156,14 +71,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label" for="social"><strong>Please Select Survey</strong></label>
+                                <label class="control-label" for="JumpStartSurveyEdit"><strong>Please Select Survey</strong></label>
                                 <select name="jumpstartsurvey" class="selectboxit" id="JumpStartSurveyEdit">
                                     <optgroup label="Saved Survey Data">
-                                    <?php
-                                        if(isset($surveys->Success) && $surveys->Success==1){
-                                            foreach ($surveys->Survey as $skey => $survey) {
-                                                echo '<option value="'.$survey->SurveyID.'">'.$survey->SurveyName.'</option>';
-                                            } }?>
+                                        @foreach ($surveys as $survey)
+                                            <option value="{{ $survey->surveyid }}">{{ $survey->surveyname }}</option>
+                                        @endforeach
                                     </optgroup>
                                 </select>
                             </div>
@@ -217,12 +130,73 @@
                 $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
             });
 
-            var eventData;
-            var waiverData;
-            var userData;
-            var socialMediaData;
-            var truckData;
-        });
+            $('input[name="type"]').on('click', function(){
+                if($('input[name="type"]:checked').val()=="c"){
+                    $(".next").hide();
+                    $("#EndSubmitForm").show();
+                    $("#data-loading").show();
+                    $("#survey-show").hide();
+                }
+                else if($('input[name="type"]:checked').val()=="s"){
+                    $(".next").show();
+                    $("#EndSubmitForm").hide();
+                    $("#data-loading").hide();
+                    $("#survey-show").show();
+                }
+                else if($('input[name="type"]:checked').val()=="y"){
+                    $(".next").hide();
+                    $("#EndSubmitForm").show();
+                    $("#data-loading").show();
+                    $("#survey-show").hide();
+                }
+            });
 
+            $(".previous").on('click', function(){
+                if($("div.tab-content").find(".active").attr("id")=="fwv-3"){
+                    $("#EndSubmitForm").hide();
+                }
+                $(".next").show();
+            });
+
+            $("#EndSubmitForm").on('click', function(e){
+                e.preventDefault();
+                var eventId = $("#eventID").val();
+                var action = $('input[name="type"]:checked').val();
+                var surveyId = $("#JumpStartSurveyEdit").val();
+
+                var url = "{{ route('manage-data-management.export') }}?EventID=" + eventId;
+
+                if (action == "c") {
+                    url += "&action=cust";
+                } else if (action == "s") {
+                    url += "&action=survey&SurveyID=" + surveyId;
+                } else if (action == "y") {
+                    url += "&action=honda";
+                }
+
+                window.open(url, "_blank");
+            });
+
+            $(".next").on('click', function(){
+                if($("div.tab-content").find(".active").attr("id")=="fwv-2"){
+                    if($('input[name="type"]:checked').val()=="c"){
+                        $(".next").hide();
+                        $("#survey-show").hide();
+                        $("#data-loading").show();
+                    }
+                    else if($('input[name="type"]:checked').val()=="s"){
+                        $(".next").hide();
+                        $("#survey-show").show();
+                        $("#data-loading").hide();
+                        $("#EndSubmitForm").show();
+                    }
+                    else if($('input[name="type"]:checked').val()=="y"){
+                        $(".next").hide();
+                        $("#survey-show").hide();
+                        $("#data-loading").show();
+                    }
+                }
+            });
+        });
     </script>
 @endpush

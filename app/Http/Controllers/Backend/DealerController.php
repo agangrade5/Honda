@@ -35,7 +35,7 @@ class DealerController extends Controller
             'dealerdistrict' => $request->input('DealerDistrict'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Dealer has been created successfully');
+        return redirect()->back()->with(['msg' => 'The Dealer has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -52,7 +52,7 @@ class DealerController extends Controller
             'dealerdistrict' => $request->input('DealerDistrict'),
         ]);
 
-        return redirect()->back()->with('msg', 'The Dealer has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The Dealer has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -63,6 +63,6 @@ class DealerController extends Controller
         $dealer = Dealer::findOrFail($id);
         $dealer->delete();
 
-        return redirect()->back()->with('msg', 'The Dealer has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The Dealer has been deleted successfully', 'status' => 'success']);
     }
 }

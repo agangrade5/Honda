@@ -6,10 +6,16 @@
     <!-- Content Header section -->
     @include('layouts.backend.content_header', compact('title'))
 
-    @if(session('msg'))
+    @if(session('status') == 'error')
     <div class="dx-warning">
         <div>
-            <p>{{ session('msg') }}</p>
+            <p>{!! session('msg') !!}</p>
+        </div>
+    </div>
+    @elseif(session('status') == 'success')
+    <div class="dx-success">
+        <div>
+            <p>{!! session('msg') !!}</p>
         </div>
     </div>
     @endif
@@ -128,8 +134,8 @@
         });
 
         // View Signature Trigger
-        $( "#example-1" ).on( "click", "tbody tr td a.btn-secondary", function() {
-            var WaiverDID = $(this).parent().prev().prev().prev().prev().text();
+        $( "#example-1" ).on( "click", "tbody tr td a.btn-view-signature", function() {
+            var WaiverDID = $(this).attr('id');
             $("#WaiverTitle").text($(this).parent().prev().text());
             
             var htmlData = $("#WaiverHTML" + WaiverDID).html();
@@ -141,6 +147,7 @@
             
             $("#WaiverSignedImg").attr("src", imgURL + iname);
             $("#WaiverDEditID").val(WaiverDID);
+            $("#user-modal-edit").modal("show");
         });
 
         // Blur focused elements on modal hide to prevent aria-hidden focus warnings in the browser console

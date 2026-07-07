@@ -46,7 +46,7 @@ class SmsTemplateController extends Controller
             'clientid' => 1,
         ]);
 
-        return redirect()->back()->with('msg', 'The SMS Template has been created successfully');
+        return redirect()->back()->with(['msg' => 'The SMS Template has been created successfully', 'status' => 'success']);
     }
 
     /**
@@ -61,7 +61,7 @@ class SmsTemplateController extends Controller
             'templateblob' => $request->input('TemplateBlob1'),
         ]);
 
-        return redirect()->back()->with('msg', 'The SMS Template has been updated successfully');
+        return redirect()->back()->with(['msg' => 'The SMS Template has been updated successfully', 'status' => 'success']);
     }
 
     /**
@@ -73,6 +73,6 @@ class SmsTemplateController extends Controller
         $template = SmsTemplate::findOrFail($templateId);
         $template->delete();
 
-        return redirect()->back()->with('msg', 'The SMS Template has been deleted successfully');
+        return redirect()->back()->with(['msg' => 'The SMS Template has been deleted successfully', 'status' => 'success']);
     }
 }
