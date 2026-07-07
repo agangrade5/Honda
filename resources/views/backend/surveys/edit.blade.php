@@ -94,7 +94,7 @@
                                                             <a href="{{ route('manage-survey-questions.edit', $q_key) }}?SurveyID={{ $survey_id }}" class="btn btn-secondary btn-sm btn-icon icon-left">
                                                             Edit
                                                             </a>
-                                                            <a href="javascript:;" onclick="deleteQuestion(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
+                                                            <a href="javascript:;" onclick="deleteQuestion(this);" class="btn btn-danger btn-icon btn-sm"><i class="icon-white icon-heart"></i> Delete</a>
                                                         </td>
                                                     </tr>
                                                     @endforeach

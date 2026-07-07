@@ -94,7 +94,7 @@
                             <a href="javascript:;"
                                data-id="{{ $inventorie->VehicleID }}"
                                onclick="jQuery('#inventory-modal-delete').modal('show');"
-                               class="btn btn-danger btn-icon">
+                               class="btn btn-danger btn-icon btn-sm">
                                <i class="icon-white icon-heart"></i> Delete
                             </a>
                             @endif

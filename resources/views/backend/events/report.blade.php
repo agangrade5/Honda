@@ -563,7 +563,7 @@
 {{-- ════════════════════════════════════════
      Demo Reports Modal  (#report-modal)
 ════════════════════════════════════════ --}}
-<div class="modal fade custom-width" id="report-modal">
+<div class="modal fade custom-width" id="report-modal" tabindex="-1" role="dialog" aria-labelledby="report-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" style="width:90%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -760,7 +760,7 @@
 {{-- ════════════════════════════════════════
      Share Link Modal  (#event-report-modal)
 ════════════════════════════════════════ --}}
-<div class="modal fade custom-width" id="event-report-modal">
+<div class="modal fade custom-width" id="event-report-modal" tabindex="-1" role="dialog" aria-labelledby="event-report-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" style="width:70%;">
         <div class="modal-content">
             <div class="modal-header">

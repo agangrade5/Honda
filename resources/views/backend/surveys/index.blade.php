@@ -57,7 +57,7 @@
                                 Edit
                                 </a>
                                 @if(!auth()->check() || auth()->user()?->userlevel == 1)
-                                <a href="javascript:void(0);" id="{{ $survey->SurveyID }}" onclick="deleteSurvey(this);" class="btn btn-danger btn-icon"><i class="icon-white icon-heart"></i> Delete</a>
+                                <a href="javascript:void(0);" id="{{ $survey->SurveyID }}" onclick="deleteSurvey(this);" class="btn btn-danger btn-icon btn-sm"><i class="icon-white icon-heart"></i> Delete</a>
                                 @endif
                             </td>
                         </tr>

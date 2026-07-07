@@ -96,7 +96,7 @@
 <!-- content @e -->
 
 <!-- Send Email Modal -->
-<div class="modal fade custom-width" id="customer-modal-edit">
+<div class="modal fade custom-width" id="customer-modal-edit" tabindex="-1" role="dialog" aria-labelledby="customer-modal-edit-label" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

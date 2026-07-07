@@ -69,7 +69,7 @@
                             <a href="javascript:;" 
                                data-id="{{ $dealer->dealerid }}" 
                                onclick="jQuery('#dealer-modal-delete').modal('show');" 
-                               class="btn btn-danger btn-icon">
+                               class="btn btn-danger btn-icon btn-sm">
                                <i class="icon-white icon-heart"></i> Delete
                             </a>
                             @endif
