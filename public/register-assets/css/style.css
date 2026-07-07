@@ -1,0 +1,191 @@
+body{
+	background: #000000;
+	font-weight: normal;
+}
+input, select{
+	color: #767676;
+	background: none;
+}
+.btn, .btn-large {
+    background: #013A9D;
+    color: #fff;
+}
+
+.squareList{
+	 padding-left: 18px !important;
+}
+.squareList li{
+	list-style-type: square !important;
+}
+
+button:focus {
+   outline: none;
+   background-color: #013A9D;
+}
+.btn:hover, .btn-large:hover {
+   background-color: #013A9D;
+}
+.pd-zero{padding:0 !important;
+}
+.main-section{
+	min-height:100vh;
+	color:#fff;
+	padding: 0;
+	background: #000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+}
+.mainHeading{
+	font-size: 40px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+}
+.form-header{text-align:center;
+}
+.form-header img{ max-width: 260px;
+    margin: auto;
+}
+.form-header h3{font-size: 22px;
+	margin-top:12px;
+	margin-bottom: 40px;
+	font-size:26px;
+	color: #fff !important;
+}
+ul.stepper.horizontal .step-actions{
+	background: none;
+}
+.steps-content p{
+	margin-bottom: 12px !important;
+}
+.ticket-redio label{    width: 32% !important;
+    display: inline-block;
+	margin-bottom: 10px;
+    margin-top: 10px;
+}
+.ticketrow{border: 1.5px solid #717171;
+    border-radius: 4px;
+	margin-bottom: 25px !important;
+    padding: 15px;
+}
+.steps-content h4{font-size: 1.4rem;
+    text-transform: uppercase;
+    font-weight: 600;
+	margin-top: 0;
+}
+.plznotetext{
+	margin-top: 25px;
+    margin-bottom: 25px;
+}
+.steps-content .input-field{margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.bluebold{
+	font-weight: 600;
+	font-size: 20px;
+}
+.thankutext{font-size:18px;
+}
+
+/* 01-09-2018 KBGP*/
+.card {
+	/*min-height: 130vh;*/
+	box-shadow:none !important;
+	background: none;
+	margin-bottom: 15px
+}
+
+.ticketrow select{
+	    border-bottom: 1px solid #9e9e9e;
+	    box-shadow:none;
+	    border-width:0 0 1px 0;
+	    padding-left:1px;
+}
+.ticketrow select:focus{
+	box-shadow:none;
+}
+
+.ticketrow-second li{
+	padding-bottom:10px;
+}
+
+.ticketrow select{
+	outline: none;
+}
+
+ul.stepper.horizontal .step.active .step-title:before, ul.stepper.horizontal .step.done .step-title:before {
+    background-color: #013A9D;
+}
+
+.container-border{
+	border: 1.5px solid #717171;
+	border-bottom:0; 
+    border-radius: 4px;
+    margin-bottom: 25px !important;
+    padding: 0;
+}
+
+.step-content{
+	border-bottom: 1.5px solid #717171;
+	border-left: 1.5px solid #717171;
+	border-right: 1.5px solid #717171;
+}
+
+.card .card-content{
+	padding: 23px;
+}
+
+ul.stepper.horizontal{
+	min-height: auto;
+}
+
+ul.stepper.horizontal .step-content{
+	margin-bottom: 30px;
+}
+
+@media only screen and (max-width:576px){
+	ul.stepper.horizontal .step-title{
+	    font-size: 13px;
+	    padding: 0 !important;
+	    height:65px;
+	    line-height:65px;
+	    width: 100%;
+	    text-align: center;
+	}
+	ul.stepper.horizontal .step .step-title:before{
+		height: 21px;
+    	width: 21px;
+    	line-height: 21px;
+    	top: 21.5px;
+    	left: 0;
+    	right: 0;
+    	margin:auto;
+	}
+	ul.stepper.horizontal .step{
+		height:65px !important;
+		display:inline-block;
+		width:30% !important;
+	}
+	ul.stepper.horizontal>.step:last-of-type, ul.stepper.horizontal>.step[data-last=true]{
+			width: 30% !important;
+	}
+	ul.stepper.horizontal .step-title span{
+	    display: block;
+	    width: 100%;
+	    position: absolute;
+	    top: 18px;
+	    left: 0;
+	    right: 0;
+	}
+	ul.stepper.horizontal:before{
+		    min-height: 65px !important;
+	}
+	ul.stepper>.step:not(:last-of-type):after{
+		display:none !important;
+	}
+	.card-content ul.stepper.horizontal{
+	    display: block !important;
+	}
+	ul.stepper.horizontal .step-content{
+		top: inherit;
+	}
+}

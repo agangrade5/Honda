@@ -28,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.auth' => AdminAuth::class,
             'no.cache' => NoCache::class
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'API/APICloud.php'
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
