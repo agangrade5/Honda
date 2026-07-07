@@ -89,6 +89,7 @@ class EmailTemplateController extends Controller
         try {
             Mail::html($html, function ($message) use ($to, $subject) {
                 $message->to($to)
+                        ->from('rewards@sendmail.ncompasstrac.com', 'Honda Motor Company')
                         ->subject($subject);
             });
             return redirect()->back()->with(['msg' => 'The Test Email has been sent successfully', 'status' => 'success']);
