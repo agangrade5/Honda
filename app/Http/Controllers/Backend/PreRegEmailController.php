@@ -148,7 +148,7 @@ class PreRegEmailController extends Controller
         try {
             Mail::html($emailBody, function ($message) use ($customerEmail, $emailSubject) {
                 $message->to($customerEmail)
-                        ->from('rewards@sendmail.ncompasstrac.com', 'Honda Motor Company')
+                        ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
                         ->subject($emailSubject);
             });
 
