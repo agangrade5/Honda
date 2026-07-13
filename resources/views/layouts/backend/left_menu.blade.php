@@ -21,137 +21,200 @@
         </div>
     </header>
     <ul id="main-menu" class="main-menu">
+        @if(!in_array(auth()->user()?->userlevel, [6]))
         <li class="{{ request()->routeIs('manage-events.*') ? 'active' : '' }}">
             <a href="{{ route('manage-events.index') }}">
             <i class="linecons-location"></i>
             <span class="title">Events</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-trucks.*') ? 'active' : '' }}">
             <a href="{{ route('manage-trucks.index') }}">
             <i class="linecons-truck"></i>
             <span class="title">Trucks</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-inventory.*') ? 'active' : '' }}">
             <a href="{{ route('manage-inventory.index') }}">
             <i class="linecons-tag"></i>
             <span class="title">Inventory</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,4,5,6,7,8,9]))
         <li class="{{ request()->routeIs('manage-regions.*') ? 'active' : '' }}">
             <a href="{{ route('manage-regions.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Regions</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-social-media.*') ? 'active' : '' }}">
             <a href="{{ route('manage-social-media.index') }}">
             <i class="glyphicon glyphicon-bullhorn"></i>
             <span class="title">Manage Social Media</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,4,5,6,7,8,9]))
         <li class="{{ request()->routeIs('manage-countries.*') ? 'active' : '' }}">
             <a href="{{ route('manage-countries.index') }}">
             <i class="glyphicon glyphicon-flag"></i>
             <span class="title">Manage Countries</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,4,5,6,7,8,9]))
         <li class="{{ request()->routeIs('manage-dealers.*') ? 'active' : '' }}">
             <a href="{{ route('manage-dealers.index') }}">
             <i class="glyphicon glyphicon-star-empty"></i>
             <span class="title">Manage Dealers</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-restricted-riders.*') ? 'active' : '' }}">
             <a href="{{ route('manage-restricted-riders.index') }}">
             <i class="glyphicon glyphicon-remove"></i>
             <span class="title">Manage Restricted Riders</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-groups.*') ? 'active' : '' }}">
             <a href="{{ route('manage-groups.index') }}">
             <i class="glyphicon glyphicon-th"></i>
             <span class="title">Vehicle Groups</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-signed-waivers.*') ? 'active' : '' }}">
             <a href="{{ route('manage-signed-waivers.index') }}">
             <i class="glyphicon glyphicon-paperclip"></i>
             <span class="title">Manage Signed Waiver</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,4,5,6,7,9]))
         <li class="{{ request()->routeIs('manage-import-vehicles.*') ? 'active' : '' }}">
             <a href="{{ route('manage-import-vehicles.index') }}">
             <i class="glyphicon glyphicon-paperclip"></i>
             <span class="title">Manage Import Vehicle</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-models.*') ? 'active' : '' }}">
             <a href="{{ route('manage-models.index') }}">
             <i class="glyphicon glyphicon-wrench"></i>
             <span class="title">Manage Models</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,4,5,6,7,8,9]))
         <li class="{{ request()->routeIs('manage-users.*') ? 'active' : '' }}">
             <a href="{{ route('manage-users.index') }}">
             <i class="linecons-user"></i>
             <span class="title">Users</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,6,7,9]))
         <li class="{{ request()->routeIs('manage-waivers.*') ? 'active' : '' }}">
             <a href="{{ route('manage-waivers.index') }}">
             <i class="linecons-doc"></i>
             <span class="title">Waivers</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-email-templates.*') ? 'active' : '' }}">
             <a href="{{ route('manage-email-templates.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Email Templates</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,5,7,9]))
         <li class="{{ request()->routeIs('manage-sms-templates.*') ? 'active' : '' }}">
             <a href="{{ route('manage-sms-templates.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">SMS Templates</span>
             </a>
         </li>
+        @endif
+
+        @if(!in_array(auth()->user()?->userlevel, [3,4,5,6,7,8,9]))
         <li class="{{ request()->routeIs('manage-surveys.*') ? 'active' : '' }}">
             <a href="{{ route('manage-surveys.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Manage Surveys</span>
             </a>
         </li>
+        @endif
+
+        @if(in_array(auth()->user()?->userlevel, [1,2]))
         <li class="{{ request()->routeIs('manage-data-management.*') ? 'active' : '' }}">
             <a href="{{ route('manage-data-management.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Data Management</span>
             </a>
         </li>
+        @endif
+
         <li class="{{ request()->routeIs('manage-bikes-and-times.*') ? 'active' : '' }}">
             <a href="{{ route('manage-bikes-and-times.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Manage Bikes and Times</span>
             </a>
         </li>
+
+        @if(in_array(auth()->user()?->userlevel, [1,2]))
         <li class="{{ request()->routeIs('manage-pre-reg-email.*') ? 'active' : '' }}">
             <a href="{{ route('manage-pre-reg-email.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Pre Reg-Emails</span>
             </a>
         </li>
+        @endif
+
+        @if(in_array(auth()->user()?->userlevel, [1,2]))
         <li class="{{ request()->routeIs('manage-pre-reg-html.*') ? 'active' : '' }}">
             <a href="{{ route('manage-pre-reg-html.index') }}">
             <i class="linecons-mail"></i>
             <span class="title">Manage Pre Registration</span>
             </a>
         </li>
+        @endif
+
+        @if(in_array(auth()->user()?->userlevel, [1]))
         <li class="{{ request()->routeIs('generate-cards.*') ? 'active' : '' }}">
             <a href="{{ route('generate-cards.index') }}">
             <i class="linecons-globe"></i>
             <span class="title">Generate Cards</span>
             </a>
         </li>
+        @endif
     </ul>
 </div>

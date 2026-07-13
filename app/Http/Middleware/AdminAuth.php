@@ -21,10 +21,6 @@ class AdminAuth
             return redirect()->route('login');
         }
 
-        if (Auth::user()->userlevel != 1) {
-            return redirect()->route('login');
-        }
-
         return $next($request);
     }
 }
