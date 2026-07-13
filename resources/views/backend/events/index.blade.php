@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-
+    @if(auth()->user()?->userlevel !=3 && auth()->user()?->userlevel !=5 && auth()->user()?->userlevel !=7 && auth()->user()?->userlevel !=9)
     <div class="row">
         <div class="col-xs-6">
             <!-- Multi Report -->
@@ -62,6 +62,7 @@
             </a>
         </div>
     </div>
+    @endif
 
     @if(isset($events->Events) && $events->Success == 1)
         @foreach ($events->Events as $rkey => $revent)
