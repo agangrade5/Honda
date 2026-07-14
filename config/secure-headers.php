@@ -145,7 +145,7 @@ return [
      * Note: Please ensure your website had set up ssl/tls before enable hsts.
      */
     'hsts' => [
-        'enable' => false,
+        'enable' => true,
 
         'max-age' => 31536000,
 
@@ -646,7 +646,14 @@ return [
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src
         'connect-src' => [
-            //
+            'self' => true,
+            'schemes' => [
+                'data:',
+                'https:',
+                'http:',
+                'wss:',
+                'ws:',
+            ],
         ],
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src
@@ -661,7 +668,16 @@ return [
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src
         'font-src' => [
-            //
+            'unsafe-inline' => true,
+            'self' => true,
+            'allow' => [
+                '*',
+            ],
+            'schemes' => [
+                'data:',
+                'https:',
+                'http:',
+            ],
         ],
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/form-action
@@ -681,7 +697,15 @@ return [
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src
         'img-src' => [
-            //
+            'self' => true,
+            'allow' => [
+                'https://fonts.googleapis.com',
+            ],
+            'schemes' => [
+                'data:',
+                'https:',
+                'http:',
+            ],
         ],
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/manifest-src
@@ -746,24 +770,24 @@ return [
         'script-src' => [
             'none' => false,
 
-            'self' => false,
+            'self' => true,
 
             'report-sample' => false,
 
             'allow' => [
-                // 'url',
+                'https://oss.maxcdn.com',
             ],
 
             'schemes' => [
                 // 'data:',
-                // 'https:',
+                'https:',
             ],
 
             /* followings are only work for `script` and `style` related directives */
 
-            'unsafe-inline' => false,
+            'unsafe-inline' => true,
 
-            'unsafe-eval' => false,
+            'unsafe-eval' => true,
 
             // https://www.w3.org/TR/CSP3/#unsafe-hashes-usage
             'unsafe-hashes' => false,
@@ -771,7 +795,7 @@ return [
             // Enable `strict-dynamic` will *ignore* `self`, `unsafe-inline`,
             // `allow` and `schemes`. You can find more information from:
             // https://www.w3.org/TR/CSP3/#strict-dynamic-usage
-            'strict-dynamic' => false,
+            'strict-dynamic' => true,
 
             'hashes' => [
                 'sha256' => [
@@ -800,7 +824,11 @@ return [
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
         'style-src' => [
-            //
+            'self' => true,
+            'unsafe-inline' => true,
+            'allow' => [
+                'https://fonts.googleapis.com',
+            ],
         ],
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src-attr
