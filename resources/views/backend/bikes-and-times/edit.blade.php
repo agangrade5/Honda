@@ -496,7 +496,7 @@
 @endpush
 
 @push('scripts')
-<script src="{{ asset('assets/js/time/bootstrap-timepicker.min.js') }}"></script>
+{!! returnScriptWithNonce(asset('assets/js/time/bootstrap-timepicker.min.js')) !!}
 <script>
     $('#starttime').timepicker();
     $('#endtime').timepicker();

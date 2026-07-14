@@ -14,11 +14,11 @@
     <link rel="stylesheet" href="{{ asset('register-assets/css/materialize-stepper.min.css') }}">
     <link rel="stylesheet" href="{{ asset('register-assets/css/style.css') }}">
 
-    <script src="{{ asset('register-assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('register-assets/js/materialize.min.js') }}"></script>
-    <script src="{{ asset('register-assets/js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('register-assets/js/additional-methods.js') }}"></script>
-    <script src="{{ asset('register-assets/js/materialize-stepper.min.js') }}"></script>
+    {!! returnScriptWithNonce(asset('register-assets/js/jquery.min.js')) !!}
+    {!! returnScriptWithNonce(asset('register-assets/js/materialize.min.js')) !!}
+    {!! returnScriptWithNonce(asset('register-assets/js/jquery.validate.min.js')) !!}
+    {!! returnScriptWithNonce(asset('register-assets/js/additional-methods.js')) !!}
+    {!! returnScriptWithNonce(asset('register-assets/js/materialize-stepper.min.js')) !!}
 
     <script type="text/javascript">
         var dynamic_survey_html_1 = {!! json_encode($strHtml1) !!};
@@ -198,7 +198,7 @@ function changeParentDetails(i){
 }
 </style>
 
-<script src="{{ asset('register-assets/js/jquery.inputmask.bundle.js') }}"></script>
+{!! returnScriptWithNonce(asset('register-assets/js/jquery.inputmask.bundle.js')) !!}
 <script type="text/javascript">
   $(":input").inputmask();
   $("#cellphone_1").inputmask({"mask": "(999) 999-9999"});

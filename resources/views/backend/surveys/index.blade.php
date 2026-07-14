@@ -95,7 +95,7 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/jquery.session.js') }}"></script>
+{!! returnScriptWithNonce(asset('assets/js/jquery.session.js')) !!}
 <script type="text/javascript">
     function deleteSurvey(c_obj){
         var id = $(c_obj).attr("id");

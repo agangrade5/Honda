@@ -20,8 +20,8 @@
 <link rel="stylesheet" href={{ asset("assets/css/xenon-skins.css")}}>
 <link rel="stylesheet" href={{ asset("assets/css/custom.css")}}>
 
-<script src={{ asset("assets/js/jquery-1.11.1.min.js")}}></script>
-<script src={{ asset("assets/js/jquery-cookie/jquery.cookie.js")}}></script>
+{!! returnScriptWithNonce(asset("assets/js/jquery-1.11.1.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/jquery-cookie/jquery.cookie.js")) !!}
 <script type="text/javascript">
 window.onbeforeunload = function(e) {
     $(".page-loading-overlay").removeClass('loaded');
@@ -34,6 +34,6 @@ window.addEventListener("pageshow", function (event) {
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	{!! returnScriptWithNonce("https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js") !!}
+	{!! returnScriptWithNonce("https://oss.maxcdn.com/respond/1.4.2/respond.min.js") !!}
 <![endif]-->

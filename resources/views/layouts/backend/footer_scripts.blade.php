@@ -10,38 +10,38 @@
 <link rel="stylesheet" href={{ asset("assets/js/uikit/uikit.css")}}>
 <link rel="stylesheet" href={{ asset("assets/js/uikit/css/addons/uikit.almost-flat.addons.min.css")}}>
 <!-- Bottom Scripts -->
-<script src={{ asset("assets/js/bootstrap.min.js")}}></script>
-<script src={{ asset("assets/js/TweenMax.min.js")}}></script>
-<script src={{ asset("assets/js/resizeable.js")}}></script>
-<script src={{ asset("assets/js/joinable.js")}}></script>
-<script src={{ asset("assets/js/xenon-api.js")}}></script>
-<script src={{ asset("assets/js/xenon-toggles.js")}}></script>
-<script src={{ asset("assets/js/datatables/js/jquery.dataTables.min.js")}}></script>
-<script src={{ asset("assets/js/moment.min.js")}}></script>
-<script src={{ asset("assets/js/wysihtml5/lib/js/wysihtml5-0.3.0.js")}}></script>
+{!! returnScriptWithNonce(asset("assets/js/bootstrap.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/TweenMax.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/resizeable.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/joinable.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/xenon-api.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/xenon-toggles.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/datatables/js/jquery.dataTables.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/moment.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/wysihtml5/lib/js/wysihtml5-0.3.0.js")) !!}
 <!-- Imported scripts on this page -->
-<script src={{ asset("assets/js/xenon-widgets.js")}}></script>
-<script src={{ asset("assets/js/devexpress-web-14.1/js/globalize.min.js")}}></script>
-<script src={{ asset("assets/js/devexpress-web-14.1/js/dx.chartjs.js")}}></script>
-<script src={{ asset("assets/js/toastr/toastr.min.js")}}></script>
-<script src={{ asset("assets/js/datatables/dataTables.bootstrap.js")}}></script>
-<script src={{ asset("assets/js/datatables/yadcf/jquery.dataTables.yadcf.js")}}></script>
-<script src={{ asset("assets/js/datatables/tabletools/dataTables.tableTools.min.js")}}></script>
-<script src={{ asset("assets/js/select2/select2.min.js")}}></script>
-<script src={{ asset("assets/js/jquery-ui/jquery-ui.min.js")}}></script>
-<script src={{ asset("assets/js/selectboxit/jquery.selectBoxIt.min.js")}}></script>
-<script src={{ asset("assets/js/multiselect/js/jquery.multi-select.js")}}></script>
-<script src={{ asset("assets/js/daterangepicker/daterangepicker.js")}}></script>
-<script src={{ asset("assets/js/datepicker/bootstrap-datepicker.js")}}></script>
-<script src={{ asset("assets/js/datepicker/bootstrap-datetimepicker.js")}}></script>
-<script src={{ asset("assets/js/inputmask/jquery.inputmask.bundle.js")}}></script>
-<script src={{ asset("assets/js/formwizard/jquery.bootstrap.wizard.min.js")}}></script>
-<script src={{ asset("assets/js/jquery-validate/jquery.validate.min.js")}}></script>
-<script src={{ asset("assets/js/ckeditor/ckeditor.js")}}></script>
-<script src={{ asset("assets/js/ckeditor/adapters/jquery.js")}}></script>
-{{-- <script src={{ asset("assets/js/rwd-table/js/rwd-table.min.js")}}></script> --}}
+{!! returnScriptWithNonce(asset("assets/js/xenon-widgets.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/devexpress-web-14.1/js/globalize.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/devexpress-web-14.1/js/dx.chartjs.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/toastr/toastr.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/datatables/dataTables.bootstrap.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/datatables/yadcf/jquery.dataTables.yadcf.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/datatables/tabletools/dataTables.tableTools.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/select2/select2.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/jquery-ui/jquery-ui.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/selectboxit/jquery.selectBoxIt.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/multiselect/js/jquery.multi-select.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/daterangepicker/daterangepicker.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/datepicker/bootstrap-datepicker.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/datepicker/bootstrap-datetimepicker.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/inputmask/jquery.inputmask.bundle.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/formwizard/jquery.bootstrap.wizard.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/jquery-validate/jquery.validate.min.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/ckeditor/ckeditor.js")) !!}
+{!! returnScriptWithNonce(asset("assets/js/ckeditor/adapters/jquery.js")) !!}
+{{-- {!! returnScriptWithNonce(asset("assets/js/rwd-table/js/rwd-table.min.js")) !!} --}}
 <!-- JavaScripts initializations and stuff -->
-<script src={{ asset("assets/js/xenon-custom.js")}}></script>
+{!! returnScriptWithNonce(asset("assets/js/xenon-custom.js")) !!}
 
 <script>
 $(document).ready(function() {

@@ -226,7 +226,7 @@
         });
     });
 </script>
-<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+{!! returnScriptWithNonce(asset('vendor/jsvalidation/js/jsvalidation.js')) !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\GroupRequest', '#Group') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\GroupRequest', '#GroupEdit') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\GroupRequest', '#GroupDelete') !!}

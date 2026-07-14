@@ -23,8 +23,8 @@
 	<link rel="stylesheet" href="{{ asset('assets/css/xenon-skins.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
-	<script src="{{ asset('assets/js/jquery-1.11.1.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-cookie/jquery.cookie.js') }}"></script>
+	{!! returnScriptWithNonce(asset('assets/js/jquery-1.11.1.min.js')) !!}
+    {!! returnScriptWithNonce(asset('assets/js/jquery-cookie/jquery.cookie.js')) !!}
 	<script type="text/javascript">
 		window.onbeforeunload = function () {
             $(".page-loading-overlay").removeClass("loaded");
@@ -36,8 +36,8 @@
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		{!! returnScriptWithNonce("https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js")!!}
+		{!! returnScriptWithNonce("https://oss.maxcdn.com/respond/1.4.2/respond.min.js")!!}
 	<![endif]-->
 </head>
 <body class="page-body login-page">
@@ -134,17 +134,17 @@
 	</div>
 
 	<!-- Bottom Scripts -->
-	<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-	<script src="{{ asset('assets/js/TweenMax.min.js') }}"></script>
-	<script src="{{ asset('assets/js/resizeable.js') }}"></script>
-	<script src="{{ asset('assets/js/joinable.js') }}"></script>
-	<script src="{{ asset('assets/js/xenon-api.js') }}"></script>
-	<script src="{{ asset('assets/js/xenon-toggles.js') }}"></script>
-	<script src="{{ asset('assets/js/jquery-validate/jquery.validate.min.js') }}"></script>
-	<script src="{{ asset('assets/js/toastr/toastr.min.js') }}"></script>
+	{!! returnScriptWithNonce(asset('assets/js/bootstrap.min.js')) !!}
+	{!! returnScriptWithNonce(asset('assets/js/TweenMax.min.js')) !!}
+	{!! returnScriptWithNonce(asset('assets/js/resizeable.js')) !!}
+	{!! returnScriptWithNonce(asset('assets/js/joinable.js')) !!}
+	{!! returnScriptWithNonce(asset('assets/js/xenon-api.js')) !!}
+	{!! returnScriptWithNonce(asset('assets/js/xenon-toggles.js')) !!}
+	{!! returnScriptWithNonce(asset('assets/js/jquery-validate/jquery.validate.min.js')) !!}
+	{!! returnScriptWithNonce(asset('assets/js/toastr/toastr.min.js')) !!}
 
 	<!-- JavaScripts initializations and stuff -->
-	<script src="{{ asset('assets/js/xenon-custom.js') }}"></script>
+	{!! returnScriptWithNonce(asset('assets/js/xenon-custom.js')) !!}
 
 	@if(session('msg') === 'Error')
 	<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert">
