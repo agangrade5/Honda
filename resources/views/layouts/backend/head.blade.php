@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="{{config('app.name')}} Admin Panel" />
 <meta name="author" content="NCompassTrac" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <title> {{config('app.name')}} | @yield('title') </title>
 
@@ -28,6 +29,11 @@ window.onbeforeunload = function(e) {
 }
 window.addEventListener("pageshow", function (event) {
     $(".page-loading-overlay").addClass("loaded");
+});
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
 });
 </script>
 <style>.datepicker{z-index:1200 !important;}</style>

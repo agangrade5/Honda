@@ -21,6 +21,7 @@
             <div class="loader-2"></div>
         </div>
 		<!-- Footer Scripts -->
+        @routes
         @include('layouts.backend.footer_scripts')
         <!-- Custom Scripts -->
         @stack('scripts')
