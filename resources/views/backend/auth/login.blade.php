@@ -25,14 +25,7 @@
 
 	{!! returnScriptWithNonce(asset('assets/js/jquery-1.11.1.min.js')) !!}
     {!! returnScriptWithNonce(asset('assets/js/jquery-cookie/jquery.cookie.js')) !!}
-	<script type="text/javascript">
-		window.onbeforeunload = function () {
-            $(".page-loading-overlay").removeClass("loaded");
-        };
-        window.addEventListener("pageshow", function (event) {
-            $(".page-loading-overlay").addClass("loaded");
-        });
-	</script>
+
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -45,44 +38,7 @@
 	<div class="login-container">
 		<div class="row">
 			<div class="col-sm-6">
-				<script type="text/javascript">
-					jQuery(document).ready(function($)
-					{
-                        $.cookie('authorized','no');
-
-						// Reveal Login form
-						setTimeout(function(){ $(".fade-in-effect").addClass('in'); }, 1);
-
-						// Validation and Ajax action
-						$("form#login").validate({
-							rules: {
-								username: {
-									required: true
-								},
-								passwd: {
-									required: true
-								}
-							},
-
-							messages: {
-								username: {
-									required: 'Please enter your username.'
-								},
-								passwd: {
-									required: 'Please enter your password.'
-								}
-							},
-
-							submitHandler: function(form)
-							{
-								form.submit();
-							}
-						});
-
-						// Set Form focus
-						$("form#login .form-group:has(.form-control):first .form-control").focus();
-					});
-				</script>
+				@vite(['resources/js/backend/auth/login.js'])
 
 				<!-- Errors container -->
 				<div class="errors-container">
@@ -154,13 +110,7 @@
 			<div class="toast-message">You have entered wrong user credentials, please try again.</div>
 		</div>
 	</div>
-	<script>
-	jQuery(document).ready(function($) {
-		$(document).on('click', '#toast-container .toast-close-button', function() {
-			$('#toast-container').remove();
-		});
-	});
-	</script>
+
 	@endif
 
 </body>

@@ -96,16 +96,5 @@
 
 @push('scripts')
 {!! returnScriptWithNonce(asset('assets/js/jquery.session.js')) !!}
-<script type="text/javascript">
-    function deleteSurvey(c_obj){
-        var id = $(c_obj).attr("id");
-        $("#DeleteSurveyIndex").val(id);
-        $("#DeleteSessionSurveyForm").attr('action', '/manage-surveys/' + id);
-        $('#survey-modal-delete').modal('show');
-    }
-
-    $( document ).ready(function() {
-        $.session.set("SurveyName", "");
-    });
-</script>
+@vite(['resources/js/backend/surveys/index.js'])
 @endpush
