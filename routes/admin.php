@@ -41,6 +41,7 @@ Route::middleware(['admin.auth', 'no.cache'])->group(function () {
             Route::post('/add', 'addState')->name('add');
             Route::post('/edit', 'editState')->name('edit');
             Route::post('/delete', 'deleteState')->name('delete');
+            Route::post('/by-country', 'getStatesByCountry')->name('by-country');
         });
     // Manage Signed Waiver Routes
     Route::prefix('manage-signed-waivers')

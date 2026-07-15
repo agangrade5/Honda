@@ -135,4 +135,20 @@ class CountryController extends Controller
 
         return response('');
     }
+
+    /**
+     * AJAX Action: Get states by country.
+     */
+    public function getStatesByCountry(Request $request)
+    {
+        $request->validate([
+            'CountryID' => ['required', 'integer', 'exists:countries,countryid', new NoScripts()],
+        ]);
+
+        $states = State::where('countryid', $request->input('CountryID'))
+            ->orderBy('statename')
+            ->get(['statename']);
+
+        return response()->json($states);
+    }
 }

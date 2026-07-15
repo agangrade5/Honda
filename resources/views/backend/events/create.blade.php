@@ -575,11 +575,9 @@
             var CountryID = $(this).val();
             $.ajax({
                 method: "POST",
-                url: "{{ url('Action.php') }}",
+                url: "{{ route('manage-countries.states.by-country') }}",
                 dataType: 'json',
                 data: {
-                    action: "select",
-                    controller: "state",
                     CountryID: CountryID
                 }
             })

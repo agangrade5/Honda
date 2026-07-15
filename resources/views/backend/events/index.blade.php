@@ -44,17 +44,7 @@
     @if(auth()->user()?->userlevel !=3 && auth()->user()?->userlevel !=5 && auth()->user()?->userlevel !=7 && auth()->user()?->userlevel !=9)
     <div class="row">
         <div class="col-xs-6">
-            <!-- Multi Report -->
-            <form id="MultiReportForm" action="{{ url('Action.php') }}">
-                <input type="hidden" name="ids" value="">
-            </form>
-            <script type="text/javascript">
-                $(document).ready(function() {
-
-                });
-            </script>
-            <a href="javascript:;" style="display:none;width: 200px !important;" class="btn btn-info btn-md btnTopCus"
-                id="MultiReport">View Multi-Report</a>
+            
         </div>
         <div class="col-xs-6 text-right">
             <a class="btn btn-secondary btn-md btnTopCus" href="{{ route('manage-events.create') }}">
@@ -1291,20 +1281,6 @@
                                             allowClear: true
                                         }).on('select2-open', function() {
                                             $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                        });
-                                        $("a.reportLink").click(function() {
-                                            var eventId = $(this).parent().prev().prev().prev().prev().prev().prev().text();
-                                            window.location.href = "{{ url('Action.php') }}?id=" + eventId;
-                                        });
-                                        $("a#MultiReport").click(function() {
-                                            var checkboxes = document.getElementsByName('crm[]');
-                                            var checkboxesChecked = [];
-                                            for (var i = 0; i < checkboxes.length; i++) {
-                                                if (checkboxes[i].checked) {
-                                                    checkboxesChecked.push(checkboxes[i].value);
-                                                }
-                                            }
-                                            window.location.href = "{{ url('Action.php') }}?id=" + checkboxesChecked;
                                         });
                                     });
                                 </script>
