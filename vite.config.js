@@ -36,6 +36,7 @@ export default defineConfig({
                 'resources/js/backend/survey-questions/create.js',
                 'resources/js/backend/auth/login.js',
                 'resources/js/backend/auth/register.js',
+                'resources/css/backend/auth/register.css',
             ],
             refresh: true,
             fonts: [

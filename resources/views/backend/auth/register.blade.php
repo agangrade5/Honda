@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('register-assets/css/materialize-stepper.min.css') }}">
     <link rel="stylesheet" href="{{ asset('register-assets/css/style.css') }}">
+    @vite(['resources/css/backend/auth/register.css'])
 
     {!! returnScriptWithNonce(asset('register-assets/js/jquery.min.js')) !!}
     {!! returnScriptWithNonce(asset('register-assets/js/materialize.min.js')) !!}
@@ -115,55 +116,7 @@
 
 @vite(['resources/js/backend/auth/register.js'])
 
-<style type="text/css">
-#SubmitFrm {
-    padding-top: 10.0rem !important;
-    position: relative !important;
-}
-.step-title {
-    pointer-events: none;
-}
-#loadingImage {
-    width: 100%;
-    background: #fff;
-    height: 100%;
-    position: fixed;
-    z-index: 999999999;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-    padding-top: 50px;
-}
-#loadingImage .loadingImageinner {
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    -webkit-align-items: center;
-    -moz-align-items: center;
-    -ms-align-items: center;
-    justify-content: center;
-    -webkit-justify-content: center;
-    -moz-justify-content: center;
-    -ms-justify-content: center;
-    -webkit-display: flex !important;
-    -moz-display: flex !important;
-    -ms-display: flex !important;
-    display: flex !important;
-}
-.showErrorMessage {
-    border: 1.5px solid #717171;
-    border-top: 0;
-    border-radius: 4px;
-    margin-bottom: 25px !important;
-    padding: 50px 30px;
-    text-align: center;
-    margin-top: -30px;
-    color: red;
-    font-weight: 400;
-}
-</style>
+
 
 {!! returnScriptWithNonce(asset('register-assets/js/jquery.inputmask.bundle.js')) !!}
 
