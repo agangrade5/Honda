@@ -36,7 +36,7 @@
     </nav>
 
     {{-- Charts init script (runs at document ready) --}}
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
         jQuery(document).ready(function($) {
             if (!$.isFunction($.fn.dxChart))
                 $(".dx-warning").removeClass('hidden');
@@ -258,7 +258,7 @@
     </script>
 
     {{-- Notification script --}}
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
         var sample_notification;
         jQuery(document).ready(function($) {
             $('#btn-logout-report').on('click', function(e) {
@@ -472,7 +472,7 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
+        <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
             jQuery(document).ready(function($) {
                 if (!$.isFunction($.fn.dxChart)) return;
                 $("#dynamic-survey-graph-{{ $surveyID }}-{{ $ques_key }}").dxChart({
@@ -779,7 +779,7 @@
 </div>
 
 {{-- ── Scripts ── --}}
-<script type="text/javascript">
+<script nonce="{{ csp_nonce('script') }}" type="text/javascript">
 jQuery(document).ready(function($) {
 
     // Datepickers

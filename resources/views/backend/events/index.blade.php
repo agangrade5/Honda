@@ -25,7 +25,7 @@
             <div class="form-group">
                 <label class="control-label">Choose a year:</label>
                 <form method="get" action="{{ route('manage-events.index') }}" id="YearFilterForm">
-                    <script type="text/javascript">
+                    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                         function YearChange() {
                             $("#YearFilterForm").submit();
                         }
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <script type="text/javascript">
+                    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                         jQuery(document).ready(function($) {
                           $("#Region_{{ $tableID }}").click(function() {
                             $(".{{ $tableID }}").prop('checked', false);
@@ -242,7 +242,7 @@
                                 </td>
                             </tr>
                             @endforeach
-                            <script>
+                            <script nonce="{{ csp_nonce('script') }}" >
                                 $(document).ready(function() {
                                     $(".edit").click(function() {
                                         $('#event-modal').modal('show');
@@ -302,7 +302,7 @@
 </div>
 <!-- content @e -->
 
-<script>
+<script nonce="{{ csp_nonce('script') }}" >
     $(document).ready(function() {
         var GEAdddress = '';
         $("button.btn-info").click(function() {
@@ -739,7 +739,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Event Type</label>
-                                <script type="text/javascript">
+                                <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                                     function get_link_show() {
                                         var EventID = $("#EventEditID").val();
                                         var link = $("#link" + EventID).val();
@@ -786,7 +786,7 @@
                             </div>
                         </div>
                     </div>
-                    <script type="text/javascript">
+                    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                         jQuery(document).ready(function($) {
                             $("#EventJumpStart").click(function() {
                                 if ($(this).prop("checked")) {
@@ -1041,7 +1041,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Dealers</label>
-                                <script type="text/javascript">
+                                <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                                     jQuery(document).ready(function($) {
                                         $("#DealerIDEdit").select2({
                                             placeholder: 'Choose the dealer or dealers that are involved in this event.',
@@ -1274,7 +1274,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="control-label" for="trucks">Truck Association</label>
-                                <script type="text/javascript">
+                                <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                                     jQuery(document).ready(function($) {
                                         $("#TruckIDEdit").select2({
                                             placeholder: 'Choose the dealer or dealers that are involved in this event.',
@@ -1468,7 +1468,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script nonce="{{ csp_nonce('script') }}" type="text/javascript">
     function showHide() {
         var x = document.getElementById("MultiReport");
         x.style.display = "none";
@@ -1480,7 +1480,7 @@
     }
 </script>
 
-<style type="text/css">
+<style nonce="{{ csp_nonce('style') }}" type="text/css">
     .modal-content {
         border: 0;
     }
@@ -1498,7 +1498,7 @@
 {!! JsValidator::formRequest('App\Http\Requests\Backend\EventRequest', '#EventEditForm') !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\EventRequest', '#EventDelete') !!}
 
-<script type="text/javascript">
+<script nonce="{{ csp_nonce('script') }}" type="text/javascript">
     $('.datetimepicker').datetimepicker({
         useCurrent: true,
         format: "ddd, DD MMMM YYYY HH:mm"

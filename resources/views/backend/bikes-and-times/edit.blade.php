@@ -488,11 +488,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('assets/css/time/bootstrap-timepicker.min.css') }}">
-<style type="text/css">
-    label {
-        font-weight: bold;
-    }
-</style>
+@vite(['resources/css/backend/bikes-and-times/edit.css'])
 @endpush
 
 @push('scripts')

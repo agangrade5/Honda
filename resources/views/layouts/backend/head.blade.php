@@ -23,7 +23,7 @@
 
 {!! returnScriptWithNonce(asset("assets/js/jquery-1.11.1.min.js")) !!}
 {!! returnScriptWithNonce(asset("assets/js/jquery-cookie/jquery.cookie.js")) !!}
-<script type="text/javascript">
+<script nonce="{{ csp_nonce('script') }}" type="text/javascript">
 window.onbeforeunload = function(e) {
     $(".page-loading-overlay").removeClass('loaded');
 }
@@ -36,7 +36,7 @@ $.ajaxSetup({
     }
 });
 </script>
-<style>.datepicker{z-index:1200 !important;}</style>
+<style nonce="{{ csp_nonce('style') }}">.datepicker{z-index:1200 !important;}</style>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>

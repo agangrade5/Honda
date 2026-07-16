@@ -21,7 +21,7 @@
     {!! returnScriptWithNonce(asset('register-assets/js/additional-methods.js')) !!}
     {!! returnScriptWithNonce(asset('register-assets/js/materialize-stepper.min.js')) !!}
 
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
         var dynamic_survey_html_1 = {!! json_encode($strHtml1) !!};
         var dynamic_survey_html_2 = {!! json_encode($strHtml2) !!};
         var dynamic_survey_html_3 = {!! json_encode($strHtml3) !!};

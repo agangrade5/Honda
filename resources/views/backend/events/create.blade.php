@@ -1,7 +1,7 @@
 @extends('layouts.backend.app')
 @section('title', $title)
 @section('content')
-<style>
+<style nonce="{{ csp_nonce('script') }}" >
     form .form-group.validate-has-error span.validate-has-error {
         color: #cc3f44;
         display: block;
@@ -27,7 +27,7 @@
     @endif
 
     <!-- Form wizard with validation starts here -->
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
         jQuery(document).ready(function($) {
             $(".multi-select").multiSelect({
                 afterInit: function() {
@@ -96,7 +96,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Event Type</label>
-                            <script type="text/javascript">
+                            <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                                 jQuery(document).ready(function($) {
                                     $("#EventCountry").select2({
                                         placeholder: 'Select Event Type...',
@@ -130,7 +130,7 @@
                     </div>
                 </div>
 
-                <script type="text/javascript">
+                <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                     jQuery(document).ready(function($) {
                         $("#EventJumpStart").click(function() {
                             if ($(this).prop("checked")) {
@@ -327,7 +327,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">Dealers</label>
-                            <script type="text/javascript">
+                            <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                                 jQuery(document).ready(function($) {
                                     $("#DealerIDEdit").select2({
                                         placeholder: 'Choose the dealer or dealers that are involved in this event.',
@@ -450,7 +450,7 @@
                 <div class="row">
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <script type="text/javascript">
+                            <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                                 jQuery(document).ready(function($) {
                                     $("#UserIDEdit").multiSelect({
                                         afterInit: function() {
@@ -479,7 +479,7 @@
                 <strong>Truck Association</strong>
                 <br /><br />
                 <div class="col-sm-12 center-block">
-                    <script type="text/javascript">
+                    <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
                         jQuery(document).ready(function($) {
                             $("#TruckIDEdit").multiSelect({
                                 afterInit: function() {
@@ -567,7 +567,7 @@
 {!! returnScriptWithNonce(asset('vendor/jsvalidation/js/jsvalidation.js')) !!}
 {!! JsValidator::formRequest('App\Http\Requests\Backend\EventRequest', '#EventForm') !!}
 
-<script type="text/javascript">
+<script nonce="{{ csp_nonce('script') }}" type="text/javascript">
     jQuery(document).ready(function($) {
         $("#EventCountry").change(function() {
             $("#EventAddressStateEdit").empty();

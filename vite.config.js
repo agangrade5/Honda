@@ -37,6 +37,7 @@ export default defineConfig({
                 'resources/js/backend/auth/login.js',
                 'resources/js/backend/auth/register.js',
                 'resources/css/backend/auth/register.css',
+                'resources/css/backend/bikes-and-times/edit.css',
             ],
             refresh: true,
             fonts: [

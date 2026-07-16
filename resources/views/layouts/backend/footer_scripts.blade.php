@@ -43,7 +43,7 @@
 <!-- JavaScripts initializations and stuff -->
 {!! returnScriptWithNonce(asset("assets/js/xenon-custom.js")) !!}
 
-<script>
+<script nonce="{{ csp_nonce('script') }}">
 $(document).ready(function() {
     $(document).on('click', '#btn-logout', function(event) {
         event.preventDefault();

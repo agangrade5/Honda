@@ -8,7 +8,7 @@
             Chat
             <span class="badge badge-success is-hidden">0</span>
         </h2>
-        <script type="text/javascript">
+        <script nonce="{{ csp_nonce('script') }}" type="text/javascript">
             // Here is just a sample how to open chat conversation box
             jQuery(document).ready(function($)
             {
