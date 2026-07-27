@@ -15,7 +15,10 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('manage-regions.index');
+            if (Auth::user()->userlevel == 6) {
+                return redirect()->route('manage-trucks.index');
+            }
+            return redirect()->route('manage-events.index');
         }
         return view('backend.auth.login');
     }
@@ -29,6 +32,10 @@ class LoginController extends Controller
 
         if ($user && $user->userpass === $request->input('passwd')) {
             Auth::login($user);
+            
+            if ($user->userlevel == 6) {
+                return redirect()->route('manage-trucks.index')->with('msg', 'The User has been logged in successfully');
+            }
             return redirect()->route('manage-events.index')->with('msg', 'The User has been logged in successfully');
         }
 

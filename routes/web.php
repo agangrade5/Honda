@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     if (Auth::check()) {
+        if (Auth::user()->userlevel == 6) {
+            return redirect()->route('manage-trucks.index');
+        }
         return redirect()->route('manage-events.index');
     }
 
